@@ -1,0 +1,22 @@
+{%- block subject %}
+Confirm your e-mail address
+{% endblock subject -%}
+
+{%- block body %}
+Hello!
+
+You just changed the e-mail address of your Park-Manager account.
+Please confirm you are the owner of this e-mail address by visiting:
+
+    {{ url }}
+
+You will be asked to provide your current password for verification.
+This link will expire on {{ expiration_date|date("d-m-Y H:i:s") }}.
+
+If you got this message by mistake then please ignore it, if you get
+you more of these messages then contact us so we can inform the account owner.
+
+Regards,
+
+The Team.
+{% endblock body -%}

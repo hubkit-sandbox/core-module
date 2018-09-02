@@ -1,0 +1,7 @@
+# Always use LF
+core.autocrlf=lf
+
+.gitattributes export-ignore
+.gitignore export-ignore
+phpunit.xml.dist export-ignore
+/Tests export-ignore

@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page_heading }} | Park-Manager</title>
+</head>
+
+<body>
+
+{% for label, messages in app.flashes %}
+    {% for message in messages %}
+        <div class="row">
+            <div class="ui {{ label }} message">
+                {{ message|raw }}
+            </div>
+        </div>
+    {% endfor %}
+{% endfor %}
+
+{% block content %}{% endblock content %}
+</body>
+</html>

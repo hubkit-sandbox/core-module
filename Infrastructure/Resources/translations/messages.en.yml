@@ -1,0 +1,61 @@
+# Copyright (c) the Contributors as noted in the AUTHORS file.
+#
+# This file is part of the Park-Manager project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+label:
+    email: E-mail address
+    current_password: Current Password
+    password: Password
+    password2: Repeat Password
+    login_remember_me: Remember me
+button:
+    login: Login
+    change_password: Change password
+
+flash:
+    password_reset_accepted: Password reset accepted. Please try to login with your new password.
+    user_password_changed: Password changed.
+    password_reset_send: |
+        If this e-mail address is valid (opted into account recovery), and no reset was requested recently,
+        <em>then</em> you should receive an e-mail. Otherwise check your spam-folder or try again.
+
+login:
+    heading: Login
+    admin_heading: Administrator Login
+    forgot_password: Forgot your password?
+    help.trouble.button: Trouble logging in?
+    help.trouble.html: |
+        <ul>
+            <li>Check your e-mail address - did you change it recently?</li>
+            <li>Check your password - note that your password is case sensitive!</li>
+            <li>Check your computer clock - and synchronize if possible.</li>
+            <li>Make sure cookies are accepted (for this website).</li>
+            <li>Still can't login? Contact support for assistence.</li>
+        <ul>
+
+password_reset:
+    heading: Password reset
+    admin_heading: Administrator Password reset
+    paragraph.html: |
+        <p>To reset your password provide the (main) e-mail address associated with your account.</p>
+        <p>Please note that <b>no more then one reset request is accepted</b> within a reasonable time,
+            if you didn't receive an e-mail <b>check your spam folder or try again later.</b></p>
+    confirm.html: |
+        <p>Provide your new password (twice to prevent typing errors).</p>
+        <p>You can safely remove the e-mail message with the reset link as this link can only be used once.</p>
+    submit_button: Send reset
+    confirm_button: Confirm reset
+    error:
+        invalid_token: Invalid token provided, please copy the reset URL in the received e-mail (in full) and try again.
+        no_token: |
+            Sorry but no results were found with this token.<br><a href="%reset_url%">Please try again</a>
+
+change_password:
+    heading: Change your Password
+    paragraph.html: |
+        <p>Please provide your current password for verification. Note that your new password needs to follow
+            some basic security rules.</p>

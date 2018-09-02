@@ -1,0 +1,26 @@
+{% extends '@ParkManagerCore/security/layout.html.twig' %}
+
+{% set page_heading = ('login.'~ app_context.activeSection ~ '_heading')|trans %}
+{% if error is defined and error is not empty %}
+    {% set error = error.messageKey|trans(error.messageData, 'security')|e %}
+{% endif %}
+
+{% block content %}
+<form action="{{ path(route) }}" method="post">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+    <div>
+        <label for="_email_field"><{{ 'label.email'|trans }}/label>
+        <input type="text" name="_email" id="_email_field" value="{{ last_username }}" required>
+    </div>
+    <div>
+        <label for="_password_field"><{{ 'label.password'|trans }}/label>
+        <input type="password" name="_password" id="_password_field" required>
+    </div>
+    <button type="submit" name="_submit">{{ 'button.login'|trans }}</button>
+
+    <div>
+        <a href="{{ path('park_manager.'~ app_context.routePrefix ~'.security_request_password_reset') }}">{{ 'login.forgot_password'|trans }}</a>
+    </div>
+</form>
+{% endblock content %}

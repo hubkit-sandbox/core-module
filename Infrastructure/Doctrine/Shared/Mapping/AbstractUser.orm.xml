@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+        http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <mapped-superclass name="ParkManager\Module\CoreModule\Domain\Shared\AbstractUser" table="users">
+        <field name="password" column="auth_password" type="text" nullable="true" />
+        <field name="enabled" column="access_enabled" type="boolean" />
+        <field name="roles" type="array_collection" />
+
+        <embedded name="email" class="ParkManager\Module\CoreModule\Domain\Shared\EmailAddress" column-prefix="email_"  />
+        <embedded name="emailAddressChangeToken" class="ParkManager\Component\Security\Token\SplitTokenValueHolder" column-prefix="email_change_"  />
+        <embedded name="passwordResetToken" class="ParkManager\Component\Security\Token\SplitTokenValueHolder" column-prefix="password_reset_" />
+
+        <unique-constraints>
+            <unique-constraint columns="email_address" />
+            <unique-constraint columns="email_canonical" />
+        </unique-constraints>
+    </mapped-superclass>
+</doctrine-mapping>
