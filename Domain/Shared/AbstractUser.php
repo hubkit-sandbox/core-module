@@ -230,7 +230,7 @@ abstract class AbstractUser extends EventsRecordingEntity
      *
      * @param SplitTokenValueHolder $token
      *
-     * @return bool False when a confirmation-token was already set _and_ not expired,
+     * @return bool false when a confirmation-token was already set _and_ not expired,
      *              or when password resetting was disabled for this user.
      *              True when the token was accepted and set
      */
