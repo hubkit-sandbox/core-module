@@ -16,6 +16,7 @@ namespace ParkManager\Module\CoreModule\Infrastructure\DependencyInjection;
 
 use ParkManager\Bridge\Twig\EventListener\TwigResponseListener;
 use ParkManager\Component\Module\ParkManagerModuleDependencyExtension;
+use ParkManager\Component\Module\RegistersDoctrineDbalTypes;
 use ParkManager\Component\Module\Traits\DoctrineDbalTypesConfiguratorTrait;
 use ParkManager\Module\CoreModule\Infrastructure\Twig\AppContextGlobal;
 use Rollerworks\Bundle\RouteAutowiringBundle\RouteImporter;
@@ -24,7 +25,7 @@ use Symfony\Component\DependencyInjection\Compiler\ServiceLocatorTagPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
-final class DependencyExtension extends ParkManagerModuleDependencyExtension
+final class DependencyExtension extends ParkManagerModuleDependencyExtension implements RegistersDoctrineDbalTypes
 {
     use DoctrineDbalTypesConfiguratorTrait;
 
