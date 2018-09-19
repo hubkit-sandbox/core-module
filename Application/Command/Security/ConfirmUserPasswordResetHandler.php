@@ -28,14 +28,14 @@ final class ConfirmUserPasswordResetHandler
 
     public function __invoke(ConfirmUserPasswordReset $command): void
     {
-        $token = $command->token();
-        $user = $this->userCollection->getByPasswordResetToken($token->selector());
+        $token   = $command->token();
+        $user    = $this->userCollection->getByPasswordResetToken($token->selector());
         $success = $user->confirmPasswordReset($token, $command->password());
 
         // Always save, as the token is cleared.
         $this->userCollection->save($user);
 
-        if (!$success) {
+        if (! $success) {
             throw new PasswordResetConfirmationRejected();
         }
     }

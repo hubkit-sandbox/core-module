@@ -28,7 +28,7 @@ final class RequestPasswordResetAction
 
     public function __construct(ServiceBusFormFactory $formFactory, ApplicationContext $applicationContext)
     {
-        $this->formFactory = $formFactory;
+        $this->formFactory        = $formFactory;
         $this->applicationContext = $applicationContext;
     }
 
@@ -38,7 +38,7 @@ final class RequestPasswordResetAction
         $handler->handleRequest($request);
 
         if ($handler->isReady()) {
-            return new RouteRedirectResponse('park_manager.'.$this->applicationContext->getRouteNamePrefix().'.security_login');
+            return new RouteRedirectResponse('park_manager.' . $this->applicationContext->getRouteNamePrefix() . '.security_login');
         }
 
         $response = new TwigResponse('@ParkManagerCore/security/password_reset.html.twig', $handler);

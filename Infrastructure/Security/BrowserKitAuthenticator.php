@@ -24,6 +24,7 @@ use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
+use function strtr;
 
 /**
  * The BrowserKitAuthenticator is only to be used during BrowserKit tests.
@@ -49,13 +50,12 @@ final class BrowserKitAuthenticator extends AbstractGuardAuthenticator
     /**
      * @param array        $credentials
      * @param UserProvider $userProvider
-     *
-     * @return SecurityUser|null
      */
     public function getUser($credentials, UserProviderInterface $userProvider): ?SecurityUser
     {
         $email = $credentials['username'];
-        if (null === $email) {
+
+        if ($email === null) {
             return null;
         }
 
@@ -65,18 +65,16 @@ final class BrowserKitAuthenticator extends AbstractGuardAuthenticator
     /**
      * @param array        $credentials
      * @param SecurityUser $user
-     *
-     * @return bool
      */
     public function checkCredentials($credentials, UserInterface $user): bool
     {
-        if (!$user->isEnabled()) {
+        if (! $user->isEnabled()) {
             throw new AuthenticationException();
         }
 
-        if (!$this->passwordEncoder->isPasswordValid($user, $credentials['password']) &&
-            (null !== $credentials['password_new'] &&
-             !$this->passwordEncoder->isPasswordValid($user, $credentials['password_new']))
+        if (! $this->passwordEncoder->isPasswordValid($user, $credentials['password']) &&
+            ($credentials['password_new'] !== null &&
+             ! $this->passwordEncoder->isPasswordValid($user, $credentials['password_new']))
         ) {
             throw new BadCredentialsException();
         }
@@ -84,12 +82,12 @@ final class BrowserKitAuthenticator extends AbstractGuardAuthenticator
         return true;
     }
 
-    public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey): ?Response
     {
         return null;
     }
 
-    public function start(Request $request, AuthenticationException $authException = null): Response
+    public function start(Request $request, ?AuthenticationException $authException = null): Response
     {
         return new Response('Auth header required', 401);
     }
@@ -103,12 +101,12 @@ final class BrowserKitAuthenticator extends AbstractGuardAuthenticator
         return new JsonResponse($data, Response::HTTP_FORBIDDEN);
     }
 
-    public function supportsRememberMe()
+    public function supportsRememberMe(): bool
     {
         return false;
     }
 
-    public function supports(Request $request)
+    public function supports(Request $request): bool
     {
         return $request->server->has('TEST_AUTH_USERNAME');
     }

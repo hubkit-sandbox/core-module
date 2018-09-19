@@ -35,18 +35,24 @@ final class UpdateAuthTokenWhenPasswordWasChanged implements EventSubscriber
     {
         $token = $this->tokenStorage->getToken();
 
-        if (null === $token || !$token->isAuthenticated() || !($user = $token->getUser()) instanceof SecurityUser) {
+        if ($token === null || ! $token->isAuthenticated()) {
             return;
         }
 
-        if (!$event->id()->equals(UserId::fromString($token->getUsername()))) {
+        $user = $token->getUser();
+
+        if (! $user instanceof SecurityUser) {
+            return;
+        }
+
+        if (! $event->id()->equals(UserId::fromString($token->getUsername()))) {
             return;
         }
 
         /** @var SecurityUser $user */
         $user = $this->userProvider->refreshUser($user);
 
-        if (!$user->isEnabled()) {
+        if (! $user->isEnabled()) {
             return;
         }
 

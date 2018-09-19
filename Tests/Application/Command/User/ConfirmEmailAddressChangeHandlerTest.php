@@ -31,7 +31,7 @@ use Prophecy\Argument;
 final class ConfirmEmailAddressChangeHandlerTest extends TestCase
 {
     public const TOKEN_STRING = 'S1th74ywhDETYAaXWi-2Bee2_ltx-JPGKs9SVvbZCkMi8ZxiEVMBw68S';
-    public const SELECTOR = 'S1th74ywhDETYAaXWi-2Bee2_ltx-JPG';
+    public const SELECTOR     = 'S1th74ywhDETYAaXWi-2Bee2_ltx-JPG';
 
     private $token;
 

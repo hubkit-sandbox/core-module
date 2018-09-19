@@ -28,8 +28,8 @@ final class ConfirmEmailAddressChangeHandler
 
     public function __invoke(ConfirmEmailAddressChange $command): void
     {
-        $token = $command->token();
-        $user = $this->userCollection->getByEmailAddressChangeToken($token->selector());
+        $token   = $command->token();
+        $user    = $this->userCollection->getByEmailAddressChangeToken($token->selector());
         $success = $user->confirmEmailAddressChange($token);
 
         // Always save, as the token is cleared.
@@ -38,7 +38,7 @@ final class ConfirmEmailAddressChangeHandler
         // However this risk is rather small and handled by the repository constraints.
         $this->userCollection->save($user);
 
-        if (!$success) {
+        if (! $success) {
             throw new EmailChangeConfirmationRejected();
         }
     }

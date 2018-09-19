@@ -14,9 +14,11 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Tests\Infrastructure\Web\Action\User;
 
+use ParkManager\Module\CoreModule\Domain\User\UserRepository;
 use ParkManager\Module\CoreModule\Tests\Infrastructure\Web\Action\HttpResponseAssertions;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use function sprintf;
 
 return;
 /**
@@ -44,9 +46,9 @@ abstract class ChangePasswordActionTestCase extends WebTestCase
 
         $form = $crawler->selectButton('button.change_password')->form();
         $form->setValues([
-            $this->getFormName().'[cur_password]' => $this->getCurrentPassword(),
-            $this->getFormName().'[new_password][first]' => 'yea-my-new-password',
-            $this->getFormName().'[new_password][second]' => 'yea-my-new-password',
+            $this->getFormName() . '[cur_password]' => $this->getCurrentPassword(),
+            $this->getFormName() . '[new_password][first]' => 'yea-my-new-password',
+            $this->getFormName() . '[new_password][second]' => 'yea-my-new-password',
         ]);
 
         $client->submit($form);
@@ -70,9 +72,9 @@ abstract class ChangePasswordActionTestCase extends WebTestCase
 
         $form = $crawler->selectButton('button.change_password')->form();
         $form->setValues([
-            $this->getFormName().'[cur_password]' => 'Nope',
-            $this->getFormName().'[new_password][first]' => 'yea-my-new-password',
-            $this->getFormName().'[new_password][second]' => 'yea-my-new-password',
+            $this->getFormName() . '[cur_password]' => 'Nope',
+            $this->getFormName() . '[new_password][first]' => 'yea-my-new-password',
+            $this->getFormName() . '[new_password][second]' => 'yea-my-new-password',
         ]);
 
         $client->submit($form);
@@ -108,10 +110,11 @@ abstract class ChangePasswordActionTestCase extends WebTestCase
 
     protected function givenUserExists(Client $client)
     {
-        /** @var \ParkManager\Module\CoreModule\Domain\User\UserRepository $repository */
+        /** @var UserRepository $repository */
         $repository = $client->getContainer()->get($this->getRepositoryServiceId());
+        $user       = $repository->findByEmailAddress($this->getUsername());
 
-        if (!$user = $repository->findByEmailAddress($this->getUsername())) {
+        if ($user === null) {
             $this->fail(sprintf('User with e-mail address %s is not registered. Are fixtures loaded?', $this->getUsername()));
         }
 
@@ -122,7 +125,17 @@ abstract class ChangePasswordActionTestCase extends WebTestCase
         $em->flush();
 
         $connection = $em->getConnection();
-        while ($connection->isTransactionActive()) {
+
+        // Copied from \Doctrine\DBAL\Connection::commitAll()
+        while ($connection->getTransactionNestingLevel() !== 0) {
+            if ($connection->isAutoCommit() === false && $connection->getTransactionNestingLevel() === 1) {
+                // When in no auto-commit mode, the last nesting commit immediately starts a new transaction.
+                // Therefore we need to do the final commit here and then leave to avoid an infinite loop.
+                $connection->commit();
+
+                return;
+            }
+
             $connection->commit();
         }
     }

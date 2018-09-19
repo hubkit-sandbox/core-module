@@ -24,7 +24,7 @@ final class RequestConfirmationOfEmailAddressChange
 
     public function __construct(string $id, string $email)
     {
-        $this->id = UserId::fromString($id);
+        $this->id    = UserId::fromString($id);
         $this->email = new EmailAddress($email);
     }
 

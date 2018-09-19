@@ -28,8 +28,8 @@ final class EmailAddressChangeConfirmationMailer implements EmailAddressChangeCo
 
     public function __construct(Sender $mailer, UrlGeneratorInterface $urlGenerator, string $route)
     {
-        $this->sender = $mailer;
-        $this->urlGenerator = $urlGenerator;
+        $this->sender             = $mailer;
+        $this->urlGenerator       = $urlGenerator;
         $this->confirmChangeRoute = $route;
     }
 

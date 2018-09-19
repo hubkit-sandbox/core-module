@@ -33,44 +33,30 @@ abstract class AbstractUser extends EventsRecordingEntity
 {
     public const DEFAULT_ROLE = 'ROLE_USER';
 
-    /**
-     * @var AbstractUserId
-     */
+    /** @var AbstractUserId */
     protected $id;
 
-    /**
-     * @var EmailAddress
-     */
+    /** @var EmailAddress */
     protected $email;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     protected $enabled = true;
 
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     protected $password;
 
-    /**
-     * @var Collection
-     */
+    /** @var Collection */
     protected $roles;
 
-    /**
-     * @var SplitTokenValueHolder|null
-     */
+    /** @var SplitTokenValueHolder|null */
     protected $emailAddressChangeToken;
 
-    /**
-     * @var SplitTokenValueHolder|null
-     */
+    /** @var SplitTokenValueHolder|null */
     protected $passwordResetToken;
 
     protected function __construct(AbstractUserId $id, EmailAddress $email)
     {
-        $this->id = $id;
+        $this->id    = $id;
         $this->email = $email;
         $this->roles = new ArrayCollection(static::getDefaultRoles());
     }
@@ -94,8 +80,6 @@ abstract class AbstractUser extends EventsRecordingEntity
      * Returns the hashed password.
      *
      * When empty a different authentication type is assumed.
-     *
-     * @return null|string
      */
     public function password(): ?string
     {
@@ -105,13 +89,11 @@ abstract class AbstractUser extends EventsRecordingEntity
     /**
      * Change the user's password.
      *
-     * Pass null when another authentication system is used.
-     *
-     * @param null|string $password
+     * Pass null When another authentication system is used.
      */
     public function changePassword(?string $password): void
     {
-        if (null !== $password) {
+        if ($password !== null) {
             Assertion::notEmpty($password, 'Password can only null or a non-empty string.');
         }
 
@@ -124,8 +106,6 @@ abstract class AbstractUser extends EventsRecordingEntity
 
     /**
      * Returns whether access are enabled (is allowed to login).
-     *
-     * @return bool
      */
     public function isEnabled(): bool
     {
@@ -154,7 +134,7 @@ abstract class AbstractUser extends EventsRecordingEntity
 
     public function addRole(string $role): void
     {
-        if (!$this->roles->contains($role)) {
+        if (! $this->roles->contains($role)) {
             $this->roles->add($role);
         }
     }
@@ -166,7 +146,7 @@ abstract class AbstractUser extends EventsRecordingEntity
 
     public function removeRole(string $role): void
     {
-        Assertion::notInArray($role, self::getDefaultRoles(), 'Cannot remove default role "'.$role.'".');
+        Assertion::notInArray($role, self::getDefaultRoles(), 'Cannot remove default role "' . $role . '".');
 
         $this->roles->removeElement($role);
     }
@@ -174,16 +154,14 @@ abstract class AbstractUser extends EventsRecordingEntity
     /**
      * Set the confirmation of e-mail address change information.
      *
-     * @param EmailAddress          $email
-     * @param SplitTokenValueHolder $token
      *
      * @return bool Returns false when a not expired confirmation-token was already set (for this address)
      *              true when the token was accepted and set
      */
     public function setConfirmationOfEmailAddressChange(EmailAddress $email, SplitTokenValueHolder $token): bool
     {
-        if (!SplitTokenValueHolder::isEmpty($this->emailAddressChangeToken) &&
-            !$this->emailAddressChangeToken->isExpired() &&
+        if (! SplitTokenValueHolder::isEmpty($this->emailAddressChangeToken) &&
+            ! $this->emailAddressChangeToken->isExpired() &&
             $this->emailAddressChangeToken->metadata()['email'] === $email->address()
         ) {
             return false;
@@ -202,7 +180,6 @@ abstract class AbstractUser extends EventsRecordingEntity
      *
      * Note: When the token doesn't match, remove it. Do not allow even a second chance.
      *
-     * @param SplitToken $token
      *
      * @return bool Returns true when the confirmation was accepted, false otherwise (token invalid/expired)
      */
@@ -228,7 +205,6 @@ abstract class AbstractUser extends EventsRecordingEntity
     /**
      * Sets the password reset token (for confirmation).
      *
-     * @param SplitTokenValueHolder $token
      *
      * @return bool false when a confirmation-token was already set _and_ not expired,
      *              or when password resetting was disabled for this user.
@@ -236,7 +212,7 @@ abstract class AbstractUser extends EventsRecordingEntity
      */
     public function setPasswordResetToken(SplitTokenValueHolder $token): bool
     {
-        if (!SplitTokenValueHolder::isEmpty($this->passwordResetToken) && !$this->passwordResetToken->isExpired()) {
+        if (! SplitTokenValueHolder::isEmpty($this->passwordResetToken) && ! $this->passwordResetToken->isExpired()) {
             return false;
         }
 
@@ -254,8 +230,6 @@ abstract class AbstractUser extends EventsRecordingEntity
      *
      * Note: When the token doesn't match, remove it. Do not allow even a second chance.
      *
-     * @param SplitToken $token
-     * @param string     $passwordHash
      *
      * @return bool Returns true when the reset was accepted, false otherwise (token invalid/expired)
      */

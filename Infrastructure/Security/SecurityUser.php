@@ -17,6 +17,10 @@ namespace ParkManager\Module\CoreModule\Infrastructure\Security;
 use ParkManager\Module\CoreModule\Domain\Shared\AbstractUserId;
 use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use function get_class;
+use function hash_equals;
+use function serialize;
+use function unserialize;
 
 /**
  * The SecurityUser wraps around a "regular" a User and
@@ -36,8 +40,8 @@ abstract class SecurityUser implements UserInterface, EquatableInterface, \Seria
     {
         $this->username = $id;
         $this->password = $password;
-        $this->enabled = $enabled;
-        $this->roles = $roles;
+        $this->enabled  = $enabled;
+        $this->roles    = $roles;
     }
 
     public function serialize(): string
@@ -56,38 +60,25 @@ abstract class SecurityUser implements UserInterface, EquatableInterface, \Seria
 
         $this->username = $data['username'];
         $this->password = $data['password'];
-        $this->enabled = $data['enabled'];
-        $this->roles = $data['roles'];
+        $this->enabled  = $data['enabled'];
+        $this->roles    = $data['roles'];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getRoles(): array
     {
         return $this->roles;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getPassword(): string
     {
         return $this->password;
     }
 
-    /**
-     * @ignore
-     * @codeCoverageIgnore
-     */
     public function getSalt()
     {
         return null; // No-op
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getUsername(): string
     {
         return $this->username;
@@ -103,28 +94,17 @@ abstract class SecurityUser implements UserInterface, EquatableInterface, \Seria
         return $this->enabled;
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
-     */
     public function eraseCredentials(): void
     {
         // no-op
     }
 
     /**
-     * {@inheritdoc}
-     */
-
-    /**
-     * {@inheritdoc}
-     *
      * @param static $user
      */
     public function isEqualTo(UserInterface $user): bool
     {
-        if (\get_class($user) !== \get_class($this)) {
+        if (get_class($user) !== get_class($this)) {
             return false;
         }
 
@@ -133,11 +113,11 @@ abstract class SecurityUser implements UserInterface, EquatableInterface, \Seria
             return false;
         }
 
-        if (!hash_equals($user->getPassword(), $this->getPassword())) {
+        if (! hash_equals($user->getPassword(), $this->getPassword())) {
             return false;
         }
 
         /** @var static $user */
-        return !($user->isEnabled() !== $this->isEnabled());
+        return ! ($user->isEnabled() !== $this->isEnabled());
     }
 }

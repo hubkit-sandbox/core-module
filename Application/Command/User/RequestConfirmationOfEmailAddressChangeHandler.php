@@ -26,16 +26,13 @@ final class RequestConfirmationOfEmailAddressChangeHandler
     private $tokenTTL;
 
     /**
-     * @param UserRepository     $repository
-     * @param ConfirmationMailer $mailer
-     * @param SplitTokenFactory  $tokenFactory
-     * @param int                $tokenTTL     Maximum life-time in seconds (default is 'one hour')
+     * @param int $tokenTTL Maximum life-time in seconds (default is 'one hour')
      */
     public function __construct(UserRepository $repository, ConfirmationMailer $mailer, SplitTokenFactory $tokenFactory, int $tokenTTL = 3600)
     {
-        $this->tokenTTL = $tokenTTL;
-        $this->userCollection = $repository;
-        $this->splitTokenFactory = $tokenFactory;
+        $this->tokenTTL           = $tokenTTL;
+        $this->userCollection     = $repository;
+        $this->splitTokenFactory  = $tokenFactory;
         $this->confirmationMailer = $mailer;
     }
 
@@ -43,17 +40,17 @@ final class RequestConfirmationOfEmailAddressChangeHandler
     {
         $email = $command->email();
 
-        if (null !== $this->userCollection->findByEmailAddress($email)) {
+        if ($this->userCollection->findByEmailAddress($email) !== null) {
             // E-mail address is already in use by (another) user. To prevent exposing existence simply do nothing.
             // This also covers when the e-mail address was not actually changed.
             return;
         }
 
-        $id = $command->id();
+        $id   = $command->id();
         $user = $this->userCollection->get($id);
 
-        $tokenExpiration = new \DateTimeImmutable('+ '.$this->tokenTTL.' seconds');
-        $splitToken = $this->splitTokenFactory->generate($id->toString(), $tokenExpiration);
+        $tokenExpiration = new \DateTimeImmutable('+ ' . $this->tokenTTL . ' seconds');
+        $splitToken      = $this->splitTokenFactory->generate($id->toString())->expireAt($tokenExpiration);
 
         if ($user->setConfirmationOfEmailAddressChange($email, $splitToken->toValueHolder())) {
             $this->userCollection->save($user);

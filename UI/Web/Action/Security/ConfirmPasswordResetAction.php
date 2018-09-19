@@ -32,7 +32,7 @@ final class ConfirmPasswordResetAction
     public function __construct(SplitTokenFactory $tokenFactory, ServiceBusFormFactory $formFactory)
     {
         $this->tokenFactory = $tokenFactory;
-        $this->formFactory = $formFactory;
+        $this->formFactory  = $formFactory;
     }
 
     public function __invoke(Request $request, string $token)

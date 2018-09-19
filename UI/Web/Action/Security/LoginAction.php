@@ -26,17 +26,17 @@ final class LoginAction
 
     public function __construct(AuthenticationUtils $authUtils, ApplicationContext $applicationContext)
     {
-        $this->authUtils = $authUtils;
+        $this->authUtils          = $authUtils;
         $this->applicationContext = $applicationContext;
     }
 
     public function __invoke(Request $request)
     {
-        $error = $this->authUtils->getLastAuthenticationError();
+        $error        = $this->authUtils->getLastAuthenticationError();
         $lastUsername = $this->authUtils->getLastUsername();
 
         return new TwigResponse('@ParkManagerCore/security/login.html.twig', [
-            'route' => 'park_manager.'.$this->applicationContext->getRouteNamePrefix().'.security_login',
+            'route' => 'park_manager.' . $this->applicationContext->getRouteNamePrefix() . '.security_login',
             'last_username' => $lastUsername,
             'error' => $error,
         ]);

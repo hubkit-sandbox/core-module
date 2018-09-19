@@ -54,12 +54,12 @@ return function (ContainerConfigurator $c) {
                 ->subscriber(SendPasswordResetMailWhenPasswordResetWasRequested::class)
             ->end()
         ->end()
-        ->handlers(__DIR__.'/../../../../Application/Command/Administrator')
+        ->handlers(__DIR__ . '/../../../../Application/Command/Administrator')
             ->load('ParkManager\Module\CoreModule\Application\Command\Administrator\\', '*Handler.php')
         ->end();
 
     QueryBusConfigurator::register($di, 'park_manager.query_bus.administrator')
-        ->handlers(__DIR__.'/../../../../Application/Query')
+        ->handlers(__DIR__ . '/../../../../Application/Query')
         ->end();
 
     // Services

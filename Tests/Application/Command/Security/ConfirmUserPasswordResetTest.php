@@ -29,7 +29,7 @@ final class ConfirmUserPasswordResetTest extends TestCase
     public function its_constructable()
     {
         $password = 'my-password-I-forgot';
-        $token = FakeSplitTokenFactory::instance()->fromString(self::TOKEN_STRING);
+        $token    = FakeSplitTokenFactory::instance()->fromString(self::TOKEN_STRING);
 
         $command = new ConfirmUserPasswordReset($token, $password);
 

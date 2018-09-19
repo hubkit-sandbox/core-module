@@ -19,7 +19,7 @@ final class EmailChangeConfirmationRejected extends \InvalidArgumentException
     public function __construct()
     {
         parent::__construct(
-            'Failed to accept e-mail address change confirmation. '.
+            'Failed to accept e-mail address change confirmation. ' .
             'Token is invalid/expired or no request was registered.',
             1
         );

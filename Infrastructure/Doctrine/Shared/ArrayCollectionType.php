@@ -18,18 +18,19 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\JsonType;
+use function is_resource;
+use function json_decode;
+use function json_encode;
+use function stream_get_contents;
 
 final class ArrayCollectionType extends JsonType
 {
     /**
-     * @param Collection|null  $value
-     * @param AbstractPlatform $platform
-     *
-     * @return null|string
+     * @param Collection|null $value
      */
     public function convertToDatabaseValue($value, AbstractPlatform $platform): ?string
     {
-        if (null === $value) {
+        if ($value === null) {
             return null;
         }
 
@@ -38,11 +39,11 @@ final class ArrayCollectionType extends JsonType
 
     public function convertToPHPValue($value, AbstractPlatform $platform): ArrayCollection
     {
-        if (null === $value || '' === $value) {
+        if ($value === null || $value === '') {
             return new ArrayCollection();
         }
 
-        $value = \is_resource($value) ? stream_get_contents($value) : $value;
+        $value = is_resource($value) ? stream_get_contents($value) : $value;
 
         return new ArrayCollection(json_decode($value, true));
     }

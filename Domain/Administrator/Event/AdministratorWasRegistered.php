@@ -26,8 +26,8 @@ final class AdministratorWasRegistered extends DomainEvent
 
     public function __construct(AdministratorId $id, EmailAddress $email, string $displayName)
     {
-        $this->id = $id;
-        $this->email = $email;
+        $this->id          = $id;
+        $this->email       = $email;
         $this->displayName = $displayName;
     }
 

@@ -15,6 +15,8 @@ declare(strict_types=1);
 namespace ParkManager\Module\CoreModule\Infrastructure\DependencyInjection;
 
 use Symfony\Component\Config\Resource\SelfCheckingResourceInterface;
+use function serialize;
+use function unserialize;
 
 /**
  * Tracks if a specific env-variable was changed.
@@ -27,12 +29,12 @@ final class EnvVariableResource implements SelfCheckingResourceInterface
     public function __construct(string $envName)
     {
         $this->resource = $envName;
-        $this->value = $_ENV[$envName] ?? null;
+        $this->value    = $_ENV[$envName] ?? null;
     }
 
     public function __toString(): string
     {
-        return 'env:'.$this->resource;
+        return 'env:' . $this->resource;
     }
 
     public function isFresh($timestamp): bool

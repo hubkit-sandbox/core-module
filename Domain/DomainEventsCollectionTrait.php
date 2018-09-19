@@ -33,7 +33,7 @@ trait DomainEventsCollectionTrait
      */
     public function releaseEvents(): array
     {
-        $pendingEvents = $this->domainEvents;
+        $pendingEvents      = $this->domainEvents;
         $this->domainEvents = [];
 
         return $pendingEvents;

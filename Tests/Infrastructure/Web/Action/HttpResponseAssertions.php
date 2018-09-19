@@ -22,10 +22,10 @@ final class HttpResponseAssertions
 {
     public static function assertRequestWasSuccessful(Client $client): void
     {
-        if (!$client->getResponse()->isSuccessful()) {
+        if (! $client->getResponse()->isSuccessful()) {
             Assert::fail(
-                'Last request was not successful (statusCode: ]200 - 300]):'.
-                VarDumper::dump($client->getInternalRequest()).
+                'Last request was not successful (statusCode: ]200 - 300]):' .
+                VarDumper::dump($client->getInternalRequest()) .
                 VarDumper::dump($client->getInternalResponse())
             );
         }
@@ -39,8 +39,8 @@ final class HttpResponseAssertions
             Assert::assertEquals(
                 $statusCode,
                 $client->getResponse()->getStatusCode(),
-                'Last response did not match status-code. '.
-                VarDumper::dump($client->getInternalRequest()).
+                'Last response did not match status-code. ' .
+                VarDumper::dump($client->getInternalRequest()) .
                 VarDumper::dump($client->getInternalResponse())
             );
         }
@@ -51,10 +51,10 @@ final class HttpResponseAssertions
     public static function assertRequestWasRedirected(Client $client, string ...$expectedUrls): void
     {
         foreach ($expectedUrls as $expectedUrl) {
-            if (!$client->getResponse()->isRedirect($expectedUrl)) {
+            if (! $client->getResponse()->isRedirect($expectedUrl)) {
                 Assert::fail(
-                    'Last request was not a redirect to: '.$expectedUrl.
-                    VarDumper::dump($client->getInternalRequest()).
+                    'Last request was not a redirect to: ' . $expectedUrl .
+                    VarDumper::dump($client->getInternalRequest()) .
                     VarDumper::dump($client->getInternalResponse())
                 );
             }

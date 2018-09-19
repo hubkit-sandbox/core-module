@@ -20,9 +20,7 @@ use ParkManager\Module\CoreModule\Tests\Domain\Mock\Event\UserWasRegistered;
 /** @internal */
 final class User extends EventsRecordingEntity
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $name;
 
     public static function register(string $name): self

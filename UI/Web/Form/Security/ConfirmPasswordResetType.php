@@ -29,6 +29,7 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraint;
+use function iterator_to_array;
 
 class ConfirmPasswordResetType extends AbstractType implements DataMapperInterface
 {
@@ -51,7 +52,7 @@ class ConfirmPasswordResetType extends AbstractType implements DataMapperInterfa
                     'constraints' => $options['password_constraints'],
                 ],
                 'algorithm' => function (string $value) {
-                    return 'encoded('.$value.')';
+                    return 'encoded(' . $value . ')';
                 }, // FIXME This needs an actual service
             ]);
     }

@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Application\Command\Security;
 
+use DateTimeImmutable;
 use ParkManager\Component\Security\Token\SplitTokenFactory;
 use ParkManager\Module\CoreModule\Domain\Shared\UserRepository;
 
@@ -26,8 +27,8 @@ final class RequestUserPasswordResetHandler
     public function __construct(UserRepository $repository, SplitTokenFactory $tokenFactory, int $tokenTTL = 3600)
     {
         $this->userRepository = $repository;
-        $this->tokenFactory = $tokenFactory;
-        $this->tokenTTL = $tokenTTL;
+        $this->tokenFactory   = $tokenFactory;
+        $this->tokenTTL       = $tokenTTL;
     }
 
     public function __invoke(RequestUserPasswordReset $command): void
@@ -39,10 +40,13 @@ final class RequestUserPasswordResetHandler
         // It's still possible persistence may leak timing information
         // but leaking persistence timing is less risky.
 
-        $tokenExpiration = new \DateTimeImmutable('+ '.$this->tokenTTL.' seconds');
-        $splitToken = $this->tokenFactory->generate(null, $tokenExpiration);
+        $splitToken = $this->tokenFactory->generate()->expireAt(
+            new DateTimeImmutable('+ ' . $this->tokenTTL . ' seconds')
+        );
 
-        if (null === ($user = $this->userRepository->findByEmailAddress($command->email()))) {
+        $user = $this->userRepository->findByEmailAddress($command->email());
+
+        if ($user === null) {
             // No account with this e-mail address. To prevent exposing existence simply do nothing.
             // It's still possible generating the token may leak timing information,
             return;

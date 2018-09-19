@@ -32,6 +32,11 @@
         },
         "sort-packages": true
     },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.3-dev"
+        }
+    },
     "autoload": {
         "psr-4": {
             "ParkManager\\Module\\CoreModule\\": ""
@@ -43,10 +48,5 @@
     },
     "autoload-dev": {
         "ParkManager\\Module\\CoreModule\\Tests\\": "Tests"
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "0.3-dev"
-        }
     }
 }

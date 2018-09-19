@@ -43,14 +43,14 @@ class DoctrineOrmUserRepository extends EntityRepository implements UserReposito
 
     /**
      * @param UserId $id
-     *
-     * @return User
      */
     public function get(AbstractUserId $id): User
     {
         Assertion::isInstanceOf($id, UserId::class);
 
-        if (null === $user = $this->find($id)) {
+        $user = $this->find($id);
+
+        if ($user === null) {
             throw UserNotFound::withUserId($id);
         }
 
@@ -90,7 +90,7 @@ class DoctrineOrmUserRepository extends EntityRepository implements UserReposito
             ->setParameter('selector', $selector)
             ->getOneOrNullResult();
 
-        if (null === $user) {
+        if ($user === null) {
             throw new PasswordResetTokenNotAccepted();
         }
 
@@ -105,7 +105,7 @@ class DoctrineOrmUserRepository extends EntityRepository implements UserReposito
             ->setParameter('selector', $selector)
             ->getOneOrNullResult();
 
-        if (null === $user) {
+        if ($user === null) {
             throw new PasswordResetTokenNotAccepted();
         }
 

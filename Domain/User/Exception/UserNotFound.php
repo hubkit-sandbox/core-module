@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace ParkManager\Module\CoreModule\Domain\User\Exception;
 
 use ParkManager\Module\CoreModule\Domain\User\UserId;
+use function sprintf;
 
 final class UserNotFound extends \InvalidArgumentException
 {

@@ -43,7 +43,9 @@ final class DoctrineOrmAdministratorRepository extends EntityRepository implemen
     {
         Assertion::isInstanceOf($id, AdministratorId::class);
 
-        if (null === $administrator = $this->find($id)) {
+        $administrator = $this->find($id);
+
+        if ($administrator === null) {
             throw AdministratorNotFound::withId($id);
         }
 
@@ -53,6 +55,7 @@ final class DoctrineOrmAdministratorRepository extends EntityRepository implemen
     public function save(AbstractUser $administrator): void
     {
         Assertion::isInstanceOf($administrator, Administrator::class);
+
         $this->_em->persist($administrator);
 
         foreach ($administrator->releaseEvents() as $event) {
@@ -83,7 +86,7 @@ final class DoctrineOrmAdministratorRepository extends EntityRepository implemen
             ->setParameter('selector', $selector)
             ->getOneOrNullResult();
 
-        if (null === $administrator) {
+        if ($administrator === null) {
             throw new PasswordResetTokenNotAccepted();
         }
 

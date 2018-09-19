@@ -23,7 +23,7 @@ trait EventSourcedRepositoryTestHelper
     {
         $eventBusProphecy = $this->prophesize(EventEmitter::class);
 
-        if (-1 === $expectedEventsCount) {
+        if ($expectedEventsCount === -1) {
             $eventBusProphecy->emit(Argument::any())->shouldBeCalled();
         } else {
             $eventBusProphecy->emit(Argument::any())->shouldBeCalledTimes($expectedEventsCount);

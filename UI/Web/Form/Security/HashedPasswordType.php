@@ -21,12 +21,16 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use function array_merge;
+use function gettype;
+use function is_string;
+use function sodium_memzero;
 
 final class HashedPasswordType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $passwordOptions = $options['password_options'] + ['required' => $options['required']];
+        $passwordOptions         = $options['password_options'] + ['required' => $options['required']];
         $passwordOptions['attr'] = array_merge(
             $passwordOptions['attr'] ?? [],
             [
@@ -38,7 +42,9 @@ final class HashedPasswordType extends AbstractType
         );
 
         if ($options['password_confirm']) {
-            $builder->add('password', RepeatedType::class,
+            $builder->add(
+                'password',
+                RepeatedType::class,
                 [
                     'type' => PasswordType::class,
                     'invalid_message' => 'password_not_the_same',
@@ -58,12 +64,12 @@ final class HashedPasswordType extends AbstractType
                     return null;
                 },
                 function ($value) use ($encoder): ?string {
-                    if (null === $value) {
+                    if ($value === null) {
                         return null;
                     }
 
-                    if (!\is_string($value)) {
-                        throw new TransformationFailedException('Expected string got "'.\gettype($value).'"');
+                    if (! is_string($value)) {
+                        throw new TransformationFailedException('Expected string got "' . gettype($value) . '"');
                     }
 
                     $encodePassword = $encoder($value);

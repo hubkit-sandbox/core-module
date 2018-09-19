@@ -105,7 +105,7 @@ final class RequestConfirmationOfEmailAddressChangeHandlerTest extends TestCase
                 $email,
                 Argument::that(
                     function (SplitToken $splitToken) {
-                        return '' !== $splitToken->token();
+                        return $splitToken->token() !== '';
                     }
                 ),
                 Argument::any()

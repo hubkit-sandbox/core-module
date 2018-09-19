@@ -28,7 +28,7 @@ final class ConfirmUserPasswordReset
 
     public function __construct(SplitToken $token, string $password)
     {
-        $this->token = $token;
+        $this->token    = $token;
         $this->password = $password;
     }
 

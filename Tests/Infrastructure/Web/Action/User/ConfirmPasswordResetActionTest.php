@@ -28,7 +28,7 @@ class ConfirmPasswordResetActionTest extends ConfirmPasswordResetActionTestCase
 
     protected function getEntryUri(string $token): string
     {
-        return '/admin/resetting/confirm/'.$token;
+        return '/admin/resetting/confirm/' . $token;
     }
 
     protected function getLoginUri(): string

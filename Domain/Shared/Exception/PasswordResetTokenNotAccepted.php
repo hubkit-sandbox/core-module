@@ -31,7 +31,7 @@ final class PasswordResetTokenNotAccepted extends \DomainException
     public function __construct(?SplitTokenValueHolder $storedToken = null, ?SplitToken $providedToken = null)
     {
         parent::__construct('PasswordReset is invalid (expired, no result or verifier mismatch).');
-        $this->storedToken = $storedToken;
+        $this->storedToken   = $storedToken;
         $this->providedToken = $providedToken;
     }
 

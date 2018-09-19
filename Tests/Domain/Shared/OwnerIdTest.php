@@ -29,7 +29,7 @@ final class OwnerIdTest extends TestCase
     public function it_creates_from_userId()
     {
         $userId = UserId::fromString(self::USER_ID);
-        $id = OwnerId::fromUserId($userId);
+        $id     = OwnerId::fromUserId($userId);
 
         self::assertTrue($id->equals(OwnerId::fromUserId(UserId::fromString(self::USER_ID))));
         self::assertFalse($id->equals(OwnerId::fromUserId(UserId::fromString('fb676f62-955a-11e8-8ef5-4a0003ae49a0'))));

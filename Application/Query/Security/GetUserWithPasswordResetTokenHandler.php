@@ -29,15 +29,15 @@ final class GetUserWithPasswordResetTokenHandler
 
     public function __invoke(GetUserByPasswordResetToken $query): AbstractUserId
     {
-        $user = $this->userFinder->getByPasswordResetToken($query->token()->selector());
+        $user       = $this->userFinder->getByPasswordResetToken($query->token()->selector());
         $resetToken = $user->passwordResetToken();
 
         // Technically this value can still be null! And it helps static analyzers.
-        if (null === $resetToken) {
+        if ($resetToken === null) {
             throw new PasswordResetTokenNotAccepted($resetToken, $query->token());
         }
 
-        if (!$query->token()->matches($resetToken)) {
+        if (! $query->token()->matches($resetToken)) {
             throw new PasswordResetTokenNotAccepted($resetToken, $query->token());
         }
 

@@ -48,10 +48,10 @@ final class FormAuthenticator extends AbstractFormLoginAuthenticator
         string $loginRoute,
         string $defaultSuccessRoute = '/'
     ) {
-        $this->csrfTokenManager = $csrfTokenManager;
-        $this->passwordEncoder = $passwordEncoder;
-        $this->urlGenerator = $urlGenerator;
-        $this->loginRoute = $loginRoute;
+        $this->csrfTokenManager    = $csrfTokenManager;
+        $this->passwordEncoder     = $passwordEncoder;
+        $this->urlGenerator        = $urlGenerator;
+        $this->loginRoute          = $loginRoute;
         $this->defaultSuccessRoute = $defaultSuccessRoute;
     }
 
@@ -59,14 +59,14 @@ final class FormAuthenticator extends AbstractFormLoginAuthenticator
     {
         $csrfToken = $request->request->get('_csrf_token');
 
-        if (false === $this->csrfTokenManager->isTokenValid(new CsrfToken('authenticate', $csrfToken))) {
+        if ($this->csrfTokenManager->isTokenValid(new CsrfToken('authenticate', $csrfToken)) === false) {
             throw new InvalidCsrfTokenException('Invalid CSRF token.');
         }
 
         $email = $request->request->get('_email');
 
-        if (null !== $session = $request->getSession()) {
-            $session->set(Security::LAST_USERNAME, $email);
+        if ($request->hasSession()) {
+            $request->getSession()->set(Security::LAST_USERNAME, $email);
         }
 
         return [
@@ -78,13 +78,12 @@ final class FormAuthenticator extends AbstractFormLoginAuthenticator
     /**
      * @param array        $credentials
      * @param UserProvider $userProvider
-     *
-     * @return SecurityUser|null
      */
     public function getUser($credentials, UserProviderInterface $userProvider): ?SecurityUser
     {
         $email = $credentials['email'];
-        if (null === $email) {
+
+        if ($email === null) {
             return null;
         }
 
@@ -94,16 +93,14 @@ final class FormAuthenticator extends AbstractFormLoginAuthenticator
     /**
      * @param mixed        $credentials
      * @param SecurityUser $user
-     *
-     * @return bool
      */
     public function checkCredentials($credentials, UserInterface $user): bool
     {
-        if (!$this->passwordEncoder->isPasswordValid($user, $credentials['password'])) {
+        if (! $this->passwordEncoder->isPasswordValid($user, $credentials['password'])) {
             throw new BadCredentialsException();
         }
 
-        if (!$user->isEnabled()) {
+        if (! $user->isEnabled()) {
             throw new AuthenticationException();
         }
 
@@ -118,7 +115,7 @@ final class FormAuthenticator extends AbstractFormLoginAuthenticator
             $targetPath = $this->getTargetPath($request->getSession(), $providerKey);
         }
 
-        if (!$targetPath) {
+        if (! $targetPath) {
             $targetPath = $this->urlGenerator->generate($this->defaultSuccessRoute);
         }
 

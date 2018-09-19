@@ -53,7 +53,7 @@ final class ConfirmPasswordResetTypeTest extends TypeTestCase
     public function it_hashes_password()
     {
         $token = $this->splitTokenFactory->fromString(FakeSplitTokenFactory::FULL_TOKEN);
-        $form = $this->factory->create(ConfirmPasswordResetType::class, null, ['token' => $token]);
+        $form  = $this->factory->create(ConfirmPasswordResetType::class, null, ['token' => $token]);
         $form->submit([
             'password' => ['password' => ['first' => 'Hello there', 'second' => 'Hello there']],
             'reset_token' => FakeSplitTokenFactory::FULL_TOKEN,
@@ -67,7 +67,7 @@ final class ConfirmPasswordResetTypeTest extends TypeTestCase
     public function it_does_not_accept_invalid_input()
     {
         $token = $this->splitTokenFactory->fromString(FakeSplitTokenFactory::FULL_TOKEN);
-        $form = $this->factory->create(ConfirmPasswordResetType::class, null, ['token' => $token]);
+        $form  = $this->factory->create(ConfirmPasswordResetType::class, null, ['token' => $token]);
         $form->submit([
             'password' => 'Hello there',
             'reset_token' => FakeSplitTokenFactory::FULL_TOKEN,
@@ -80,7 +80,7 @@ final class ConfirmPasswordResetTypeTest extends TypeTestCase
     public function it_does_not_accept_invalid_token()
     {
         $token = $this->splitTokenFactory->fromString(FakeSplitTokenFactory::FULL_TOKEN);
-        $form = $this->factory->create(ConfirmPasswordResetType::class, null, ['token' => $token]);
+        $form  = $this->factory->create(ConfirmPasswordResetType::class, null, ['token' => $token]);
         $form->submit(['password' => 'Hello there']);
 
         self::assertNull($form->getData());
@@ -90,7 +90,7 @@ final class ConfirmPasswordResetTypeTest extends TypeTestCase
     public function it_gives_null_for_model_password()
     {
         $token = $this->splitTokenFactory->fromString(FakeSplitTokenFactory::FULL_TOKEN);
-        $form = $this->factory->create(ConfirmPasswordResetType::class, null, ['token' => $token]);
+        $form  = $this->factory->create(ConfirmPasswordResetType::class, null, ['token' => $token]);
 
         self::assertFalse($form->isSubmitted());
         self::assertNull($form->getData());

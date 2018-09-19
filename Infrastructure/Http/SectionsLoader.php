@@ -25,22 +25,15 @@ final class SectionsLoader extends Loader
     private $isSecure;
 
     /**
-     * Constructor.
-     *
-     * @param LoaderResolverInterface $loader      Route loader resolver
-     * @param string                  $primaryHost
-     * @param bool                    $isSecure
+     * @param LoaderResolverInterface $loader Route loader resolver
      */
     public function __construct(LoaderResolverInterface $loader, ?string $primaryHost, bool $isSecure)
     {
-        $this->loader = $loader;
+        $this->loader      = $loader;
         $this->primaryHost = $primaryHost;
-        $this->isSecure = $isSecure;
+        $this->isSecure    = $isSecure;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function load($resource, $type = null)
     {
         $collection = new RouteCollection();
@@ -51,12 +44,9 @@ final class SectionsLoader extends Loader
         return $collection;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supports($resource, $type = null)
     {
-        return 'park_manager_sections_loader' === $type;
+        return $type === 'park_manager_sections_loader';
     }
 
     private function loadResource(string $resource): RouteCollection
@@ -77,7 +67,7 @@ final class SectionsLoader extends Loader
         $admin = $this->loadResource('park_manager.admin_section.root');
         $admin->addPrefix('admin/');
 
-        if (null !== $this->primaryHost) {
+        if ($this->primaryHost !== null) {
             $admin->setHost($this->primaryHost);
         }
 
@@ -88,7 +78,7 @@ final class SectionsLoader extends Loader
     {
         $api = $this->loadResource('park_manager.api_section.root');
 
-        if (null !== $this->primaryHost) {
+        if ($this->primaryHost !== null) {
             $api->setHost('api.{host}');
             $api->addRequirements(['host' => '.+']);
             $api->addDefaults(['host' => $this->primaryHost]);

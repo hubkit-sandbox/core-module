@@ -38,9 +38,15 @@ final class HashedSecurityPasswordTypeTest extends TypeTestCase
     public function it_hashes_password()
     {
         $builder = $this->factory->createBuilder();
-        $builder->add('password', HashedPasswordType::class, ['algorithm' => function (string $value) {
-            return 'encoded('.$value.')';
-        }]);
+        $builder->add(
+            'password',
+            HashedPasswordType::class,
+            [
+                'algorithm' => function (string $value) {
+                    return 'encoded(' . $value . ')';
+                },
+            ]
+        );
 
         $form = $builder->getForm();
         $form->submit(['password' => ['password' => 'Hello there']]);
@@ -54,9 +60,15 @@ final class HashedSecurityPasswordTypeTest extends TypeTestCase
     {
         $builder = $this->factory->createBuilder(FormType::class, ['name' => 'Ruby']);
         $builder->add('name', TextType::class);
-        $builder->add('password', HashedPasswordType::class, ['algorithm' => function (string $value) {
-            return 'encoded('.$value.')';
-        }]);
+        $builder->add(
+            'password',
+            HashedPasswordType::class,
+            [
+                'algorithm' => function (string $value) {
+                    return 'encoded(' . $value . ')';
+                },
+            ]
+        );
 
         $form = $builder->getForm();
 
@@ -71,7 +83,7 @@ final class HashedSecurityPasswordTypeTest extends TypeTestCase
         $builder->add('password', HashedPasswordType::class, [
             'password_confirm' => true,
             'algorithm' => function (string $value) {
-                return 'encoded('.$value.')';
+                return 'encoded(' . $value . ')';
             },
         ]);
 

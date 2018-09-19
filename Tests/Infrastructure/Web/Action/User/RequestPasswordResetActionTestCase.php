@@ -37,7 +37,7 @@ abstract class RequestPasswordResetActionTestCase extends WebTestCase
         HttpResponseAssertions::assertRequestWasSuccessful($client);
 
         $form = $crawler->selectButton('password_reset.submit_button')->form();
-        $form->setValues([$this->getFormName().'[email]' => $this->getEmailAddress()]);
+        $form->setValues([$this->getFormName() . '[email]' => $this->getEmailAddress()]);
 
         $client->submit($form);
         HttpResponseAssertions::assertRequestWasRedirected($client, $this->getLoginUri());

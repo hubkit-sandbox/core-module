@@ -23,7 +23,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
-use Symfony\Component\Validator\Constraints\{Email, NotBlank};
+use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 final class RegisterAdministratorCommand extends Command
@@ -38,9 +39,9 @@ final class RegisterAdministratorCommand extends Command
     {
         parent::__construct();
 
-        $this->validator = $validator;
+        $this->validator       = $validator;
         $this->passwordEncoder = $passwordEncoder;
-        $this->commandBus = $commandBus;
+        $this->commandBus      = $commandBus;
     }
 
     protected function configure()
@@ -58,7 +59,7 @@ EOT
         $io = new SymfonyStyle($input, $output);
 
         $displayName = $io->ask('Display name');
-        $email = $io->ask('E-mail address', null, function ($value) {
+        $email       = $io->ask('E-mail address', null, function ($value) {
             $violationList = $this->validator->validate($value, [new NotBlank(), new Email()]);
 
             if ($violationList->count() > 0) {

@@ -24,6 +24,7 @@ use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\Compiler\ServiceLocatorTagPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
+use function class_exists;
 
 final class DependencyExtension extends ParkManagerModuleDependencyExtension implements RegistersDoctrineDbalTypes
 {
@@ -55,13 +56,13 @@ final class DependencyExtension extends ParkManagerModuleDependencyExtension imp
     protected function prependExtra(ContainerBuilder $container): void
     {
         $container->prependExtensionConfig('twig', [
-            'globals' => ['app_context' => '@'.AppContextGlobal::class],
+            'globals' => ['app_context' => '@' . AppContextGlobal::class],
         ]);
     }
 
     protected function registerRoutes(RouteImporter $routeImporter, ?string $configDir): void
     {
-        $routeImporter->import($configDir.'/routing/administrator.php', 'park_manager.admin_section.root');
-        $routeImporter->import($configDir.'/routing/client.php', 'park_manager.client_section.root');
+        $routeImporter->import($configDir . '/routing/administrator.php', 'park_manager.admin_section.root');
+        $routeImporter->import($configDir . '/routing/client.php', 'park_manager.client_section.root');
     }
 }

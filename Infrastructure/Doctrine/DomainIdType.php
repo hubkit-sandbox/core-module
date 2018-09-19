@@ -16,10 +16,11 @@ namespace ParkManager\Module\CoreModule\Infrastructure\Doctrine;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\GuidType;
+use function is_string;
 
 abstract class DomainIdType extends GuidType
 {
-    public const NAME = 'park_manager_domain_id';
+    public const NAME         = 'park_manager_domain_id';
     public const OBJECT_CLASS = null;
 
     final public function getName(): string
@@ -34,7 +35,7 @@ abstract class DomainIdType extends GuidType
 
     final public function convertToDatabaseValue($value, AbstractPlatform $platform): ?string
     {
-        if (null === $value || \is_string($value)) {
+        if ($value === null || is_string($value)) {
             return $value;
         }
 
@@ -43,7 +44,7 @@ abstract class DomainIdType extends GuidType
 
     final public function convertToPHPValue($value, AbstractPlatform $platform)
     {
-        if (null === $value) {
+        if ($value === null) {
             return $value;
         }
 

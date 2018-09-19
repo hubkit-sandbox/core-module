@@ -26,9 +26,7 @@ use ParkManager\Module\CoreModule\Domain\Shared\Exception\PasswordResetTokenNotA
 interface UserRepository
 {
     /**
-     * @param string $selector
-     *
-     * @throws PasswordResetTokenNotAccepted when no user is found with
+     * @throws PasswordResetTokenNotAccepted When no user is found with
      *                                       this split-token selector
      *
      * @return AbstractUser
@@ -36,15 +34,11 @@ interface UserRepository
     public function getByPasswordResetToken(string $selector);
 
     /**
-     * @param EmailAddress $email
-     *
      * @return AbstractUser|null
      */
     public function findByEmailAddress(EmailAddress $email);
 
     /**
-     * @param AbstractUserId $id
-     *
      * @return AbstractUser
      */
     public function get(AbstractUserId $id);
@@ -53,8 +47,6 @@ interface UserRepository
      * Save the user information in the repository.
      *
      * For "this" specific interface only updates are issued.
-     *
-     * @param AbstractUser $user
      */
     public function save(AbstractUser $user): void;
 }

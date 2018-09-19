@@ -17,7 +17,6 @@ namespace ParkManager\Module\CoreModule\Tests\Application\Command\User;
 use ParkManager\Module\CoreModule\Application\Command\User\ChangeUserPassword;
 use ParkManager\Module\CoreModule\Application\Command\User\ChangeUserPasswordHandler;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Prophecy\ObjectProphecy;
 
 /**
  * @internal

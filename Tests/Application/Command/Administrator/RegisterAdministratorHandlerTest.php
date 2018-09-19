@@ -29,7 +29,7 @@ use Prophecy\Argument;
  */
 final class RegisterAdministratorHandlerTest extends TestCase
 {
-    private const ID_NEW = '01dd5964-5426-11e7-be03-acbc32b58315';
+    private const ID_NEW      = '01dd5964-5426-11e7-be03-acbc32b58315';
     private const ID_EXISTING = 'a0816f44-6545-11e7-a234-acbc32b58315';
 
     /** @test */

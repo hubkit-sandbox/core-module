@@ -25,7 +25,7 @@ final class PasswordResetWasRequested extends DomainEvent
 
     public function __construct(AbstractUserId $id, SplitToken $token)
     {
-        $this->id = $id;
+        $this->id    = $id;
         $this->token = $token;
     }
 

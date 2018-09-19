@@ -25,19 +25,14 @@ final class RegisterAdministrator
     private $password;
 
     /**
-     * Constructor.
-     *
-     * @param string      $id
-     * @param string      $email
-     * @param string      $displayName
-     * @param null|string $password    Null (no password) or an encoded password string (not plain)
+     * @param null|string $password Null (no password) or an encoded password string (not plain)
      */
     public function __construct(string $id, string $email, string $displayName, ?string $password = null)
     {
-        $this->id = AdministratorId::fromString($id);
-        $this->email = new EmailAddress($email);
+        $this->id          = AdministratorId::fromString($id);
+        $this->email       = new EmailAddress($email);
         $this->displayName = $displayName;
-        $this->password = $password;
+        $this->password    = $password;
     }
 
     public function id(): AdministratorId

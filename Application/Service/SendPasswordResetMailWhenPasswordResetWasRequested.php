@@ -31,7 +31,7 @@ final class SendPasswordResetMailWhenPasswordResetWasRequested implements EventS
 
     public function __construct(PasswordResetMailer $mailer, UserRepository $userRepository)
     {
-        $this->mailer = $mailer;
+        $this->mailer         = $mailer;
         $this->userRepository = $userRepository;
     }
 
@@ -45,8 +45,6 @@ final class SendPasswordResetMailWhenPasswordResetWasRequested implements EventS
 
     public static function getSubscribedEvents(): array
     {
-        return [
-            PasswordResetWasRequested::class => 'onPasswordResetWasRequested',
-        ];
+        return [PasswordResetWasRequested::class => 'onPasswordResetWasRequested'];
     }
 }

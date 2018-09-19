@@ -20,17 +20,19 @@ use ParkManager\Module\CoreModule\Infrastructure\Security\SecurityUser;
 use ParkManager\Module\CoreModule\Tests\Infrastructure\Fixtures\Security\SecurityUserExtended;
 use ParkManager\Module\CoreModule\Tests\Infrastructure\Fixtures\Security\SecurityUserSecond;
 use PHPUnit\Framework\TestCase;
+use function serialize;
+use function unserialize;
 
 final class SecurityUserTest extends TestCase
 {
-    private const ID1 = '930c3fd0-3bd1-11e7-bb9b-acdc32b58315';
-    private const ID2 = 'c831846c-53f6-11e7-aceb-acbc32b58315';
+    private const ID1      = '930c3fd0-3bd1-11e7-bb9b-acdc32b58315';
+    private const ID2      = 'c831846c-53f6-11e7-aceb-acbc32b58315';
     private const PASSWORD = 'my-password-is-better-then-your-password';
 
     /** @test */
     public function its_username_equals_UserId()
     {
-        $securityUser = $this->createSecurityUser();
+        $securityUser  = $this->createSecurityUser();
         $securityUser2 = $this->createSecurityUser(self::ID2);
 
         self::assertSame(self::ID1, $securityUser->getUsername());

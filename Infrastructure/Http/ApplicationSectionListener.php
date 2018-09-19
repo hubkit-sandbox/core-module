@@ -32,14 +32,14 @@ final class ApplicationSectionListener implements EventSubscriberInterface
      */
     public function __construct(array $sectionMatchers, ApplicationContext $applicationContext, SwitchableUserRepository $userRepository)
     {
-        $this->sectionMatchers = $sectionMatchers;
+        $this->sectionMatchers    = $sectionMatchers;
         $this->applicationContext = $applicationContext;
-        $this->userRepository = $userRepository;
+        $this->userRepository     = $userRepository;
     }
 
     public function onKernelRequest(GetResponseEvent $event): void
     {
-        if (!$event->isMasterRequest()) {
+        if (! $event->isMasterRequest()) {
             return;
         }
 

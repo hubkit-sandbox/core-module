@@ -23,6 +23,9 @@ use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
+use function get_class;
+use function is_subclass_of;
+use function sprintf;
 
 final class UserProvider implements UserProviderInterface
 {
@@ -32,9 +35,9 @@ final class UserProvider implements UserProviderInterface
     public function __construct(UserRepository $repository, string $userClass)
     {
         $this->repository = $repository;
-        $this->userClass = $userClass;
+        $this->userClass  = $userClass;
 
-        if (!is_subclass_of($userClass, SecurityUser::class, true)) {
+        if (! is_subclass_of($userClass, SecurityUser::class, true)) {
             throw new \InvalidArgumentException(
                 sprintf('Expected UserClass (%s) to be a child of "%s"', $userClass, SecurityUser::class)
             );
@@ -45,7 +48,7 @@ final class UserProvider implements UserProviderInterface
     {
         $user = $this->repository->findByEmailAddress(new EmailAddress($username));
 
-        if (null === $user) {
+        if ($user === null) {
             $e = new UsernameNotFoundException();
             $e->setUsername($username);
 
@@ -57,13 +60,11 @@ final class UserProvider implements UserProviderInterface
 
     /**
      * @param SecurityUser $user
-     *
-     * @return SecurityUser
      */
     public function refreshUser(UserInterface $user): SecurityUser
     {
-        if (!$user instanceof $this->userClass) {
-            throw new UnsupportedUserException(sprintf('Expected an instance of %s, but got "%s".', $this->userClass, \get_class($user)));
+        if (! $user instanceof $this->userClass) {
+            throw new UnsupportedUserException(sprintf('Expected an instance of %s, but got "%s".', $this->userClass, get_class($user)));
         }
 
         try {

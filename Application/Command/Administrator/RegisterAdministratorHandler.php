@@ -31,7 +31,7 @@ final class RegisterAdministratorHandler
     {
         $email = $command->email();
 
-        if (null !== $this->repository->findByEmailAddress($email)) {
+        if ($this->repository->findByEmailAddress($email) !== null) {
             throw new AdministratorEmailAddressAlreadyInUse();
         }
 

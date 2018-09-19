@@ -19,13 +19,15 @@ use ParkManager\Module\CoreModule\Infrastructure\DependencyInjection\DependencyE
 use ParkManager\Module\CoreModule\Infrastructure\DependencyInjection\EnvVariableResource;
 use ParkManager\Module\CoreModule\Infrastructure\Http\CookiesRequestMatcher;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\HttpFoundation\RequestMatcher;
+use function realpath;
 
 class ParkManagerCoreModule extends AbstractParkManagerModule
 {
-    public function getContainerExtension(): DependencyExtension
+    public function getContainerExtension(): ?ExtensionInterface
     {
-        if (null === $this->extension) {
+        if ($this->extension === null) {
             $this->extension = new DependencyExtension();
         }
 
@@ -34,11 +36,10 @@ class ParkManagerCoreModule extends AbstractParkManagerModule
 
     public static function setAppConfiguration(ContainerBuilder $container): void
     {
-        // XXX MOVE TO CoreModule
         $container->addResource(new EnvVariableResource('PRIMARY_HOST'));
         $container->addResource(new EnvVariableResource('ENABLE_HTTPS'));
 
-        $isSecure = (($_ENV['ENABLE_HTTPS'] ?? 'false') === 'true');
+        $isSecure    = (($_ENV['ENABLE_HTTPS'] ?? 'false') === 'true');
         $primaryHost = $_ENV['PRIMARY_HOST'] ?? null;
 
         $container->setParameter('park_manager.config.primary_host', $_ENV['PRIMARY_HOST'] ?? '');
@@ -60,10 +61,11 @@ class ParkManagerCoreModule extends AbstractParkManagerModule
         }
     }
 
-    protected function getDoctrineMappings(): array
+    protected function getDoctrineOrmMappings(): array
     {
-        $mapping = parent::getDoctrineMappings();
-        $mapping[realpath(__DIR__.'/Infrastructure/Doctrine/SecurityMapping')] = 'ParkManager\\Component\\Security';
+        $mapping = parent::getDoctrineOrmMappings();
+
+        $mapping[realpath(__DIR__ . '/Infrastructure/Doctrine/SecurityMapping')] = 'ParkManager\\Component\\Security';
 
         return $mapping;
     }

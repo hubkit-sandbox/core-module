@@ -21,8 +21,8 @@ abstract class EntityRepository extends BaseEntityRepository
 {
     public function __construct(EntityManagerInterface $entityManager, string $className)
     {
-        $this->_em = $entityManager;
-        $this->_class = $entityManager->getMetadataFactory()->getMetadataFor($className);
+        $this->_em         = $entityManager;
+        $this->_class      = $entityManager->getMetadataFactory()->getMetadataFor($className);
         $this->_entityName = $className;
     }
 }

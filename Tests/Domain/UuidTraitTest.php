@@ -16,6 +16,10 @@ namespace ParkManager\Module\CoreModule\Tests\Domain;
 
 use ParkManager\Module\CoreModule\Tests\Domain\Mock\MockIdentity;
 use PHPUnit\Framework\TestCase;
+use function json_decode;
+use function json_encode;
+use function serialize;
+use function unserialize;
 
 final class UuidTraitTest extends TestCase
 {
@@ -30,7 +34,7 @@ final class UuidTraitTest extends TestCase
     /** @test */
     public function it_allows_comparing()
     {
-        $id = MockIdentity::create();
+        $id  = MockIdentity::create();
         $id2 = MockIdentity::create();
 
         self::assertTrue($id->equals($id));
@@ -55,7 +59,7 @@ final class UuidTraitTest extends TestCase
     /** @test */
     public function its_serializable()
     {
-        $id = MockIdentity::fromString('56253090-3960-11e7-94fd-acbc32b58315');
+        $id         = MockIdentity::fromString('56253090-3960-11e7-94fd-acbc32b58315');
         $serialized = serialize($id);
 
         self::assertEquals($id, unserialize($serialized, []));
@@ -64,7 +68,7 @@ final class UuidTraitTest extends TestCase
     /** @test */
     public function its_json_serializable()
     {
-        $id = MockIdentity::fromString('56253090-3960-11e7-94fd-acbc32b58315');
+        $id         = MockIdentity::fromString('56253090-3960-11e7-94fd-acbc32b58315');
         $serialized = json_encode($id);
 
         self::assertEquals('56253090-3960-11e7-94fd-acbc32b58315', json_decode($serialized, true));

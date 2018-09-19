@@ -29,7 +29,7 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root($this->configName);
+        $rootNode    = $treeBuilder->root($this->configName);
 
         $rootNode
             ->children()

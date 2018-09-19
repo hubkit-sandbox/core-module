@@ -29,7 +29,7 @@ trait UuidTrait
 
     protected function __construct(UuidInterface $value)
     {
-        $this->value = $value;
+        $this->value       = $value;
         $this->stringValue = $value->toString();
     }
 
@@ -55,7 +55,7 @@ trait UuidTrait
 
     public function equals($identity): bool
     {
-        if (!$identity instanceof self) {
+        if (! $identity instanceof self) {
             return false;
         }
 
@@ -69,7 +69,7 @@ trait UuidTrait
 
     public function unserialize($serialized): void
     {
-        $this->value = Uuid::fromString($serialized);
+        $this->value       = Uuid::fromString($serialized);
         $this->stringValue = $this->value->toString();
     }
 

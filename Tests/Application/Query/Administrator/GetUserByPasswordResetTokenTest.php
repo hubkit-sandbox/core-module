@@ -26,7 +26,7 @@ final class GetUserByPasswordResetTokenTest extends TestCase
     /** @test */
     public function it_constructable()
     {
-        $message = new GetUserByPasswordResetToken(
+        $message   = new GetUserByPasswordResetToken(
             $token = FakeSplitTokenFactory::instance()->fromString('S1th74ywhDETYAaXWi-2Bee2_ltx-JPGKs9SVvbZCkMi8ZxiEVMBw68S')
         );
 

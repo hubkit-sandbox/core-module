@@ -17,6 +17,7 @@ namespace ParkManager\Module\CoreModule\Tests\Infrastructure\Web\Action\User;
 use ParkManager\Component\Security\Token\SplitToken;
 use ParkManager\Module\CoreModule\Domain\User\User;
 use ParkManager\Module\CoreModule\Domain\User\UserId;
+use ParkManager\Module\CoreModule\Domain\User\UserRepository;
 use ParkManager\Module\CoreModule\Tests\Infrastructure\Web\Action\HttpResponseAssertions;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -35,16 +36,16 @@ abstract class ConfirmPasswordResetActionTestCase extends WebTestCase
     public function its_accessible_by_anonymous()
     {
         $client = self::createClient();
-        $token = SplitToken::generate($this->getUserId());
-        $user = $this->givenUserExistsAndHasToken($client, $token);
+        $token  = SplitToken::generate($this->getUserId());
+        $user   = $this->givenUserExistsAndHasToken($client, $token);
 
         $crawler = $client->request('GET', $this->getEntryUri($token->token()));
         HttpResponseAssertions::assertRequestWasSuccessful($client);
 
         $form = $crawler->selectButton('button.change_password')->form();
         $form->setValues([
-            $this->getFormName().'[password][first]' => 'new-password',
-            $this->getFormName().'[password][second]' => 'new-password',
+            $this->getFormName() . '[password][first]' => 'new-password',
+            $this->getFormName() . '[password][second]' => 'new-password',
         ]);
 
         $client->submit($form);
@@ -104,7 +105,7 @@ abstract class ConfirmPasswordResetActionTestCase extends WebTestCase
 
     private function givenUserExistsAndHasToken(Client $client, SplitToken $token): User
     {
-        /** @var \ParkManager\Module\CoreModule\Domain\User\UserRepository $repository */
+        /** @var UserRepository $repository */
         $repository = $client->getContainer()->get($this->getRepositoryServiceId());
         /** @var User $user */
         $user = $repository->get(UserId::fromString($this->getUserId()));

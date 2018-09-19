@@ -28,9 +28,9 @@ final class PasswordResetSwiftMailer implements PasswordResetMailer
 
     public function __construct(Sender $sender, UrlGeneratorInterface $urlGenerator, string $route)
     {
-        $this->sender = $sender;
+        $this->sender       = $sender;
         $this->urlGenerator = $urlGenerator;
-        $this->route = $route;
+        $this->route        = $route;
     }
 
     public function send(EmailAddress $emailAddress, SplitToken $splitToken, \DateTimeImmutable $tokenExpiration): void

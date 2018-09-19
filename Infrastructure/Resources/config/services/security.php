@@ -15,28 +15,23 @@ declare(strict_types=1);
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use League\Tactician\Plugins\LockingMiddleware;
-use ParkManager\Bundle\ServiceBusBundle\DependencyInjection\Configurator\{MessageBusConfigurator,QueryBusConfigurator};
+use ParkManager\Bundle\ServiceBusBundle\DependencyInjection\Configurator\MessageBusConfigurator;
+use ParkManager\Bundle\ServiceBusBundle\DependencyInjection\Configurator\QueryBusConfigurator;
 use ParkManager\Component\ApplicationFoundation\Command\CommandBus;
 use ParkManager\Component\ApplicationFoundation\Query\QueryBus;
 use ParkManager\Component\FormHandler\ServiceBusFormFactory;
-use ParkManager\Module\CoreModule\Application\Command\Security\{
-    ConfirmUserPasswordResetHandler,
-    RequestUserPasswordResetHandler
-};
+use ParkManager\Module\CoreModule\Application\Command\Security\ConfirmUserPasswordResetHandler;
+use ParkManager\Module\CoreModule\Application\Command\Security\RequestUserPasswordResetHandler;
 use ParkManager\Module\CoreModule\Application\Query\Security\GetUserWithPasswordResetTokenHandler;
 use ParkManager\Module\CoreModule\Domain\Shared\UserRepository;
 use ParkManager\Module\CoreModule\Infrastructure\Context\SwitchableUserRepository;
-use ParkManager\Module\CoreModule\Infrastructure\Security\{
-    AdministratorUser,
-    FormAuthenticator,
-    GenericUser,
-    UserProvider
-};
-use ParkManager\Module\CoreModule\UI\Web\Action\Security\{
-    ConfirmPasswordResetAction,
-    LoginAction,
-    RequestPasswordResetAction
-};
+use ParkManager\Module\CoreModule\Infrastructure\Security\AdministratorUser;
+use ParkManager\Module\CoreModule\Infrastructure\Security\FormAuthenticator;
+use ParkManager\Module\CoreModule\Infrastructure\Security\GenericUser;
+use ParkManager\Module\CoreModule\Infrastructure\Security\UserProvider;
+use ParkManager\Module\CoreModule\UI\Web\Action\Security\ConfirmPasswordResetAction;
+use ParkManager\Module\CoreModule\UI\Web\Action\Security\LoginAction;
+use ParkManager\Module\CoreModule\UI\Web\Action\Security\RequestPasswordResetAction;
 
 return function (ContainerConfigurator $c) {
     $di = $c->services()->defaults()

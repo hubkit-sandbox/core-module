@@ -20,6 +20,7 @@ use Symfony\Component\Form\DataMapperInterface;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
+use function iterator_to_array;
 
 class RequestPasswordResetType extends AbstractType implements DataMapperInterface
 {

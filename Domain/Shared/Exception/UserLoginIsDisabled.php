@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace ParkManager\Module\CoreModule\Domain\Shared\Exception;
 
 use ParkManager\Module\CoreModule\Domain\Shared\AbstractUserId;
+use function sprintf;
 
 final class UserLoginIsDisabled extends \DomainException
 {

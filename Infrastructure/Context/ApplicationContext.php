@@ -14,6 +14,8 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Infrastructure\Context;
 
+use function sprintf;
+
 /**
  * @final
  */
@@ -26,29 +28,25 @@ class ApplicationContext
         'api' => true,
     ];
 
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     private $activeSection;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $privateSection = false;
 
     public function setActiveSection(string $section): void
     {
-        if (!isset(self::SECTIONS[$section])) {
+        if (! isset(self::SECTIONS[$section])) {
             throw new \InvalidArgumentException(sprintf('Section "%s" is not supported.', $section));
         }
 
-        $this->privateSection = 'private' === $section;
-        $this->activeSection = 'private' === $section ? 'client' : $section;
+        $this->privateSection = $section === 'private';
+        $this->activeSection  = $section === 'private' ? 'client' : $section;
     }
 
     public function reset()
     {
-        $this->activeSection = null;
+        $this->activeSection  = null;
         $this->privateSection = false;
     }
 
@@ -75,9 +73,9 @@ class ApplicationContext
 
     private function guardRepositoryIsActive(): void
     {
-        if (null === $this->activeSection) {
+        if ($this->activeSection === null) {
             throw new \RuntimeException(
-                'No active section was set. '.
+                'No active section was set. ' .
                 'If this service was invoked using the command-line, set the active-section by calling setActiveSection().'
             );
         }

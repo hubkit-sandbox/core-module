@@ -25,10 +25,10 @@ abstract class EventSourcedEntityRepository extends EntityRepository
 
     public function __construct(EntityManagerInterface $entityManager, EventEmitter $eventBus, string $className)
     {
-        $this->_em = $entityManager;
-        $this->_class = $entityManager->getClassMetadata($className);
+        $this->_em         = $entityManager;
+        $this->_class      = $entityManager->getClassMetadata($className);
         $this->_entityName = $className;
-        $this->eventBus = $eventBus;
+        $this->eventBus    = $eventBus;
     }
 
     protected function doDispatchEvents(EventsRecordingEntity $aggregateRoot): void

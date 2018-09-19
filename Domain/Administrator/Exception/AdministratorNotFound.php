@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace ParkManager\Module\CoreModule\Domain\Administrator\Exception;
 
 use ParkManager\Module\CoreModule\Domain\Administrator\AdministratorId;
+use function sprintf;
 
 final class AdministratorNotFound extends \InvalidArgumentException
 {

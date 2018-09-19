@@ -19,6 +19,7 @@ use ParkManager\Module\CoreModule\Domain\Shared\AbstractUserId;
 use ParkManager\Module\CoreModule\Domain\Shared\EmailAddress;
 use ParkManager\Module\CoreModule\Domain\Shared\UserRepository;
 use Psr\Container\ContainerInterface;
+use function sprintf;
 
 /**
  * Allow to switch the active user-repository at runtime.
@@ -32,14 +33,10 @@ class SwitchableUserRepository implements UserRepository
 {
     private $repositories;
 
-    /**
-     * @var UserRepository|null
-     */
+    /** @var UserRepository|null */
     private $repository;
 
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     private $active;
 
     public function __construct(ContainerInterface $repositories)
@@ -49,17 +46,17 @@ class SwitchableUserRepository implements UserRepository
 
     public function setActive(?string $name): void
     {
-        if (!$this->repositories->has($name)) {
+        if (! $this->repositories->has($name)) {
             throw new \InvalidArgumentException(sprintf('Repository "%s" is not supported.', $name));
         }
 
-        $this->active = $name;
+        $this->active     = $name;
         $this->repository = null;
     }
 
     public function reset()
     {
-        $this->active = null;
+        $this->active     = null;
         $this->repository = null;
     }
 
@@ -93,13 +90,13 @@ class SwitchableUserRepository implements UserRepository
 
     private function guardRepositoryIsActive(): void
     {
-        if (null === $this->active) {
+        if ($this->active === null) {
             throw new \RuntimeException('Call setActive() before invoking any other method.');
         }
 
         $repository = $this->repositories->get($this->active);
 
-        if (!($repository instanceof UserRepository)) {
+        if (! ($repository instanceof UserRepository)) {
             throw new \RuntimeException(sprintf('Repository "%s" service was expected to return a UserRepository instance.', $this->active));
         }
 

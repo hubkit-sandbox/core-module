@@ -14,13 +14,16 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Test\Domain;
 
+use ParkManager\Component\DomainEvent\DomainEvent;
 use ParkManager\Module\CoreModule\Domain\EventsRecordingEntity;
+use function count;
+use function get_class;
+use function sprintf;
 
 trait EventsRecordingEntityAssertionTrait
 {
     /**
-     * @param EventsRecordingEntity                            $entity
-     * @param \ParkManager\Component\DomainEvent\DomainEvent[] $expectedEvents
+     * @param DomainEvent[] $expectedEvents
      */
     protected static function assertDomainEvents(EventsRecordingEntity $entity, array $expectedEvents): void
     {
@@ -28,10 +31,10 @@ trait EventsRecordingEntityAssertionTrait
 
         foreach ($expectedEvents as $i => $event) {
             self::assertArrayHasKey($i, $events, 'Event must exist at position.');
-            self::assertEquals(\get_class($events[$i]), \get_class($event), 'Event at position must be of same type');
+            self::assertEquals(get_class($events[$i]), get_class($event), 'Event at position must be of same type');
         }
 
-        self::assertCount($c = \count($expectedEvents), $events, sprintf('Expected exactly "%d" events.', $c));
+        self::assertCount($c = count($expectedEvents), $events, sprintf('Expected exactly "%d" events.', $c));
     }
 
     protected static function assertNoDomainEvents(EventsRecordingEntity $entity): void

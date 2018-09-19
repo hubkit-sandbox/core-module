@@ -24,9 +24,7 @@ interface AdministratorRepository extends UserRepository
     /**
      * @param AdministratorId $id
      *
-     * @throws AdministratorNotFound when no administrator was found with the id
-     *
-     * @return Administrator
+     * @throws AdministratorNotFound When no administrator was found with the id
      */
     public function get($id): Administrator;
 
@@ -46,8 +44,6 @@ interface AdministratorRepository extends UserRepository
 
     /**
      * Remove an administrator registration from the repository.
-     *
-     * @param Administrator $administrator
      */
     public function remove(Administrator $administrator): void;
 }

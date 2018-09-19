@@ -25,29 +25,19 @@ interface UserRepository extends BaseUserRepository
     /**
      * @param UserId $id
      *
-     * @throws UserNotFound when no user was found with the id
-     *
-     * @return User
+     * @throws UserNotFound When no user was found with the id
      */
     public function get(AbstractUserId $id): User;
 
     public function findByEmailAddress(EmailAddress $email): ?User;
 
     /**
-     * @param string $selector
-     *
-     * @throws UserNotFound when no user was found with the token selector
-     *
-     * @return User
+     * @throws UserNotFound When no user was found with the token selector
      */
     public function getByEmailAddressChangeToken(string $selector): User;
 
     /**
-     * @param string $selector
-     *
-     * @throws UserNotFound when no user was found with the token selector
-     *
-     * @return User
+     * @throws UserNotFound When no user was found with the token selector
      */
     public function getByPasswordResetToken(string $selector): User;
 
@@ -62,8 +52,6 @@ interface UserRepository extends BaseUserRepository
 
     /**
      * Remove a user registration from the repository.
-     *
-     * @param User $user
      */
     public function remove(User $user): void;
 }
