@@ -12,7 +12,7 @@ declare(strict_types=1);
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-namespace ParkManager\Module\CoreModule\Tests\Application\Command\Administrator;
+namespace ParkManager\Module\CoreModule\Tests\Application\Command\Security;
 
 use ParkManager\Module\CoreModule\Application\Command\Security\RequestUserPasswordReset;
 use PHPUnit\Framework\TestCase;
