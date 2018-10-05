@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Application\Command\User;
 
-use ParkManager\Module\CoreModule\Domain\User\UserRepository;
+use ParkManager\Module\CoreModule\Domain\Shared\UserRepository;
 
 final class ChangeUserPasswordHandler
 {

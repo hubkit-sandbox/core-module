@@ -12,21 +12,11 @@ declare(strict_types=1);
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-namespace ParkManager\Module\CoreModule\Domain\User\Event;
+namespace ParkManager\Module\CoreModule\Infrastructure\Messenger;
 
-use ParkManager\Module\CoreModule\Domain\Shared\AbstractUserId;
-
-final class UserPasswordWasChanged
+interface RestrictionValidator
 {
-    private $id;
+    public static function accept(object $message): bool;
 
-    public function __construct(AbstractUserId $id)
-    {
-        $this->id = $id;
-    }
-
-    public function id(): AbstractUserId
-    {
-        return $this->id;
-    }
+    public function validate(object $message): void;
 }

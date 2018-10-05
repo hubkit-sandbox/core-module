@@ -12,21 +12,8 @@ declare(strict_types=1);
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-namespace ParkManager\Module\CoreModule\Domain\User\Event;
+namespace ParkManager\Module\CoreModule\Infrastructure\Messenger;
 
-use ParkManager\Module\CoreModule\Domain\Shared\AbstractUserId;
-
-final class UserPasswordWasChanged
+final class RestrictionConstraintsAreExceeded extends \LogicException
 {
-    private $id;
-
-    public function __construct(AbstractUserId $id)
-    {
-        $this->id = $id;
-    }
-
-    public function id(): AbstractUserId
-    {
-        return $this->id;
-    }
 }

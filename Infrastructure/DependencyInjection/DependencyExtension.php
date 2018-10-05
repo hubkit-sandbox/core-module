@@ -44,7 +44,8 @@ final class DependencyExtension extends ParkManagerModuleDependencyExtension imp
 
     protected function loadModule(array $configs, ContainerBuilder $container, LoaderInterface $loader): void
     {
-        $loader->load('*.php', 'glob');
+        $loader->load('services.php');
+        $loader->load('services/*.php', 'glob');
 
         if (class_exists(TwigResponseListener::class)) {
             $container->register(TwigResponseListener::class)

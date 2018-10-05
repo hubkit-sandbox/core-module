@@ -16,14 +16,14 @@ namespace ParkManager\Module\CoreModule\Infrastructure\Doctrine;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
-use ParkManager\Component\DomainEvent\EventEmitter;
 use ParkManager\Module\CoreModule\Domain\EventsRecordingEntity;
+use Symfony\Component\Messenger\MessageBusInterface as MessageBus;
 
 abstract class EventSourcedEntityRepository extends EntityRepository
 {
     protected $eventBus;
 
-    public function __construct(EntityManagerInterface $entityManager, EventEmitter $eventBus, string $className)
+    public function __construct(EntityManagerInterface $entityManager, MessageBus $eventBus, string $className)
     {
         $this->_em         = $entityManager;
         $this->_class      = $entityManager->getClassMetadata($className);
@@ -34,7 +34,7 @@ abstract class EventSourcedEntityRepository extends EntityRepository
     protected function doDispatchEvents(EventsRecordingEntity $aggregateRoot): void
     {
         foreach ($aggregateRoot->releaseEvents() as $event) {
-            $this->eventBus->emit($event);
+            $this->eventBus->dispatch($event);
         }
     }
 }

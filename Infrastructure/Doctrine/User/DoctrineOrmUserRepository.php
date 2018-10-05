@@ -16,7 +16,6 @@ namespace ParkManager\Module\CoreModule\Infrastructure\Doctrine\User;
 
 use Assert\Assertion;
 use Doctrine\ORM\EntityManagerInterface;
-use ParkManager\Component\DomainEvent\EventEmitter;
 use ParkManager\Module\CoreModule\Domain\Shared\AbstractUser;
 use ParkManager\Module\CoreModule\Domain\Shared\AbstractUserId;
 use ParkManager\Module\CoreModule\Domain\Shared\EmailAddress;
@@ -26,6 +25,7 @@ use ParkManager\Module\CoreModule\Domain\User\User;
 use ParkManager\Module\CoreModule\Domain\User\UserId;
 use ParkManager\Module\CoreModule\Domain\User\UserRepository;
 use ParkManager\Module\CoreModule\Infrastructure\Doctrine\EntityRepository;
+use Symfony\Component\Messenger\MessageBusInterface as MessageBus;
 
 /**
  * @method User find($id, $lockMode = null, $lockVersion = null)
@@ -33,12 +33,12 @@ use ParkManager\Module\CoreModule\Infrastructure\Doctrine\EntityRepository;
  */
 class DoctrineOrmUserRepository extends EntityRepository implements UserRepository
 {
-    protected $eventEmitter;
+    protected $eventBus;
 
-    public function __construct(EntityManagerInterface $entityManager, EventEmitter $eventEmitter, string $className = User::class)
+    public function __construct(EntityManagerInterface $entityManager, MessageBus $eventBus, string $className = User::class)
     {
         parent::__construct($entityManager, $className);
-        $this->eventEmitter = $eventEmitter;
+        $this->eventBus = $eventBus;
     }
 
     /**
@@ -63,7 +63,7 @@ class DoctrineOrmUserRepository extends EntityRepository implements UserReposito
         $this->_em->persist($user);
 
         foreach ($user->releaseEvents() as $event) {
-            $this->eventEmitter->emit($event);
+            $this->eventBus->dispatch($event);
         }
     }
 

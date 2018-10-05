@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Infrastructure\Console\Command;
 
-use ParkManager\Component\ApplicationFoundation\Command\CommandBus;
 use ParkManager\Module\CoreModule\Application\Command\Administrator\RegisterAdministrator;
 use ParkManager\Module\CoreModule\Domain\User\UserId;
 use ParkManager\Module\CoreModule\Infrastructure\Security\AdministratorUser;
@@ -22,6 +21,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Messenger\MessageBusInterface as MessageBus;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -35,7 +35,7 @@ final class RegisterAdministratorCommand extends Command
     private $passwordEncoder;
     private $commandBus;
 
-    public function __construct(ValidatorInterface $validator, EncoderFactoryInterface $passwordEncoder, CommandBus $commandBus)
+    public function __construct(ValidatorInterface $validator, EncoderFactoryInterface $passwordEncoder, MessageBus $commandBus)
     {
         parent::__construct();
 
@@ -72,7 +72,7 @@ EOT
         $password = $this->passwordEncoder->getEncoder(AdministratorUser::class)
             ->encodePassword($io->askHidden('Password'), '');
 
-        $this->commandBus->handle(
+        $this->commandBus->dispatch(
             new RegisterAdministrator(UserId::create()->toString(), $email, $displayName, $password)
         );
 

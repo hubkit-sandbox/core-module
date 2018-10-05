@@ -21,10 +21,10 @@ final class ConfirmEmailAddressChangeHandler
 {
     private $userCollection;
 
-    public function __construct(UserRepository $userCollection)
-    {
-        $this->userCollection = $userCollection;
-    }
+//    public function __construct(UserRepository $userCollection)
+//    {
+//        $this->userCollection = $userCollection;
+//    }
 
     public function __invoke(ConfirmEmailAddressChange $command): void
     {

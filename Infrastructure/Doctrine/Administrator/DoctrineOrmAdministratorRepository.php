@@ -16,7 +16,6 @@ namespace ParkManager\Module\CoreModule\Infrastructure\Doctrine\Administrator;
 
 use Assert\Assertion;
 use Doctrine\ORM\EntityManagerInterface;
-use ParkManager\Component\DomainEvent\EventEmitter;
 use ParkManager\Module\CoreModule\Domain\Administrator\Administrator;
 use ParkManager\Module\CoreModule\Domain\Administrator\AdministratorId;
 use ParkManager\Module\CoreModule\Domain\Administrator\AdministratorRepository;
@@ -24,19 +23,17 @@ use ParkManager\Module\CoreModule\Domain\Administrator\Exception\AdministratorNo
 use ParkManager\Module\CoreModule\Domain\Shared\AbstractUser;
 use ParkManager\Module\CoreModule\Domain\Shared\EmailAddress;
 use ParkManager\Module\CoreModule\Domain\Shared\Exception\PasswordResetTokenNotAccepted;
-use ParkManager\Module\CoreModule\Infrastructure\Doctrine\EntityRepository;
+use ParkManager\Module\CoreModule\Infrastructure\Doctrine\EventSourcedEntityRepository;
+use Symfony\Component\Messenger\MessageBusInterface as MessageBus;
 
 /**
  * @method Administrator find($id, $lockMode = null, $lockVersion = null)
  */
-final class DoctrineOrmAdministratorRepository extends EntityRepository implements AdministratorRepository
+final class DoctrineOrmAdministratorRepository extends EventSourcedEntityRepository implements AdministratorRepository
 {
-    private $eventEmitter;
-
-    public function __construct(EntityManagerInterface $entityManager, EventEmitter $eventEmitter, string $className = Administrator::class)
+    public function __construct(EntityManagerInterface $entityManager, MessageBus $eventBus, string $className = Administrator::class)
     {
-        parent::__construct($entityManager, $className);
-        $this->eventEmitter = $eventEmitter;
+        parent::__construct($entityManager, $eventBus, $className);
     }
 
     public function get($id): Administrator
@@ -58,9 +55,7 @@ final class DoctrineOrmAdministratorRepository extends EntityRepository implemen
 
         $this->_em->persist($administrator);
 
-        foreach ($administrator->releaseEvents() as $event) {
-            $this->eventEmitter->emit($event);
-        }
+        $this->doDispatchEvents($administrator);
     }
 
     public function remove(Administrator $administrator): void

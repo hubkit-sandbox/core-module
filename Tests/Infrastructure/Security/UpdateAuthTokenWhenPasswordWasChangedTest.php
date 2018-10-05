@@ -40,7 +40,7 @@ final class UpdateAuthTokenWhenPasswordWasChangedTest extends TestCase
         $tokenStorage = $this->createProvidingOnlyTokenStorage(null);
         $listener     = new UpdateAuthTokenWhenPasswordWasChanged($userProvider, $tokenStorage);
 
-        $listener->onUserPasswordWasChanged(new UserPasswordWasChanged(UserId::fromString(self::ID1)));
+        $listener->__invoke(new UserPasswordWasChanged(UserId::fromString(self::ID1)));
     }
 
     /** @test */
@@ -52,7 +52,7 @@ final class UpdateAuthTokenWhenPasswordWasChangedTest extends TestCase
         $tokenStorage = $this->createProvidingOnlyTokenStorage($token);
         $listener     = new UpdateAuthTokenWhenPasswordWasChanged($userProvider, $tokenStorage);
 
-        $listener->onUserPasswordWasChanged(new UserPasswordWasChanged(UserId::fromString(self::ID1)));
+        $listener->__invoke(new UserPasswordWasChanged(UserId::fromString(self::ID1)));
     }
 
     /** @test */
@@ -63,7 +63,7 @@ final class UpdateAuthTokenWhenPasswordWasChangedTest extends TestCase
         $tokenStorage = $this->createProvidingOnlyTokenStorage($token);
         $listener     = new UpdateAuthTokenWhenPasswordWasChanged($userProvider, $tokenStorage);
 
-        $listener->onUserPasswordWasChanged(new UserPasswordWasChanged(UserId::fromString(self::ID1)));
+        $listener->__invoke(new UserPasswordWasChanged(UserId::fromString(self::ID1)));
     }
 
     /** @test */
@@ -74,7 +74,7 @@ final class UpdateAuthTokenWhenPasswordWasChangedTest extends TestCase
         $tokenStorage = $this->createProvidingOnlyTokenStorage($token);
         $listener     = new UpdateAuthTokenWhenPasswordWasChanged($userProvider, $tokenStorage);
 
-        $listener->onUserPasswordWasChanged(new UserPasswordWasChanged(UserId::fromString(self::ID1)));
+        $listener->__invoke(new UserPasswordWasChanged(UserId::fromString(self::ID1)));
     }
 
     /** @test */
@@ -85,7 +85,7 @@ final class UpdateAuthTokenWhenPasswordWasChangedTest extends TestCase
         $tokenStorage = $this->createProvidingOnlyTokenStorage($token);
         $listener     = new UpdateAuthTokenWhenPasswordWasChanged($userProvider, $tokenStorage);
 
-        $listener->onUserPasswordWasChanged(new UserPasswordWasChanged(UserId::fromString(self::ID1)));
+        $listener->__invoke(new UserPasswordWasChanged(UserId::fromString(self::ID1)));
     }
 
     /** @test */
@@ -96,7 +96,7 @@ final class UpdateAuthTokenWhenPasswordWasChangedTest extends TestCase
         $tokenStorage = $this->createGetAndStoreTokenStorage($token);
         $listener     = new UpdateAuthTokenWhenPasswordWasChanged($userProvider, $tokenStorage);
 
-        $listener->onUserPasswordWasChanged(new UserPasswordWasChanged(UserId::fromString(self::ID1)));
+        $listener->__invoke(new UserPasswordWasChanged(UserId::fromString(self::ID1)));
 
         self::assertTrue($token->isAuthenticated());
         self::assertSame($newUser, $token->getUser());

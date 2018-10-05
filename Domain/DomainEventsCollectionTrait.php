@@ -14,8 +14,6 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Domain;
 
-use ParkManager\Component\DomainEvent\DomainEvent;
-
 /**
  * The DomainEventsCollectionTrait keeps track of recorded events.
  */
@@ -23,13 +21,13 @@ trait DomainEventsCollectionTrait
 {
     protected $domainEvents = [];
 
-    protected function recordThat(DomainEvent $event): void
+    protected function recordThat(object $event): void
     {
         $this->domainEvents[] = $event;
     }
 
     /**
-     * @return DomainEvent[]
+     * @return object[]
      */
     public function releaseEvents(): array
     {

@@ -14,13 +14,14 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
-use ParkManager\Component\ApplicationFoundation\Message\ServiceMessages;
-use ParkManager\Component\Mailer\NullSender;
-use ParkManager\Component\Mailer\Sender;
 use ParkManager\Component\Security\Token\Argon2SplitTokenFactory;
 use ParkManager\Component\Security\Token\SplitTokenFactory;
+use ParkManager\Module\CoreModule\Domain\Administrator\AdministratorRepository;
+use ParkManager\Module\CoreModule\Domain\User\UserRepository;
 use ParkManager\Module\CoreModule\Infrastructure\Context\ApplicationContext;
 use ParkManager\Module\CoreModule\Infrastructure\Context\SwitchableUserRepository;
+use ParkManager\Module\CoreModule\Infrastructure\Doctrine\Administrator\DoctrineOrmAdministratorRepository;
+use ParkManager\Module\CoreModule\Infrastructure\Doctrine\User\DoctrineOrmUserRepository;
 use ParkManager\Module\CoreModule\Infrastructure\Http\ApplicationSectionListener;
 use ParkManager\Module\CoreModule\Infrastructure\Http\SectionsLoader;
 use ParkManager\Module\CoreModule\Infrastructure\Twig\AppContextGlobal;
@@ -31,26 +32,29 @@ use Symfony\Component\DependencyInjection\ServiceLocator;
 return function (ContainerConfigurator $c) {
     $di = $c->services()->defaults()
         ->autowire()
-        ->private();
+        ->private()
+        ->bind('$eventBus', ref('park_manager.event_bus'));
 
-    // ServiceBus ServiceMessages allow the service-bus to communicate non-critical messages
-    // back to higher layers.
-    $di->set('park_manager.service_bus.log_messages', ServiceMessages::class)
-        ->alias(ServiceMessages::class, 'park_manager.service_bus.log_messages');
+    $di->set(Argon2SplitTokenFactory::class)
+        ->alias(SplitTokenFactory::class, Argon2SplitTokenFactory::class);
 
-    $di->set(Argon2SplitTokenFactory::class)->alias(SplitTokenFactory::class, Argon2SplitTokenFactory::class);
-    $di->set(NullSender::class)->alias(Sender::class, NullSender::class);
+    $di->set('park_manager.repository.administrator', DoctrineOrmAdministratorRepository::class)
+        ->alias(AdministratorRepository::class, 'park_manager.repository.administrator');
+
+    $di->set('park_manager.repository.generic_user', DoctrineOrmUserRepository::class)
+        ->alias(UserRepository::class, 'park_manager.repository.generic_user');
 
     $di->set(SwitchableUserRepository::class)->args([
         inline(ServiceLocator::class)
             ->tag('container.service_locator')
             ->arg(0, [
                 'admin' => new ServiceClosureArgument(new Reference('park_manager.repository.administrator')),
+                'client' => new ServiceClosureArgument(new Reference('park_manager.repository.generic_user')),
                 'private' => new ServiceClosureArgument(new Reference('park_manager.repository.administrator')),
-                'client' => new ServiceClosureArgument(new Reference('park_manager.repository.administrator')),
             ]),
     ]);
 
+    // RoutingLoader
     $di->set(SectionsLoader::class)
         ->tag('routing.loader')
         ->arg('$loader', ref('routing.resolver'))

@@ -14,11 +14,10 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Domain\Administrator\Event;
 
-use ParkManager\Component\DomainEvent\DomainEvent;
 use ParkManager\Module\CoreModule\Domain\Administrator\AdministratorId;
 use ParkManager\Module\CoreModule\Domain\Shared\EmailAddress;
 
-final class AdministratorWasRegistered extends DomainEvent
+final class AdministratorWasRegistered
 {
     private $id;
     private $email;

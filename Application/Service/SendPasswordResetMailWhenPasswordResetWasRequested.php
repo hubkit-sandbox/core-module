@@ -14,17 +14,14 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Application\Service;
 
-use ParkManager\Component\DomainEvent\EventSubscriber;
 use ParkManager\Module\CoreModule\Domain\Shared\Event\PasswordResetWasRequested;
 use ParkManager\Module\CoreModule\Domain\Shared\UserRepository;
 
 /**
  * Listens for the {@link PasswordResetWasRequested} domain event and sends
- * a password-reset email (with the token) to the user if of the event.
- *
- * This listener stops propagation directly after sending.
+ * a password-reset email (with the token) to the user of the event.
  */
-final class SendPasswordResetMailWhenPasswordResetWasRequested implements EventSubscriber
+final class SendPasswordResetMailWhenPasswordResetWasRequested
 {
     private $mailer;
     private $userRepository;
@@ -35,16 +32,9 @@ final class SendPasswordResetMailWhenPasswordResetWasRequested implements EventS
         $this->userRepository = $userRepository;
     }
 
-    public function onPasswordResetWasRequested(PasswordResetWasRequested $event): void
+    public function __invoke(PasswordResetWasRequested $event): void
     {
         $user = $this->userRepository->get($event->id());
         $this->mailer->send($user->email(), $event->token(), $user->passwordResetToken()->expiresAt());
-
-        $event->stopPropagation();
-    }
-
-    public static function getSubscribedEvents(): array
-    {
-        return [PasswordResetWasRequested::class => 'onPasswordResetWasRequested'];
     }
 }

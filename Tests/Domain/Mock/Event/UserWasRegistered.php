@@ -14,9 +14,7 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Tests\Domain\Mock\Event;
 
-use ParkManager\Component\DomainEvent\DomainEvent;
-
-final class UserWasRegistered extends DomainEvent
+final class UserWasRegistered
 {
     private $id;
     private $name;
