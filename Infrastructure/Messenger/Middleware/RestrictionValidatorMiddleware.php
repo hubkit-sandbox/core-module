@@ -36,7 +36,7 @@ final class RestrictionValidatorMiddleware implements MiddlewareInterface
     public function __construct(ContainerInterface $validatorsContainer, array $validatorClasses)
     {
         $this->validatorsContainer = $validatorsContainer;
-        $this->validatorClasses = $validatorClasses;
+        $this->validatorClasses    = $validatorClasses;
     }
 
     public function handle($message, callable $next)

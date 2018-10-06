@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Infrastructure\Messenger\Middleware;
 
-use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Middleware\MiddlewareInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;

@@ -14,9 +14,6 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
-use ParkManager\Module\CoreModule\Domain\Shared\UserRepository;
-use ParkManager\Module\CoreModule\Infrastructure\Context\SwitchableUserRepository;
-
 return function (ContainerConfigurator $c) {
     $di = $c->services()->defaults()
         ->autowire()

@@ -41,7 +41,8 @@ final class FormAuthenticator extends AbstractFormLoginAuthenticator
     private $loginRoute;
     private $defaultSuccessRoute;
 
-    public function __construct(CsrfTokenManager $csrfTokenManager, UserPasswordEncoder $passwordEncoder, UrlGenerator $urlGenerator, string $loginRoute, string $defaultSuccessRoute = '/') {
+    public function __construct(CsrfTokenManager $csrfTokenManager, UserPasswordEncoder $passwordEncoder, UrlGenerator $urlGenerator, string $loginRoute, string $defaultSuccessRoute = '/')
+    {
         $this->csrfTokenManager    = $csrfTokenManager;
         $this->passwordEncoder     = $passwordEncoder;
         $this->urlGenerator        = $urlGenerator;
