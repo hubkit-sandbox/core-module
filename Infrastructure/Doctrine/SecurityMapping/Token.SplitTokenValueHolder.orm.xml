@@ -4,7 +4,7 @@
     xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
         http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
-    <embeddable name="ParkManager\Component\Security\Token\SplitTokenValueHolder">
+    <embeddable name="ParkManager\Module\CoreModule\Domain\Shared\SplitTokenValueHolder">
         <field name="selector" type="string" length="32" nullable="true" unique="true" />
         <field name="verifierHash" column="verifier" type="text" nullable="true" />
         <field name="expiresAt" column="expires_at" type="datetime_immutable" nullable="true" />

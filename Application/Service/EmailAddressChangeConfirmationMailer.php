@@ -14,8 +14,8 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Application\Service;
 
-use ParkManager\Component\Security\Token\SplitToken;
 use ParkManager\Module\CoreModule\Domain\Shared\EmailAddress;
+use ParkManager\Module\CoreModule\Domain\Shared\SplitToken;
 
 interface EmailAddressChangeConfirmationMailer
 {

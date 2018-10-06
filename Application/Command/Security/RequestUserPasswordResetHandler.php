@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace ParkManager\Module\CoreModule\Application\Command\Security;
 
 use DateTimeImmutable;
-use ParkManager\Component\Security\Token\SplitTokenFactory;
+use ParkManager\Module\CoreModule\Application\Service\Crypto\SplitTokenFactory;
 use ParkManager\Module\CoreModule\Domain\Shared\UserRepository;
 
 final class RequestUserPasswordResetHandler

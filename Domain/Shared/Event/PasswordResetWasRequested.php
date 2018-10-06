@@ -14,8 +14,8 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Domain\Shared\Event;
 
-use ParkManager\Component\Security\Token\SplitToken;
 use ParkManager\Module\CoreModule\Domain\Shared\AbstractUserId;
+use ParkManager\Module\CoreModule\Domain\Shared\SplitToken;
 
 final class PasswordResetWasRequested
 {

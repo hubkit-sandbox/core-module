@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Tests\UI\Web\Form\Security;
 
-use ParkManager\Component\Security\Token\FakeSplitTokenFactory;
+use ParkManager\Module\CoreModule\Test\Crypto\FakeSplitTokenFactory;
 use ParkManager\Module\CoreModule\Application\Command\Security\ConfirmUserPasswordReset;
 use ParkManager\Module\CoreModule\UI\Web\Form\Security\ConfirmPasswordResetType;
 use Symfony\Component\Form\Test\Traits\ValidatorExtensionTrait;

@@ -14,10 +14,10 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Tests\Application\Command\User;
 
-use ParkManager\Component\Security\Token\FakeSplitTokenFactory;
-use ParkManager\Component\Security\Token\SplitToken;
+use ParkManager\Module\CoreModule\Test\Crypto\FakeSplitTokenFactory;
 use ParkManager\Module\CoreModule\Application\Command\User\ConfirmEmailAddressChange;
 use ParkManager\Module\CoreModule\Application\Command\User\ConfirmEmailAddressChangeHandler;
+use ParkManager\Module\CoreModule\Domain\Shared\SplitToken;
 use ParkManager\Module\CoreModule\Domain\User\Exception\EmailChangeConfirmationRejected;
 use ParkManager\Module\CoreModule\Domain\User\Exception\UserNotFound;
 use ParkManager\Module\CoreModule\Domain\User\User;

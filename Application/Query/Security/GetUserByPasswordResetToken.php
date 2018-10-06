@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Application\Query\Security;
 
-use ParkManager\Component\Security\Token\SplitToken;
+use ParkManager\Module\CoreModule\Domain\Shared\SplitToken;
 
 final class GetUserByPasswordResetToken
 {

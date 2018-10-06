@@ -14,12 +14,12 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\UI\Web\Form\Security;
 
-use ParkManager\Component\Security\Token\Argon2SplitTokenFactory;
-use ParkManager\Component\Security\Token\SplitToken;
-use ParkManager\Component\Security\Token\SplitTokenFactory;
+use ParkManager\Module\CoreModule\Application\Service\Crypto\Argon2SplitTokenFactory;
 use ParkManager\Module\CoreModule\Application\Command\Security\ConfirmUserPasswordReset;
+use ParkManager\Module\CoreModule\Application\Service\Crypto\SplitTokenFactory;
 use ParkManager\Module\CoreModule\Domain\Shared\Exception\PasswordResetTokenNotAccepted;
 use ParkManager\Module\CoreModule\Domain\Shared\Exception\UserLoginIsDisabled;
+use ParkManager\Module\CoreModule\Domain\Shared\SplitToken;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\DataMapperInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;

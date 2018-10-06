@@ -16,8 +16,8 @@ namespace ParkManager\Module\CoreModule\UI\Web\Action\Security;
 
 use ParkManager\Bridge\Twig\Response\TwigResponse;
 use ParkManager\Component\FormHandler\ServiceBusFormFactory;
-use ParkManager\Component\Security\Token\SplitTokenFactory;
 use ParkManager\Module\CoreModule\Application\Query\Security\GetUserByPasswordResetToken;
+use ParkManager\Module\CoreModule\Application\Service\Crypto\SplitTokenFactory;
 use ParkManager\Module\CoreModule\UI\Web\Form\Security\ConfirmPasswordResetType;
 use Rollerworks\Bundle\RouteAutofillBundle\Response\RouteRedirectResponse;
 use Symfony\Component\HttpFoundation\Request;

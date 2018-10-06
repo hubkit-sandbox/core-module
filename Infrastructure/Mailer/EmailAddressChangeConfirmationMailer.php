@@ -15,9 +15,9 @@ declare(strict_types=1);
 namespace ParkManager\Module\CoreModule\Infrastructure\Mailer;
 
 use ParkManager\Component\Mailer\Sender;
-use ParkManager\Component\Security\Token\SplitToken;
 use ParkManager\Module\CoreModule\Application\Service\EmailAddressChangeConfirmationMailer as EmailAddressChangeConfirmationMailerBase;
 use ParkManager\Module\CoreModule\Domain\Shared\EmailAddress;
+use ParkManager\Module\CoreModule\Domain\Shared\SplitToken;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class EmailAddressChangeConfirmationMailer implements EmailAddressChangeConfirmationMailerBase

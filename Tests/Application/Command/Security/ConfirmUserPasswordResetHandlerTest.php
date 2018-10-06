@@ -14,12 +14,12 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Tests\Application\Command\Security;
 
-use ParkManager\Component\Security\Token\FakeSplitTokenFactory;
-use ParkManager\Component\Security\Token\SplitToken;
+use ParkManager\Module\CoreModule\Test\Crypto\FakeSplitTokenFactory;
 use ParkManager\Module\CoreModule\Application\Command\Security\ConfirmUserPasswordReset;
 use ParkManager\Module\CoreModule\Application\Command\Security\ConfirmUserPasswordResetHandler;
 use ParkManager\Module\CoreModule\Domain\Shared\AbstractUser as User;
 use ParkManager\Module\CoreModule\Domain\Shared\Exception\PasswordResetTokenNotAccepted;
+use ParkManager\Module\CoreModule\Domain\Shared\SplitToken;
 use ParkManager\Module\CoreModule\Domain\Shared\UserRepository;
 use ParkManager\Module\CoreModule\Domain\User\Exception\PasswordResetConfirmationRejected;
 use PHPUnit\Framework\TestCase;

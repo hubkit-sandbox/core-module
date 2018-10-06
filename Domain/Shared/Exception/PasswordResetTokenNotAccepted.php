@@ -14,8 +14,8 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Domain\Shared\Exception;
 
-use ParkManager\Component\Security\Token\SplitToken;
-use ParkManager\Component\Security\Token\SplitTokenValueHolder;
+use ParkManager\Module\CoreModule\Domain\Shared\SplitToken;
+use ParkManager\Module\CoreModule\Domain\Shared\SplitTokenValueHolder;
 
 /**
  * PasswordResetTokenNotAccepted is thrown as a generic exception

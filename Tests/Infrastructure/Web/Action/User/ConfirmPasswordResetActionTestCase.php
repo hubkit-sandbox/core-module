@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Tests\Infrastructure\Web\Action\User;
 
-use ParkManager\Component\Security\Token\SplitToken;
+use ParkManager\Module\CoreModule\Domain\Shared\SplitToken;
 use ParkManager\Module\CoreModule\Domain\User\User;
 use ParkManager\Module\CoreModule\Domain\User\UserId;
 use ParkManager\Module\CoreModule\Domain\User\UserRepository;

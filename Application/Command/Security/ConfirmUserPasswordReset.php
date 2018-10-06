@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Application\Command\Security;
 
-use ParkManager\Component\Security\Token\SplitToken;
+use ParkManager\Module\CoreModule\Domain\Shared\SplitToken;
 
 /**
  * ConfirmUserPasswordReset (with encoded-password).
