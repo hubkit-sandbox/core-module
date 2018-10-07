@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Infrastructure\Web\Action\Security;
 
-use ParkManager\Bridge\Twig\Response\TwigResponse;
+use ParkManager\Module\CoreModule\Infrastructure\Web\TwigResponse;
 use ParkManager\Module\CoreModule\Infrastructure\Context\ApplicationContext;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;

@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Infrastructure\Web\Action;
 
-use ParkManager\Bridge\Twig\Response\TwigResponse;
+use ParkManager\Module\CoreModule\Infrastructure\Web\TwigResponse;
 
 final class HomepageAction
 {

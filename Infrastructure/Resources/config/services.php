@@ -72,7 +72,4 @@ return function (ContainerConfigurator $c) {
             'private' => ref('park_manager.section.private.request_matcher'),
             'client' => ref('park_manager.section.client.request_matcher'),
         ]);
-
-    // Twig
-    $di->set(AppContextGlobal::class);
 };

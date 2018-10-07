@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Infrastructure\DependencyInjection;
 
-use ParkManager\Bridge\Twig\EventListener\TwigResponseListener;
+use ParkManager\Module\CoreModule\Infrastructure\EventListener\TwigResponseListener;
 use ParkManager\Module\CoreModule\Infrastructure\DependencyInjection\Module\ParkManagerModuleDependencyExtension;
 use ParkManager\Module\CoreModule\Infrastructure\DependencyInjection\Module\RegistersDoctrineDbalTypes;
 use ParkManager\Module\CoreModule\Infrastructure\DependencyInjection\Module\Traits\DoctrineDbalTypesConfiguratorTrait;
@@ -46,12 +46,6 @@ final class DependencyExtension extends ParkManagerModuleDependencyExtension imp
     {
         $loader->load('services.php');
         $loader->load('services/*.php', 'glob');
-
-        if (class_exists(TwigResponseListener::class)) {
-            $container->register(TwigResponseListener::class)
-                ->addTag('kernel.event_subscriber')
-                ->setArgument(0, ServiceLocatorTagPass::register($container, ['twig' => new Reference('twig')]));
-        }
     }
 
     protected function prependExtra(ContainerBuilder $container): void
