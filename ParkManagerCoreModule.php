@@ -14,9 +14,9 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule;
 
-use ParkManager\Module\CoreModule\Infrastructure\DependencyInjection\Module\AbstractParkManagerModule;
 use ParkManager\Module\CoreModule\Infrastructure\DependencyInjection\DependencyExtension;
 use ParkManager\Module\CoreModule\Infrastructure\DependencyInjection\EnvVariableResource;
+use ParkManager\Module\CoreModule\Infrastructure\DependencyInjection\Module\AbstractParkManagerModule;
 use ParkManager\Module\CoreModule\Infrastructure\Http\CookiesRequestMatcher;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;

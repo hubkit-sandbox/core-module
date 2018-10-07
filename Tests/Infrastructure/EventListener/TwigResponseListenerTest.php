@@ -3,12 +3,13 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the Park-Manager project.
- *
  * Copyright (c) the Contributors as noted in the AUTHORS file.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * This file is part of the Park-Manager project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
 namespace ParkManager\Module\CoreModule\Tests\Infrastructure\EventListener;
@@ -22,6 +23,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Twig\Environment;
+use function ob_end_clean;
+use function ob_get_contents;
+use function ob_start;
 
 /**
  * @internal

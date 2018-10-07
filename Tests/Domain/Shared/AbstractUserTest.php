@@ -15,13 +15,13 @@ declare(strict_types=1);
 namespace ParkManager\Module\CoreModule\Tests\Domain\Shared;
 
 use Assert\AssertionFailedException;
-use ParkManager\Module\CoreModule\Test\Crypto\FakeSplitTokenFactory;
 use ParkManager\Module\CoreModule\Domain\Shared\AbstractUser as User;
 use ParkManager\Module\CoreModule\Domain\Shared\EmailAddress;
 use ParkManager\Module\CoreModule\Domain\Shared\Event\PasswordResetWasRequested;
 use ParkManager\Module\CoreModule\Domain\Shared\SplitToken;
 use ParkManager\Module\CoreModule\Domain\User\Event\UserPasswordWasChanged;
 use ParkManager\Module\CoreModule\Domain\User\UserId;
+use ParkManager\Module\CoreModule\Test\Crypto\FakeSplitTokenFactory;
 use ParkManager\Module\CoreModule\Test\Domain\EventsRecordingEntityAssertionTrait;
 use PHPUnit\Framework\TestCase;
 use function str_repeat;

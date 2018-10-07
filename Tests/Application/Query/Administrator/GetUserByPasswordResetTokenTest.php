@@ -14,8 +14,8 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Tests\Application\Query\Administrator;
 
-use ParkManager\Module\CoreModule\Test\Crypto\FakeSplitTokenFactory;
 use ParkManager\Module\CoreModule\Application\Query\Security\GetUserByPasswordResetToken;
+use ParkManager\Module\CoreModule\Test\Crypto\FakeSplitTokenFactory;
 use PHPUnit\Framework\TestCase;
 
 /**

@@ -27,5 +27,5 @@ return function (ContainerConfigurator $c) {
         ->args([ref('park_manager.application_context')]);
 
     $di->set(TwigResponseListener::class)
-        ->addTag('kernel.event_subscriber');
+        ->tag('kernel.event_subscriber');
 };

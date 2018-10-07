@@ -14,32 +14,32 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Application\Command\User;
 
-use ParkManager\Module\CoreModule\Domain\User\Exception\EmailChangeConfirmationRejected;
-use ParkManager\Module\CoreModule\Domain\User\UserRepository;
-
-final class ConfirmEmailAddressChangeHandler
-{
-    private $userCollection;
-
-//    public function __construct(UserRepository $userCollection)
+//use ParkManager\Module\CoreModule\Domain\User\Exception\EmailChangeConfirmationRejected;
+//use ParkManager\Module\CoreModule\Domain\User\UserRepository;
+//
+//final class ConfirmEmailAddressChangeHandler
+//{
+//    private $userCollection;
+//
+////    public function __construct(UserRepository $userCollection)
+////    {
+////        $this->userCollection = $userCollection;
+////    }
+//
+//    public function __invoke(ConfirmEmailAddressChange $command): void
 //    {
-//        $this->userCollection = $userCollection;
+//        $token   = $command->token();
+//        $user    = $this->userCollection->getByEmailAddressChangeToken($token->selector());
+//        $success = $user->confirmEmailAddressChange($token);
+//
+//        // Always save, as the token is cleared.
+//        //
+//        // It's still possible the e-mail address was already 'assigned' to someone else.
+//        // However this risk is rather small and handled by the repository constraints.
+//        $this->userCollection->save($user);
+//
+//        if (! $success) {
+//            throw new EmailChangeConfirmationRejected();
+//        }
 //    }
-
-    public function __invoke(ConfirmEmailAddressChange $command): void
-    {
-        $token   = $command->token();
-        $user    = $this->userCollection->getByEmailAddressChangeToken($token->selector());
-        $success = $user->confirmEmailAddressChange($token);
-
-        // Always save, as the token is cleared.
-        //
-        // It's still possible the e-mail address was already 'assigned' to someone else.
-        // However this risk is rather small and handled by the repository constraints.
-        $this->userCollection->save($user);
-
-        if (! $success) {
-            throw new EmailChangeConfirmationRejected();
-        }
-    }
-}
+//}

@@ -14,11 +14,11 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Infrastructure\Web\Action\Security;
 
-use ParkManager\Module\CoreModule\Infrastructure\Web\TwigResponse;
-use ParkManager\Module\CoreModule\Infrastructure\Web\Form\Handler\ServiceBusFormFactory;
 use ParkManager\Module\CoreModule\Application\Query\Security\GetUserByPasswordResetToken;
 use ParkManager\Module\CoreModule\Application\Service\Crypto\SplitTokenFactory;
+use ParkManager\Module\CoreModule\Infrastructure\Web\Form\Handler\ServiceBusFormFactory;
 use ParkManager\Module\CoreModule\Infrastructure\Web\Form\Security\ConfirmPasswordResetType;
+use ParkManager\Module\CoreModule\Infrastructure\Web\TwigResponse;
 use Rollerworks\Bundle\RouteAutofillBundle\Response\RouteRedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 

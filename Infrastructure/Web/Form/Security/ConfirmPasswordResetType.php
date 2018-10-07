@@ -14,8 +14,8 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Infrastructure\Web\Form\Security;
 
-use ParkManager\Module\CoreModule\Application\Service\Crypto\Argon2SplitTokenFactory;
 use ParkManager\Module\CoreModule\Application\Command\Security\ConfirmUserPasswordReset;
+use ParkManager\Module\CoreModule\Application\Service\Crypto\Argon2SplitTokenFactory;
 use ParkManager\Module\CoreModule\Application\Service\Crypto\SplitTokenFactory;
 use ParkManager\Module\CoreModule\Domain\Shared\Exception\PasswordResetTokenNotAccepted;
 use ParkManager\Module\CoreModule\Domain\Shared\Exception\UserLoginIsDisabled;

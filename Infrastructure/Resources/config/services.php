@@ -24,7 +24,6 @@ use ParkManager\Module\CoreModule\Infrastructure\Doctrine\Administrator\Doctrine
 use ParkManager\Module\CoreModule\Infrastructure\Doctrine\User\DoctrineOrmUserRepository;
 use ParkManager\Module\CoreModule\Infrastructure\Http\ApplicationSectionListener;
 use ParkManager\Module\CoreModule\Infrastructure\Http\SectionsLoader;
-use ParkManager\Module\CoreModule\Infrastructure\Twig\AppContextGlobal;
 use Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\DependencyInjection\ServiceLocator;
