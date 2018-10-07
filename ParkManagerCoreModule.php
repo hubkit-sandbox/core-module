@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule;
 
-use ParkManager\Component\Module\AbstractParkManagerModule;
+use ParkManager\Module\CoreModule\Infrastructure\DependencyInjection\Module\AbstractParkManagerModule;
 use ParkManager\Module\CoreModule\Infrastructure\DependencyInjection\DependencyExtension;
 use ParkManager\Module\CoreModule\Infrastructure\DependencyInjection\EnvVariableResource;
 use ParkManager\Module\CoreModule\Infrastructure\Http\CookiesRequestMatcher;

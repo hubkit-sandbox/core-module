@@ -15,9 +15,9 @@ declare(strict_types=1);
 namespace ParkManager\Module\CoreModule\Infrastructure\DependencyInjection;
 
 use ParkManager\Bridge\Twig\EventListener\TwigResponseListener;
-use ParkManager\Component\Module\ParkManagerModuleDependencyExtension;
-use ParkManager\Component\Module\RegistersDoctrineDbalTypes;
-use ParkManager\Component\Module\Traits\DoctrineDbalTypesConfiguratorTrait;
+use ParkManager\Module\CoreModule\Infrastructure\DependencyInjection\Module\ParkManagerModuleDependencyExtension;
+use ParkManager\Module\CoreModule\Infrastructure\DependencyInjection\Module\RegistersDoctrineDbalTypes;
+use ParkManager\Module\CoreModule\Infrastructure\DependencyInjection\Module\Traits\DoctrineDbalTypesConfiguratorTrait;
 use ParkManager\Module\CoreModule\Infrastructure\Twig\AppContextGlobal;
 use Rollerworks\Bundle\RouteAutowiringBundle\RouteImporter;
 use Symfony\Component\Config\Loader\LoaderInterface;
