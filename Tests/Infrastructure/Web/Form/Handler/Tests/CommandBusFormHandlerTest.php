@@ -11,10 +11,10 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-namespace ParkManager\Module\CoreModule\Tests\Infrastructure\Web\Form\FormHandler\Tests;
+namespace ParkManager\Module\CoreModule\Tests\Infrastructure\Web\Form\Handler\Tests;
 
-use ParkManager\Module\CoreModule\Infrastructure\Web\Form\FormHandler\CommandBusFormHandler;
-use ParkManager\Module\CoreModule\Tests\Infrastructure\Web\Form\FormHandler\Tests\Mock\StubCommand;
+use ParkManager\Module\CoreModule\Infrastructure\Web\Form\Handler\CommandBusFormHandler;
+use ParkManager\Module\CoreModule\Tests\Infrastructure\Web\Form\Handler\Tests\Mock\StubCommand;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Symfony\Component\Form\AbstractTypeExtension;

@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Infrastructure\Web;
 
-use ParkManager\Module\CoreModule\Infrastructure\Web\Form\FormHandler\FormHandler;
+use ParkManager\Module\CoreModule\Infrastructure\Web\Form\Handler\FormHandler;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;

@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace ParkManager\Module\CoreModule\Infrastructure\Web\Action\Security;
 
 use ParkManager\Module\CoreModule\Infrastructure\Web\TwigResponse;
-use ParkManager\Module\CoreModule\Infrastructure\Web\Form\FormHandler\ServiceBusFormFactory;
+use ParkManager\Module\CoreModule\Infrastructure\Web\Form\Handler\ServiceBusFormFactory;
 use ParkManager\Module\CoreModule\Infrastructure\Context\ApplicationContext;
 use ParkManager\Module\CoreModule\Infrastructure\Web\Form\Security\RequestPasswordResetType;
 use Rollerworks\Bundle\RouteAutofillBundle\Response\RouteRedirectResponse;

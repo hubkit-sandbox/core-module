@@ -11,7 +11,7 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-namespace ParkManager\Module\CoreModule\Infrastructure\Web\Form\FormHandler;
+namespace ParkManager\Module\CoreModule\Infrastructure\Web\Form\Handler;
 
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;

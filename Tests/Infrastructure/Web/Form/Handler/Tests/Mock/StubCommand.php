@@ -11,7 +11,7 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-namespace ParkManager\Module\CoreModule\Tests\Infrastructure\Web\Form\FormHandler\Tests\Mock;
+namespace ParkManager\Module\CoreModule\Tests\Infrastructure\Web\Form\Handler\Tests\Mock;
 
 final class StubCommand
 {

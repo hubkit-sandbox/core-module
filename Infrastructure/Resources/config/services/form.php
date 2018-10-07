@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
-use ParkManager\Module\CoreModule\Infrastructure\Web\Form\FormHandler\ServiceBusFormFactory;
+use ParkManager\Module\CoreModule\Infrastructure\Web\Form\Handler\ServiceBusFormFactory;
 
 return function (ContainerConfigurator $c) {
     $di = $c->services()->defaults()
