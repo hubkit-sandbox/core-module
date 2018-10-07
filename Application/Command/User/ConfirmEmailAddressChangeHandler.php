@@ -16,18 +16,18 @@ namespace ParkManager\Module\CoreModule\Application\Command\User;
 
 //use ParkManager\Module\CoreModule\Domain\User\Exception\EmailChangeConfirmationRejected;
 //use ParkManager\Module\CoreModule\Domain\User\UserRepository;
-//
-//final class ConfirmEmailAddressChangeHandler
-//{
-//    private $userCollection;
-//
-////    public function __construct(UserRepository $userCollection)
-////    {
-////        $this->userCollection = $userCollection;
-////    }
-//
-//    public function __invoke(ConfirmEmailAddressChange $command): void
+
+final class ConfirmEmailAddressChangeHandler
+{
+    private $userCollection;
+
+//    public function __construct(UserRepository $userCollection)
 //    {
+//        $this->userCollection = $userCollection;
+//    }
+
+    public function __invoke(ConfirmEmailAddressChange $command): void
+    {
 //        $token   = $command->token();
 //        $user    = $this->userCollection->getByEmailAddressChangeToken($token->selector());
 //        $success = $user->confirmEmailAddressChange($token);
@@ -41,5 +41,5 @@ namespace ParkManager\Module\CoreModule\Application\Command\User;
 //        if (! $success) {
 //            throw new EmailChangeConfirmationRejected();
 //        }
-//    }
-//}
+    }
+}
