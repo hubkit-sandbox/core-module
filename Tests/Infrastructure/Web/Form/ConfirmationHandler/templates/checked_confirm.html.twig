@@ -1,0 +1,13 @@
+{% spaceless %}
+<form action="/user/1/delete">
+    <h1>{{ title }}</h1>
+    <p>{{ message }}</p>
+
+    {%- if error is not null %}{{ error|replace({ '{{ value }}': required_value }) }}{% endif -%}
+
+    <input type="hidden" name="_value" value="{{ provided_value }}">
+    <input type="hidden" name="_token" value="{{ token }}">
+    <button type="submit">{{ yes_btn_label }}</button>
+    <a href="{{ cancel_url }}">Cancel</a>
+</form>
+{% endspaceless %}
