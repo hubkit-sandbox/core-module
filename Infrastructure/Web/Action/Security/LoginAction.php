@@ -12,7 +12,7 @@ declare(strict_types=1);
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-namespace ParkManager\Module\CoreModule\UI\Web\Action\Security;
+namespace ParkManager\Module\CoreModule\Infrastructure\Web\Action\Security;
 
 use ParkManager\Bridge\Twig\Response\TwigResponse;
 use ParkManager\Module\CoreModule\Infrastructure\Context\ApplicationContext;

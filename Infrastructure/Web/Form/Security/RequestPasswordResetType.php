@@ -12,7 +12,7 @@ declare(strict_types=1);
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-namespace ParkManager\Module\CoreModule\UI\Web\Form\Security;
+namespace ParkManager\Module\CoreModule\Infrastructure\Web\Form\Security;
 
 use ParkManager\Module\CoreModule\Application\Command\Security\RequestUserPasswordReset;
 use Symfony\Component\Form\AbstractType;

@@ -12,14 +12,15 @@ declare(strict_types=1);
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-namespace ParkManager\Module\CoreModule\UI\Web\Action;
+namespace ParkManager\Module\CoreModule\Infrastructure\Web\Action\Security;
 
-use ParkManager\Bridge\Twig\Response\TwigResponse;
-
-final class HomepageAction
+/**
+ * @codeCoverageIgnore
+ */
+final class SecurityLogoutAction
 {
-    public function __invoke(): TwigResponse
+    public function __invoke()
     {
-        return new TwigResponse('@ParkManagerCore/index.html.twig');
+        throw new \RuntimeException('You must activate the logout in your security firewall configuration.');
     }
 }

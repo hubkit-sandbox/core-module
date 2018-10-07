@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Tests\UI\Web\Form\Security;
 
-use ParkManager\Module\CoreModule\UI\Web\Form\Security\HashedPasswordType;
+use ParkManager\Module\CoreModule\Infrastructure\Web\Form\Security\HashedPasswordType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Test\Traits\ValidatorExtensionTrait;
