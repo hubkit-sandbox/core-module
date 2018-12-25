@@ -196,8 +196,12 @@ abstract class SplitToken
      *
      * @param null|string $id Id this token was bound to during generation
      */
-    final public function matches(SplitTokenValueHolder $token, ?string $id = null): bool
+    final public function matches(?SplitTokenValueHolder $token, ?string $id = null): bool
     {
+        if (SplitTokenValueHolder::isEmpty($token)) {
+            return false;
+        }
+
         if ($token->isExpired() || $token->selector() !== $this->selector) {
             return false;
         }
@@ -218,7 +222,17 @@ abstract class SplitToken
             throw new \RuntimeException('toValueHolder() does not work SplitToken object created with fromString().');
         }
 
-        return new SplitTokenValueHolder($this->selector, $this->verifierHash, $this->expiresAt, $metadata, $this);
+        return new SplitTokenValueHolder($this->selector, $this->verifierHash, $this->expiresAt, $metadata);
+    }
+
+    /**
+     * Compares if both objects are the same.
+     *
+     * Warning this method leaks timing information and the expiration date is ignored!
+     */
+    public function equals(self $other): bool
+    {
+        return $other->selector === $this->selector && $other->verifierHash === $this->verifierHash;
     }
 
     /**

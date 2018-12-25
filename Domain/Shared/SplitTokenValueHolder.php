@@ -36,20 +36,12 @@ final class SplitTokenValueHolder
     private $expiresAt;
     private $metadata = [];
 
-    /**
-     * THIS MUST NOT BE STORED!
-     *
-     * @var SplitToken
-     */
-    private $token;
-
-    public function __construct(string $selector, string $verifierHash, ?\DateTimeImmutable $expiresAt = null, array $metadata = [], ?SplitToken $token = null)
+    public function __construct(string $selector, string $verifierHash, ?\DateTimeImmutable $expiresAt = null, array $metadata = [])
     {
         $this->selector     = $selector;
         $this->verifierHash = $verifierHash;
         $this->expiresAt    = $expiresAt;
         $this->metadata     = $metadata;
-        $this->token        = $token;
     }
 
     public static function isEmpty(?self $valueHolder): bool
@@ -61,12 +53,31 @@ final class SplitTokenValueHolder
         return $valueHolder->selector === null;
     }
 
-    public function selector(): string
+    /**
+     * Returns whether the current token (if any) can be replaced with the new token.
+     *
+     * This methods should only to be used to prevent setting a token when a token
+     * was already set, which has not expired, and the same metadata was given (type checked!).
+     */
+    public static function mayReplaceCurrentToken(?self $valueHolder, array $expectedMetadata = []): bool
+    {
+        if (self::isEmpty($valueHolder)) {
+            return true;
+        }
+
+        if ($valueHolder->isExpired()) {
+            return true;
+        }
+
+        return $valueHolder->metadata() !== $expectedMetadata;
+    }
+
+    public function selector(): ?string
     {
         return $this->selector;
     }
 
-    public function verifierHash(): string
+    public function verifierHash(): ?string
     {
         return $this->verifierHash;
     }
@@ -78,7 +89,7 @@ final class SplitTokenValueHolder
 
     public function metadata(): array
     {
-        return $this->metadata;
+        return $this->metadata ?? [];
     }
 
     public function isExpired(?\DateTimeImmutable $datetime = null): bool
@@ -95,8 +106,15 @@ final class SplitTokenValueHolder
         return $this->expiresAt;
     }
 
-    public function getToken(): ?SplitToken
+    /**
+     * Compares if both objects are the same.
+     *
+     * Warning this method leaks timing information and the expiration date is ignored!
+     */
+    public function equals(self $other): bool
     {
-        return $this->token;
+        return $other->selector === $this->selector &&
+               $other->verifierHash === $this->verifierHash &&
+               $other->metadata === $this->metadata;
     }
 }

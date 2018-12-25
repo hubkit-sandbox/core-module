@@ -27,7 +27,9 @@ use function random_bytes;
  */
 final class FakeSplitTokenFactory implements SplitTokenFactory
 {
-    public const FULL_TOKEN = '1zUeXUvr4LKymANBB_bLEqiP5GPr-Pha_OR6OOnV1o8Vy_rWhDoxKNIt';
+    public const SELECTOR   = '1zUeXUvr4LKymANBB_bLEqiP5GPr-Pha';
+    public const VERIFIER   = '_OR6OOnV1o8Vy_rWhDoxKNIt';
+    public const FULL_TOKEN = self::SELECTOR . self::VERIFIER;
 
     private $randomValue;
 

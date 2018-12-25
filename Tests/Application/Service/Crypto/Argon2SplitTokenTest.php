@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Tests\Application\Service\Crypto;
 
+use DateTimeImmutable;
 use ParagonIE\Halite\HiddenString;
 use ParkManager\Module\CoreModule\Application\Service\Crypto\Argon2SplitToken as SplitToken;
 use PHPUnit\Framework\TestCase;
@@ -73,6 +74,18 @@ final class Argon2SplitTokenTest extends TestCase
     /**
      * @test
      */
+    public function it_compares_two_split_tokens()
+    {
+        $splitToken1 = SplitToken::create(self::$randValue);
+
+        self::assertTrue($splitToken1->equals($splitToken1));
+        self::assertTrue($splitToken1->equals($splitToken1->expireAt(new DateTimeImmutable('+5 seconds'))));
+        self::assertFalse($splitToken1->equals(SplitToken::create(self::$randValue)));
+    }
+
+    /**
+     * @test
+     */
     public function it_creates_a_split_token_with_custom_config()
     {
         $splitToken = SplitToken::create(self::$randValue, null, [
@@ -97,7 +110,7 @@ final class Argon2SplitTokenTest extends TestCase
         self::assertStringStartsWith('$argon2i', $value->verifierHash());
         self::assertEquals([], $value->metadata());
         self::assertFalse($value->isExpired());
-        self::assertFalse($value->isExpired(new \DateTimeImmutable('-5 minutes')));
+        self::assertFalse($value->isExpired(new DateTimeImmutable('-5 minutes')));
     }
 
     /**
@@ -117,7 +130,7 @@ final class Argon2SplitTokenTest extends TestCase
      */
     public function it_produces_a_SplitTokenValueHolder_with_expiration()
     {
-        $date       = new \DateTimeImmutable('+5 minutes');
+        $date       = new DateTimeImmutable('+5 minutes');
         $splitToken = SplitToken::create($fullToken = self::$randValue)->expireAt($date);
 
         $value = $splitToken->toValueHolder();
@@ -167,6 +180,16 @@ final class Argon2SplitTokenTest extends TestCase
     /**
      * @test
      */
+    public function it_verifies_SplitToken_from_string_and_no_current_token_set()
+    {
+        $fromString = SplitToken::fromString(self::FULL_TOKEN);
+
+        self::assertFalse($fromString->matches(null));
+    }
+
+    /**
+     * @test
+     */
     public function it_verifies_SplitToken_from_string_SplitToken_and_id()
     {
         // Stored.
@@ -202,7 +225,7 @@ final class Argon2SplitTokenTest extends TestCase
     {
         // Stored.
         $splitTokenHolder = SplitToken::create(self::$randValue)
-            ->expireAt(new \DateTimeImmutable('-5 minutes'))
+            ->expireAt(new DateTimeImmutable('-5 minutes'))
             ->toValueHolder();
 
         // Reconstructed.
