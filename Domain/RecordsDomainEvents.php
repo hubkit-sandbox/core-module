@@ -14,10 +14,12 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Domain;
 
-/**
- * @deprecated
- */
-abstract class EventsRecordingEntity implements RecordsDomainEvents
+interface RecordsDomainEvents
 {
-    use DomainEventsCollectionTrait;
+    /**
+     * Releases the recorded Domain events.
+     */
+    public function releaseEvents(): array;
+
+    public function getEvents(): array;
 }

@@ -36,4 +36,12 @@ trait DomainEventsCollectionTrait
 
         return $pendingEvents;
     }
+
+    /**
+     * @return object[]
+     */
+    public function getEvents(): array
+    {
+        return $this->domainEvents;
+    }
 }

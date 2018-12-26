@@ -14,37 +14,46 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Test\Domain;
 
-use ParkManager\Component\DomainEvent\DomainEvent;
-use ParkManager\Module\CoreModule\Domain\EventsRecordingEntity;
+use ParkManager\Module\CoreModule\Domain\RecordsDomainEvents;
+use PHPUnit\Framework\Assert;
+use function array_map;
 use function count;
 use function get_class;
+use function implode;
 use function sprintf;
 
 trait EventsRecordingEntityAssertionTrait
 {
-    /**
-     * @param DomainEvent[] $expectedEvents
-     */
-    protected static function assertDomainEvents(EventsRecordingEntity $entity, array $expectedEvents): void
+    protected static function assertDomainEvents(RecordsDomainEvents $entity, iterable $expectedEvents, ?callable $comparator = null): void
     {
         $events = $entity->releaseEvents();
 
         foreach ($expectedEvents as $i => $event) {
-            self::assertArrayHasKey($i, $events, 'Event must exist at position.');
-            self::assertEquals(get_class($events[$i]), get_class($event), 'Event at position must be of same type');
+            Assert::assertArrayHasKey($i, $events, 'Event must exist at position.');
+            Assert::assertEquals(get_class($events[$i]), get_class($event), 'Event at position must be of same type');
+
+            if ($comparator !== null) {
+                $comparator($event, $events[$i]);
+            } else {
+                Assert::assertEquals($event, $events[$i]);
+                DomainMessageAssertion::assertMessagesAreEqual($event, $events[$i]);
+            }
         }
 
-        self::assertCount($c = count($expectedEvents), $events, sprintf('Expected exactly "%d" events.', $c));
+        Assert::assertCount(
+            $c = count($expectedEvents),
+            $events,
+            sprintf('Expected exactly %d events, but %d were recorded (%s).', $c, count($events), implode(', ', array_map('get_class', $events)))
+        );
     }
 
-    protected static function assertNoDomainEvents(EventsRecordingEntity $entity): void
+    protected static function assertNoDomainEvents(RecordsDomainEvents $entity): void
     {
         $events = $entity->releaseEvents();
-
-        self::assertCount(0, $events, sprintf('Expected exactly no events.'));
+        Assert::assertCount(0, $events, sprintf('Expected exactly no events.'));
     }
 
-    protected static function resetDomainEvents(EventsRecordingEntity ...$entities): void
+    protected static function resetDomainEvents(RecordsDomainEvents ...$entities): void
     {
         foreach ($entities as $entity) {
             $entity->releaseEvents();
