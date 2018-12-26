@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Domain\Shared;
 
-use ParkManager\Module\CoreModule\Domain\User\UserId;
+use ParkManager\Module\CoreModule\Domain\Client\ClientId;
 use ParkManager\Module\CoreModule\Domain\UuidTrait;
 
 /**
@@ -53,7 +53,7 @@ final class OwnerId
         return self::fromString(self::PRIVATE);
     }
 
-    public static function fromUserId(UserId $id): self
+    public static function fromUserId(ClientId $id): self
     {
         return self::fromString($id->toString());
     }
