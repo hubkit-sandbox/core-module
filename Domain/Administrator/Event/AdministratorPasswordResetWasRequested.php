@@ -15,24 +15,20 @@ declare(strict_types=1);
 namespace ParkManager\Module\CoreModule\Domain\Administrator\Event;
 
 use ParkManager\Module\CoreModule\Domain\Administrator\AdministratorId;
-use ParkManager\Module\CoreModule\Domain\Shared\EmailAddress;
+use ParkManager\Module\CoreModule\Domain\Shared\SplitToken;
 
-final class AdministratorWasRegistered
+final class AdministratorPasswordResetWasRequested
 {
     /** @var AdministratorId */
     private $id;
 
-    /** @var EmailAddress */
-    private $email;
+    /** @var SplitToken */
+    private $token;
 
-    /** @var string */
-    private $name;
-
-    public function __construct(AdministratorId $id, EmailAddress $email, string $name)
+    public function __construct(AdministratorId $id, SplitToken $token)
     {
         $this->id    = $id;
-        $this->email = $email;
-        $this->name  = $name;
+        $this->token = $token;
     }
 
     public function getId(): AdministratorId
@@ -40,13 +36,8 @@ final class AdministratorWasRegistered
         return $this->id;
     }
 
-    public function getEmail(): EmailAddress
+    public function getToken(): SplitToken
     {
-        return $this->email;
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
+        return $this->token;
     }
 }

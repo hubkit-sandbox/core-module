@@ -14,19 +14,19 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Tests\Application\Query\Administrator;
 
-use ParkManager\Module\CoreModule\Application\Query\Security\GetUserByPasswordResetToken;
+use ParkManager\Module\CoreModule\Application\Query\Administrator\GetAdministratorWithPasswordResetToken;
 use ParkManager\Module\CoreModule\Test\Crypto\FakeSplitTokenFactory;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
  */
-final class GetUserByPasswordResetTokenTest extends TestCase
+final class GetAdministratorByPasswordResetTokenTest extends TestCase
 {
     /** @test */
     public function it_constructable()
     {
-        $message   = new GetUserByPasswordResetToken(
+        $message = new GetAdministratorWithPasswordResetToken(
             $token = FakeSplitTokenFactory::instance()->fromString('S1th74ywhDETYAaXWi-2Bee2_ltx-JPGKs9SVvbZCkMi8ZxiEVMBw68S')
         );
 

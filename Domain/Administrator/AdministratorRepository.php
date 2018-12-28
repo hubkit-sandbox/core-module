@@ -15,35 +15,27 @@ declare(strict_types=1);
 namespace ParkManager\Module\CoreModule\Domain\Administrator;
 
 use ParkManager\Module\CoreModule\Domain\Administrator\Exception\AdministratorNotFound;
-use ParkManager\Module\CoreModule\Domain\Shared\AbstractUser;
+use ParkManager\Module\CoreModule\Domain\Administrator\Exception\PasswordResetConfirmationRejected;
 use ParkManager\Module\CoreModule\Domain\Shared\EmailAddress;
-use ParkManager\Module\CoreModule\Domain\Shared\UserRepository;
 
-interface AdministratorRepository extends UserRepository
+interface AdministratorRepository
 {
     /**
-     * @param AdministratorId $id
-     *
      * @throws AdministratorNotFound When no administrator was found with the id
      */
-    public function get($id): Administrator;
+    public function get(AdministratorId $id): Administrator;
 
-    public function findByEmailAddress(EmailAddress $email): ?Administrator;
+    /**
+     * @throws AdministratorNotFound When no administrator was found with the email
+     */
+    public function getByEmail(EmailAddress $email): Administrator;
 
+    /**
+     * @throws PasswordResetConfirmationRejected When no administrator was found with the token-selector
+     */
     public function getByPasswordResetToken(string $selector): Administrator;
 
-    /**
-     * Save the Administrator in the repository.
-     *
-     * This will either store a new Administrator registration
-     * or update an existing one.
-     *
-     * @param Administrator $administrator
-     */
-    public function save(AbstractUser $administrator): void;
+    public function save(Administrator $administrator): void;
 
-    /**
-     * Remove an administrator registration from the repository.
-     */
     public function remove(Administrator $administrator): void;
 }

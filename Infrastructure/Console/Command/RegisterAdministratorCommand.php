@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace ParkManager\Module\CoreModule\Infrastructure\Console\Command;
 
 use ParkManager\Module\CoreModule\Application\Command\Administrator\RegisterAdministrator;
-use ParkManager\Module\CoreModule\Domain\User\UserId;
+use ParkManager\Module\CoreModule\Domain\Administrator\AdministratorId;
 use ParkManager\Module\CoreModule\Infrastructure\Security\AdministratorUser;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -73,7 +73,7 @@ EOT
             ->encodePassword($io->askHidden('Password'), '');
 
         $this->commandBus->dispatch(
-            new RegisterAdministrator(UserId::create()->toString(), $email, $displayName, $password)
+            new RegisterAdministrator(AdministratorId::create()->toString(), $email, $displayName, $password)
         );
 
         $io->success('Administrator was registered.');

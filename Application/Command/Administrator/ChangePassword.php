@@ -15,31 +15,23 @@ declare(strict_types=1);
 namespace ParkManager\Module\CoreModule\Application\Command\Administrator;
 
 use ParkManager\Module\CoreModule\Domain\Administrator\AdministratorId;
-use ParkManager\Module\CoreModule\Domain\Shared\EmailAddress;
 
-final class RegisterAdministrator
+final class ChangePassword
 {
     /** @var AdministratorId */
     private $id;
-
-    /** @var EmailAddress */
-    private $email;
-
-    /** @var string */
-    private $displayName;
 
     /** @var string|null */
     private $password;
 
     /**
-     * @param null|string $password Null (no password) or an encoded password string (not plain)
+     * @param string|null $password The password in hash-encoded format or null
+     *                              to disable password based authentication
      */
-    public function __construct(string $id, string $email, string $displayName, ?string $password = null)
+    public function __construct(string $id, ?string $password)
     {
-        $this->id          = AdministratorId::fromString($id);
-        $this->email       = new EmailAddress($email);
-        $this->displayName = $displayName;
-        $this->password    = $password;
+        $this->id       = AdministratorId::fromString($id);
+        $this->password = $password;
     }
 
     public function id(): AdministratorId
@@ -47,16 +39,10 @@ final class RegisterAdministrator
         return $this->id;
     }
 
-    public function email(): EmailAddress
-    {
-        return $this->email;
-    }
-
-    public function displayName(): string
-    {
-        return $this->displayName;
-    }
-
+    /**
+     * @return string|null The password in hash-encoded format or null
+     *                     to disable password based authentication
+     */
     public function password(): ?string
     {
         return $this->password;

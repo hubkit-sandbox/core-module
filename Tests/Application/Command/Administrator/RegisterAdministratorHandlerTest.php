@@ -18,11 +18,12 @@ use ParkManager\Module\CoreModule\Application\Command\Administrator\RegisterAdmi
 use ParkManager\Module\CoreModule\Application\Command\Administrator\RegisterAdministratorHandler;
 use ParkManager\Module\CoreModule\Domain\Administrator\Administrator;
 use ParkManager\Module\CoreModule\Domain\Administrator\AdministratorId;
-use ParkManager\Module\CoreModule\Domain\Administrator\AdministratorRepository;
+use ParkManager\Module\CoreModule\Domain\Administrator\Event\AdministratorPasswordWasChanged;
+use ParkManager\Module\CoreModule\Domain\Administrator\Event\AdministratorWasRegistered;
 use ParkManager\Module\CoreModule\Domain\Administrator\Exception\AdministratorEmailAddressAlreadyInUse;
 use ParkManager\Module\CoreModule\Domain\Shared\EmailAddress;
+use ParkManager\Module\CoreModule\Test\Domain\Repository\AdministratorRepositoryMock;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
 
 /**
  * @internal
@@ -33,64 +34,56 @@ final class RegisterAdministratorHandlerTest extends TestCase
     private const ID_EXISTING = 'a0816f44-6545-11e7-a234-acbc32b58315';
 
     /** @test */
-    public function it_handles_registration_of_new_administrator()
+    public function handle_registration_of_new_administrator()
     {
+        $repo    = new AdministratorRepositoryMock();
+        $handler = new RegisterAdministratorHandler($repo);
+
         $command = new RegisterAdministrator(self::ID_NEW, 'John@example.com', 'My', 'my-password');
-
-        $handler = new RegisterAdministratorHandler($this->expectUserSaved($command));
         $handler($command);
+
+        $repo->assertHasEntityWithEvents(
+            self::ID_NEW,
+            [
+                new AdministratorWasRegistered($command->id(), $command->email(), $command->displayName()),
+                new AdministratorPasswordWasChanged($command->id(), $command->password()),
+            ]
+        );
     }
 
     /** @test */
-    public function it_handles_registration_without_password()
+    public function handle_registration_without_password()
     {
-        $command = new RegisterAdministrator(self::ID_NEW, 'John@example.com', 'My', null);
+        $repo    = new AdministratorRepositoryMock();
+        $handler = new RegisterAdministratorHandler($repo);
 
-        $handler = new RegisterAdministratorHandler($this->expectUserSaved($command));
+        $command = new RegisterAdministrator(self::ID_NEW, 'John@example.com', 'My', null);
         $handler($command);
+
+        $repo->assertHasEntityWithEvents(
+            self::ID_NEW,
+            [
+                new AdministratorWasRegistered($command->id(), $command->email(), $command->displayName()),
+            ]
+        );
     }
 
     /** @test */
-    public function it_handles_registration_of_new_user_with_already_existing_email_address()
+    public function handle_registration_of_new_user_with_already_existing_email()
     {
-        $command = new RegisterAdministrator(self::ID_NEW, 'John@example.com', 'My', null);
+        $repo = new AdministratorRepositoryMock(
+            [
+                Administrator::register(
+                    AdministratorId::fromString(self::ID_EXISTING),
+                    new EmailAddress('John@example.com'),
+                    'Jane'
+                ),
+            ]
+        );
+        $handler = new RegisterAdministratorHandler($repo);
 
         $this->expectException(AdministratorEmailAddressAlreadyInUse::class);
 
-        $handler = new RegisterAdministratorHandler($this->expectUserNotSaved($command->email()));
-        $handler($command);
-    }
-
-    private function existingId(): AdministratorId
-    {
-        return AdministratorId::fromString(self::ID_EXISTING);
-    }
-
-    private function expectUserSaved(RegisterAdministrator $command): AdministratorRepository
-    {
-        $repository = $this->prophesize(AdministratorRepository::class);
-        $repository->findByEmailAddress(Argument::any())->willReturn(null);
-        $repository->save(Argument::that(function (Administrator $administrator) use ($command) {
-            self::assertTrue($command->id()->equals($administrator->id()));
-            self::assertEquals($command->email(), $administrator->email());
-            self::assertEquals($command->password(), $administrator->password());
-            self::assertEquals($command->displayName(), $administrator->displayName());
-
-            return true;
-        }))->shouldBeCalled();
-
-        return $repository->reveal();
-    }
-
-    private function expectUserNotSaved(EmailAddress $email): AdministratorRepository
-    {
-        $adminProphecy = $this->prophesize(Administrator::class);
-        $adminProphecy->id()->willReturn($this->existingId());
-
-        $repositoryProphecy = $this->prophesize(AdministratorRepository::class);
-        $repositoryProphecy->findByEmailAddress($email)->willReturn($adminProphecy->reveal());
-        $repositoryProphecy->save(Argument::any())->shouldNotBeCalled();
-
-        return $repositoryProphecy->reveal();
+        $handler(new RegisterAdministrator(self::ID_NEW, 'John@example.com', 'My', null));
     }
 }

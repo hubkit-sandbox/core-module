@@ -15,34 +15,24 @@ declare(strict_types=1);
 namespace ParkManager\Module\CoreModule\Domain\Administrator\Event;
 
 use ParkManager\Module\CoreModule\Domain\Administrator\AdministratorId;
-use ParkManager\Module\CoreModule\Domain\Shared\EmailAddress;
 
-final class AdministratorWasRegistered
+final class AdministratorNameWasChanged
 {
     /** @var AdministratorId */
     private $id;
 
-    /** @var EmailAddress */
-    private $email;
-
     /** @var string */
     private $name;
 
-    public function __construct(AdministratorId $id, EmailAddress $email, string $name)
+    public function __construct(AdministratorId $id, string $name)
     {
-        $this->id    = $id;
-        $this->email = $email;
-        $this->name  = $name;
+        $this->id   = $id;
+        $this->name = $name;
     }
 
     public function getId(): AdministratorId
     {
         return $this->id;
-    }
-
-    public function getEmail(): EmailAddress
-    {
-        return $this->email;
     }
 
     public function getName(): string

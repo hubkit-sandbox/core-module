@@ -31,9 +31,9 @@ final class AdministratorWasRegisteredTest extends TestCase
     {
         $command = new AdministratorWasRegistered($id = AdministratorId::fromString(self::USER_ID), new EmailAddress('Jane@example.com'), 'First, Named');
 
-        self::assertEquals(AdministratorId::fromString(self::USER_ID), $command->id());
-        self::assertTrue($id->equals($command->id()));
-        self::assertEquals('Jane@example.com', $command->email());
-        self::assertEquals('First, Named', $command->displayName());
+        self::assertEquals(AdministratorId::fromString(self::USER_ID), $command->getId());
+        self::assertTrue($id->equals($command->getId()));
+        self::assertEquals('Jane@example.com', $command->getEmail());
+        self::assertEquals('First, Named', $command->getName());
     }
 }

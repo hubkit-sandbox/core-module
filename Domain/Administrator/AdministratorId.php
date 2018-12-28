@@ -14,8 +14,9 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Domain\Administrator;
 
-use ParkManager\Module\CoreModule\Domain\Shared\AbstractUserId;
+use ParkManager\Module\CoreModule\Domain\UuidTrait;
 
-final class AdministratorId extends AbstractUserId
+final class AdministratorId
 {
+    use UuidTrait;
 }

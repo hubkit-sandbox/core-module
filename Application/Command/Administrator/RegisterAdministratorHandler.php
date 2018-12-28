@@ -17,6 +17,7 @@ namespace ParkManager\Module\CoreModule\Application\Command\Administrator;
 use ParkManager\Module\CoreModule\Domain\Administrator\Administrator;
 use ParkManager\Module\CoreModule\Domain\Administrator\AdministratorRepository;
 use ParkManager\Module\CoreModule\Domain\Administrator\Exception\AdministratorEmailAddressAlreadyInUse;
+use ParkManager\Module\CoreModule\Domain\Administrator\Exception\AdministratorNotFound;
 
 final class RegisterAdministratorHandler
 {
@@ -31,12 +32,21 @@ final class RegisterAdministratorHandler
     {
         $email = $command->email();
 
-        if ($this->repository->findByEmailAddress($email) !== null) {
-            throw new AdministratorEmailAddressAlreadyInUse();
+        try {
+            $administrator = $this->repository->getByEmail($email);
+
+            throw new AdministratorEmailAddressAlreadyInUse($administrator->getId());
+        } catch (AdministratorNotFound $e) {
+            // No-op
         }
 
         $this->repository->save(
-            Administrator::registerWith($command->id(), $email, $command->displayName(), $command->password())
+            Administrator::register(
+                $command->id(),
+                $email,
+                $command->displayName(),
+                $command->password()
+            )
         );
     }
 }
