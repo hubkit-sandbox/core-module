@@ -14,36 +14,39 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Infrastructure\Web\Form\Security;
 
-use ParkManager\Module\CoreModule\Application\Command\Security\ConfirmUserPasswordReset;
-use ParkManager\Module\CoreModule\Application\Service\Crypto\Argon2SplitTokenFactory;
+use Closure;
 use ParkManager\Module\CoreModule\Application\Service\Crypto\SplitTokenFactory;
 use ParkManager\Module\CoreModule\Domain\Shared\Exception\PasswordResetTokenNotAccepted;
-use ParkManager\Module\CoreModule\Domain\Shared\Exception\UserLoginIsDisabled;
 use ParkManager\Module\CoreModule\Domain\Shared\SplitToken;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\DataMapperInterface;
-use Symfony\Component\Form\Exception\TransformationFailedException;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormError;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface as EncoderFactory;
+use Symfony\Component\Security\Core\Exception\DisabledException;
 use Symfony\Component\Validator\Constraint;
-use function iterator_to_array;
+use function Sodium\memzero;
 
-class ConfirmPasswordResetType extends AbstractType implements DataMapperInterface
+class ConfirmPasswordResetType extends AbstractType
 {
+    /** @var SplitTokenFactory */
     private $splitTokenFactory;
 
-    public function __construct(?SplitTokenFactory $splitTokenFactory = null)
+    /** @var EncoderFactory */
+    private $encoderFactory;
+
+    public function __construct(SplitTokenFactory $splitTokenFactory, EncoderFactory $encoderFactory)
     {
-        $this->splitTokenFactory = $splitTokenFactory ?? new Argon2SplitTokenFactory();
+        $this->splitTokenFactory = $splitTokenFactory;
+        $this->encoderFactory    = $encoderFactory;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $userClass = $options['user_class'];
         $builder
-            ->setDataMapper($this)
+            ->setDataMapper(new ConfirmPasswordResetDataMapper($this->splitTokenFactory, $options['command_builder']))
             ->add('reset_token', HiddenType::class, ['data' => $options['token']->token()->getString()])
             ->add('password', HashedPasswordType::class, [
                 'required' => true,
@@ -51,51 +54,38 @@ class ConfirmPasswordResetType extends AbstractType implements DataMapperInterfa
                 'password_options' => [
                     'constraints' => $options['password_constraints'],
                 ],
-                'algorithm' => function (string $value) {
-                    return 'encoded(' . $value . ')';
-                }, // FIXME This needs an actual service
+                'algorithm' => function (string $value) use ($userClass) {
+                    $encoded = $this->encoderFactory->getEncoder($userClass)->encodePassword($value, '');
+
+                    memzero($value);
+
+                    return $encoded;
+                },
             ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver
-            ->setRequired('token')
+            ->setRequired(['token', 'user_class', 'command_builder'])
             ->setDefault('password_constraints', [])
-            ->setAllowedTypes('token', [SplitToken::class])
-            ->setAllowedTypes('password_constraints', ['array', Constraint::class])
             ->setDefault('exception_mapping', [
                 PasswordResetTokenNotAccepted::class => function (PasswordResetTokenNotAccepted $e) {
                     return new FormError('password_reset.invalid_token', null, [], null, $e);
                 },
-                UserLoginIsDisabled::class => function (UserLoginIsDisabled $e) {
+                DisabledException::class => function (DisabledException $e) {
                     return new FormError('password_reset.access_disabled', null, [], null, $e);
                 },
             ])
+            ->setAllowedTypes('token', [SplitToken::class])
+            ->setAllowedTypes('user_class', ['string'])
+            ->setAllowedTypes('command_builder', [Closure::class])
+            ->setAllowedTypes('password_constraints', ['array', Constraint::class])
         ;
     }
 
     public function getBlockPrefix(): string
     {
         return 'confirm_user_password_reset';
-    }
-
-    public function mapDataToForms($data, $forms)
-    {
-        // No-op
-    }
-
-    public function mapFormsToData($forms, &$data)
-    {
-        $forms = iterator_to_array($forms);
-        /** @var FormInterface[] $forms */
-        try {
-            $token = (string) $forms['reset_token']->getData();
-            $token = ($this->splitTokenFactory)->fromString($token);
-        } catch (\RuntimeException $e) {
-            throw new TransformationFailedException('Invalid token', 0, $e);
-        }
-
-        $data = new ConfirmUserPasswordReset($token, (string) $forms['password']->getData());
     }
 }

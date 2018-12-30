@@ -12,9 +12,9 @@ declare(strict_types=1);
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-namespace ParkManager\Module\CoreModule\Infrastructure\Web\Action\Security;
+namespace ParkManager\Module\CoreModule\Infrastructure\Web\Action;
 
-use ParkManager\Module\CoreModule\Application\Query\Security\GetUserByPasswordResetToken;
+use Closure;
 use ParkManager\Module\CoreModule\Application\Service\Crypto\SplitTokenFactory;
 use ParkManager\Module\CoreModule\Infrastructure\Web\Form\Handler\ServiceBusFormFactory;
 use ParkManager\Module\CoreModule\Infrastructure\Web\Form\Security\ConfirmPasswordResetType;
@@ -22,38 +22,41 @@ use ParkManager\Module\CoreModule\Infrastructure\Web\TwigResponse;
 use Rollerworks\Bundle\RouteAutofillBundle\Response\RouteRedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
-final class ConfirmPasswordResetAction
+abstract class AbstractConfirmPasswordResetAction
 {
+    /** @var SplitTokenFactory */
     private $tokenFactory;
-    private $formFactory;
 
-    private $loginRoute;
-
-    public function __construct(SplitTokenFactory $tokenFactory, ServiceBusFormFactory $formFactory)
+    public function __construct(SplitTokenFactory $tokenFactory)
     {
         $this->tokenFactory = $tokenFactory;
-        $this->formFactory  = $formFactory;
     }
 
-    public function __invoke(Request $request, string $token)
+    public function __invoke(Request $request, string $token, ServiceBusFormFactory $formFactory)
     {
         try {
             $splitToken = $this->tokenFactory->fromString($token);
         } catch (\Exception $e) {
-            return new TwigResponse('@ParkManagerCore/security/password_reset_confirm.html.twig', ['error' => 'password_reset.invalid_token'], 404);
+            return new TwigResponse($this->getTemplate(), ['error' => 'password_reset.invalid_token'], 404);
         }
 
-        $handler = $this->formFactory->createForQuery(ConfirmPasswordResetType::class, new GetUserByPasswordResetToken($splitToken), ['token' => $splitToken]);
+        $handler = $formFactory->createForQuery(ConfirmPasswordResetType::class, $this->createCommand(), ['token' => $splitToken]);
         $handler->handleRequest($request);
 
         if ($handler->isReady()) {
-            return new RouteRedirectResponse($this->loginRoute);
+            return new RouteRedirectResponse($this->getLoginRoute());
         }
 
-        $response = new TwigResponse('@ParkManagerCore/security/password_reset_confirm.html.twig', $handler);
+        $response = new TwigResponse($this->getTemplate(), $handler);
         $response->setPrivate();
         $response->setMaxAge(1);
 
         return $response;
     }
+
+    abstract protected function getTemplate(): string;
+
+    abstract protected function createCommand(): Closure;
+
+    abstract protected function getLoginRoute(): string;
 }

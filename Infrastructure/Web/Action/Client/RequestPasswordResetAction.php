@@ -12,9 +12,9 @@ declare(strict_types=1);
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-namespace ParkManager\Module\CoreModule\Infrastructure\Web\Action\Security;
+namespace ParkManager\Module\CoreModule\Infrastructure\Web\Action\Client;
 
-use ParkManager\Module\CoreModule\Infrastructure\Context\ApplicationContext;
+use ParkManager\Module\CoreModule\Application\Command\Client\RequestPasswordReset;
 use ParkManager\Module\CoreModule\Infrastructure\Web\Form\Handler\ServiceBusFormFactory;
 use ParkManager\Module\CoreModule\Infrastructure\Web\Form\Security\RequestPasswordResetType;
 use ParkManager\Module\CoreModule\Infrastructure\Web\TwigResponse;
@@ -23,25 +23,20 @@ use Symfony\Component\HttpFoundation\Request;
 
 final class RequestPasswordResetAction
 {
-    private $formFactory;
-    private $applicationContext;
-
-    public function __construct(ServiceBusFormFactory $formFactory, ApplicationContext $applicationContext)
+    public function __invoke(Request $request, ServiceBusFormFactory $formFactory): object
     {
-        $this->formFactory        = $formFactory;
-        $this->applicationContext = $applicationContext;
-    }
-
-    public function __invoke(Request $request)
-    {
-        $handler = $this->formFactory->createForCommand(RequestPasswordResetType::class, null);
+        $handler = $formFactory->createForCommand(RequestPasswordResetType::class, null, [
+            'command_builder' => function (string $email) {
+                return new RequestPasswordReset($email);
+            },
+        ]);
         $handler->handleRequest($request);
 
         if ($handler->isReady()) {
-            return new RouteRedirectResponse('park_manager.' . $this->applicationContext->getRouteNamePrefix() . '.security_login');
+            return new RouteRedirectResponse('park_manager.client.security_login');
         }
 
-        $response = new TwigResponse('@ParkManagerCore/security/password_reset.html.twig', $handler);
+        $response = new TwigResponse('@ParkManagerCore/client/password_reset.html.twig', $handler);
         $response->setPrivate();
         $response->setMaxAge(1);
 

@@ -14,38 +14,32 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Infrastructure\Web\Form\Security;
 
-use ParkManager\Module\CoreModule\Application\Command\Security\RequestUserPasswordReset;
+use Closure;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\DataMapperInterface;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormInterface;
-use function iterator_to_array;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class RequestPasswordResetType extends AbstractType implements DataMapperInterface
+class RequestPasswordResetType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->setDataMapper($this)
+            ->setDataMapper(new RequestPasswordResetDataMapper($options['command_builder']))
             ->add('email', EmailType::class, ['label' => 'label.email'])
+        ;
+    }
+
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver
+            ->setRequired(['command_builder'])
+            ->setAllowedTypes('command_builder', [Closure::class])
         ;
     }
 
     public function getBlockPrefix(): ?string
     {
         return 'request_user_password_reset';
-    }
-
-    public function mapDataToForms($data, $forms)
-    {
-        // No-op
-    }
-
-    public function mapFormsToData($forms, &$data)
-    {
-        $forms = iterator_to_array($forms);
-        /** @var FormInterface[] $forms */
-        $data = new RequestUserPasswordReset((string) $forms['email']->getData());
     }
 }
