@@ -14,11 +14,14 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Infrastructure\Security;
 
-use ParkManager\Module\CoreModule\Domain\User\Event\UserPasswordWasChanged;
-use ParkManager\Module\CoreModule\Domain\User\UserId;
+use ParkManager\Module\CoreModule\Infrastructure\Event\UserPasswordWasChanged;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
+/**
+ * Updates the current AuthenticationToken when the *current* user changes
+ * their login password.
+ */
 final class UpdateAuthTokenWhenPasswordWasChanged
 {
     private $userProvider;
@@ -44,7 +47,7 @@ final class UpdateAuthTokenWhenPasswordWasChanged
             return;
         }
 
-        if (! $event->id()->equals(UserId::fromString($token->getUsername()))) {
+        if ($event->getId() !== $token->getUsername()) {
             return;
         }
 
