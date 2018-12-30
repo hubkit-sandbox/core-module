@@ -14,20 +14,18 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Infrastructure\Security;
 
-use ParkManager\Module\CoreModule\Domain\Shared\AbstractUserId;
 use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use function get_class;
-use function hash_equals;
 use function serialize;
 use function unserialize;
 
 /**
- * The SecurityUser wraps around a "regular" a User and
- * keeps only the information related to authentication.
+ * The SecurityUser wraps around a User-model and keeps only
+ * the information related to authentication.
  *
- * To ensure password-encoders work properly this class needs
- * to be extended for each each "user type".
+ * To ensure password-encoders work properly this class must to be extended
+ * for each each user-type (Client and Administrator).
  */
 abstract class SecurityUser implements UserInterface, EquatableInterface, \Serializable
 {
@@ -49,7 +47,7 @@ abstract class SecurityUser implements UserInterface, EquatableInterface, \Seria
         return serialize([
             'username' => $this->getUsername(),
             'password' => $this->getPassword(),
-            'enabled' => $this->enabled,
+            'enabled' => $this->isEnabled(),
             'roles' => $this->getRoles(),
         ]);
     }
@@ -84,10 +82,10 @@ abstract class SecurityUser implements UserInterface, EquatableInterface, \Seria
         return $this->username;
     }
 
-    /**
-     * @return AbstractUserId
-     */
-    abstract public function userId();
+    public function getId(): string
+    {
+        return $this->username;
+    }
 
     public function isEnabled(): bool
     {
@@ -113,7 +111,7 @@ abstract class SecurityUser implements UserInterface, EquatableInterface, \Seria
             return false;
         }
 
-        if (! hash_equals($user->getPassword(), $this->getPassword())) {
+        if ($user->getPassword() !== $this->getPassword()) {
             return false;
         }
 

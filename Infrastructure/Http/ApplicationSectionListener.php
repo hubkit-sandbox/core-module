@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace ParkManager\Module\CoreModule\Infrastructure\Http;
 
 use ParkManager\Module\CoreModule\Infrastructure\Context\ApplicationContext;
-use ParkManager\Module\CoreModule\Infrastructure\Context\SwitchableUserRepository;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RequestMatcherInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
@@ -25,16 +24,14 @@ final class ApplicationSectionListener implements EventSubscriberInterface
 {
     private $sectionMatchers;
     private $applicationContext;
-    private $userRepository;
 
     /**
      * @param RequestMatcherInterface[] $sectionMatchers
      */
-    public function __construct(array $sectionMatchers, ApplicationContext $applicationContext, SwitchableUserRepository $userRepository)
+    public function __construct(array $sectionMatchers, ApplicationContext $applicationContext)
     {
         $this->sectionMatchers    = $sectionMatchers;
         $this->applicationContext = $applicationContext;
-        $this->userRepository     = $userRepository;
     }
 
     public function onKernelRequest(GetResponseEvent $event): void
@@ -50,7 +47,6 @@ final class ApplicationSectionListener implements EventSubscriberInterface
                 $request->attributes->set('_app_section', $name);
 
                 $this->applicationContext->setActiveSection($name);
-                $this->userRepository->setActive($name);
 
                 break;
             }
@@ -60,7 +56,6 @@ final class ApplicationSectionListener implements EventSubscriberInterface
     public function reset()
     {
         $this->applicationContext->reset();
-        $this->userRepository->reset();
     }
 
     public static function getSubscribedEvents(): array

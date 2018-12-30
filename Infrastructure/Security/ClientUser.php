@@ -14,12 +14,6 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Infrastructure\Security;
 
-use ParkManager\Module\CoreModule\Domain\User\UserId;
-
-final class GenericUser extends SecurityUser
+final class ClientUser extends SecurityUser
 {
-    public function userId(): UserId
-    {
-        return UserId::fromString($this->username);
-    }
 }

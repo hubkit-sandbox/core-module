@@ -14,11 +14,9 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Infrastructure\Security;
 
-use ParkManager\Module\CoreModule\Domain\Administrator\Exception\AdministratorNotFound;
-use ParkManager\Module\CoreModule\Domain\Shared\AbstractUser;
-use ParkManager\Module\CoreModule\Domain\Shared\EmailAddress;
-use ParkManager\Module\CoreModule\Domain\Shared\UserRepository;
-use ParkManager\Module\CoreModule\Domain\User\Exception\UserNotFound;
+use InvalidArgumentException;
+use ParkManager\Module\CoreModule\Application\Service\Finder\Client\AuthenticationFinder;
+use ParkManager\Module\CoreModule\Application\Service\Finder\Shared\SecurityAuthenticationData;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -29,16 +27,19 @@ use function sprintf;
 
 final class UserProvider implements UserProviderInterface
 {
-    private $repository;
+    /** @var AuthenticationFinder */
+    private $finder;
+
+    /** @var string */
     private $userClass;
 
-    public function __construct(UserRepository $repository, string $userClass)
+    public function __construct(AuthenticationFinder $repository, string $userClass)
     {
-        $this->repository = $repository;
-        $this->userClass  = $userClass;
+        $this->finder    = $repository;
+        $this->userClass = $userClass;
 
         if (! is_subclass_of($userClass, SecurityUser::class, true)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 sprintf('Expected UserClass (%s) to be a child of "%s"', $userClass, SecurityUser::class)
             );
         }
@@ -46,7 +47,7 @@ final class UserProvider implements UserProviderInterface
 
     public function loadUserByUsername($username): SecurityUser
     {
-        $user = $this->repository->findByEmailAddress(new EmailAddress($username));
+        $user = $this->finder->findAuthenticationByEmail($username);
 
         if ($user === null) {
             $e = new UsernameNotFoundException();
@@ -67,16 +68,16 @@ final class UserProvider implements UserProviderInterface
             throw new UnsupportedUserException(sprintf('Expected an instance of %s, but got "%s".', $this->userClass, get_class($user)));
         }
 
-        try {
-            $user = $this->repository->get($user->userId());
-        } catch (AdministratorNotFound | UserNotFound $e) {
+        $storedUser = $this->finder->findAuthenticationById($user->getUsername());
+
+        if ($storedUser === null) {
             $e = new UsernameNotFoundException();
             $e->setUsername($user->getUsername());
 
             throw $e;
         }
 
-        return $this->createUser($user);
+        return $this->createUser($storedUser);
     }
 
     public function supportsClass($class): bool
@@ -84,8 +85,13 @@ final class UserProvider implements UserProviderInterface
         return $this->userClass === $class;
     }
 
-    private function createUser(AbstractUser $user): SecurityUser
+    private function createUser(SecurityAuthenticationData $user): SecurityUser
     {
-        return new $this->userClass($user->id()->toString(), (string) $user->password(), $user->isEnabled(), $user->roles());
+        return new $this->userClass(
+            $user->id,
+            (string) $user->password,
+            $user->loginEnabled,
+            $user->roles
+        );
     }
 }

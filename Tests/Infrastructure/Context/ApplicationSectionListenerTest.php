@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace ParkManager\Module\CoreModule\Tests\Infrastructure\Context;
 
 use ParkManager\Module\CoreModule\Infrastructure\Context\ApplicationContext;
-use ParkManager\Module\CoreModule\Infrastructure\Context\SwitchableUserRepository;
 use ParkManager\Module\CoreModule\Infrastructure\Http\ApplicationSectionListener;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
@@ -33,8 +32,7 @@ final class ApplicationSectionListenerTest extends TestCase
     {
         $listener = new ApplicationSectionListener(
             ['client' => new RequestMatcher('^/nope')],
-            $this->doesNotExpectSectionIsSetContext(),
-            $this->doesNotExpectRepositoryIsInitialized()
+            $this->doesNotExpectSectionIsSetContext()
         );
 
         $event = $this->createMock(GetResponseEvent::class);
@@ -49,8 +47,7 @@ final class ApplicationSectionListenerTest extends TestCase
     {
         $listener = new ApplicationSectionListener(
             ['client' => new RequestMatcher('^/')],
-            $this->doesNotExpectSectionIsSetContext(),
-            $this->doesNotExpectRepositoryIsInitialized()
+            $this->doesNotExpectSectionIsSetContext()
         );
 
         $event = $this->createMock(GetResponseEvent::class);
@@ -68,8 +65,7 @@ final class ApplicationSectionListenerTest extends TestCase
                 'client' => new RequestMatcher('^/client/'),
                 'admin' => new RequestMatcher('^/admin/'),
             ],
-            $this->expectSectionIsSetContext('admin'),
-            $this->expectRepositoryIsInitialized('admin')
+            $this->expectSectionIsSetContext('admin')
         );
 
         $event = $this->createMock(GetResponseEvent::class);
@@ -87,27 +83,11 @@ final class ApplicationSectionListenerTest extends TestCase
         return $contextProphecy->reveal();
     }
 
-    private function doesNotExpectRepositoryIsInitialized(): SwitchableUserRepository
-    {
-        $switchableUserRepositoryProphecy = $this->prophesize(SwitchableUserRepository::class);
-        $switchableUserRepositoryProphecy->setActive(Argument::class)->shouldNotBeCalled();
-
-        return $switchableUserRepositoryProphecy->reveal();
-    }
-
     private function expectSectionIsSetContext(string $section): ApplicationContext
     {
         $contextProphecy = $this->prophesize(ApplicationContext::class);
         $contextProphecy->setActiveSection($section)->shouldBeCalled();
 
         return $contextProphecy->reveal();
-    }
-
-    private function expectRepositoryIsInitialized(string $section): SwitchableUserRepository
-    {
-        $switchableUserRepositoryProphecy = $this->prophesize(SwitchableUserRepository::class);
-        $switchableUserRepositoryProphecy->setActive($section)->shouldBeCalled();
-
-        return $switchableUserRepositoryProphecy->reveal();
     }
 }

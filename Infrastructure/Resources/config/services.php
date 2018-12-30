@@ -17,16 +17,12 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 use ParkManager\Module\CoreModule\Application\Service\Crypto\Argon2SplitTokenFactory;
 use ParkManager\Module\CoreModule\Application\Service\Crypto\SplitTokenFactory;
 use ParkManager\Module\CoreModule\Domain\Administrator\AdministratorRepository;
-use ParkManager\Module\CoreModule\Domain\User\UserRepository;
+use ParkManager\Module\CoreModule\Domain\Client\ClientRepository;
 use ParkManager\Module\CoreModule\Infrastructure\Context\ApplicationContext;
-use ParkManager\Module\CoreModule\Infrastructure\Context\SwitchableUserRepository;
 use ParkManager\Module\CoreModule\Infrastructure\Doctrine\Administrator\DoctrineOrmAdministratorRepository;
-use ParkManager\Module\CoreModule\Infrastructure\Doctrine\User\DoctrineOrmUserRepository;
+use ParkManager\Module\CoreModule\Infrastructure\Doctrine\Client\DoctrineOrmClientRepository;
 use ParkManager\Module\CoreModule\Infrastructure\Http\ApplicationSectionListener;
 use ParkManager\Module\CoreModule\Infrastructure\Http\SectionsLoader;
-use Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
-use Symfony\Component\DependencyInjection\Reference;
-use Symfony\Component\DependencyInjection\ServiceLocator;
 
 return function (ContainerConfigurator $c) {
     $di = $c->services()->defaults()
@@ -40,18 +36,8 @@ return function (ContainerConfigurator $c) {
     $di->set('park_manager.repository.administrator', DoctrineOrmAdministratorRepository::class)
         ->alias(AdministratorRepository::class, 'park_manager.repository.administrator');
 
-    $di->set('park_manager.repository.generic_user', DoctrineOrmUserRepository::class)
-        ->alias(UserRepository::class, 'park_manager.repository.generic_user');
-
-    $di->set(SwitchableUserRepository::class)->args([
-        inline(ServiceLocator::class)
-            ->tag('container.service_locator')
-            ->arg(0, [
-                'admin' => new ServiceClosureArgument(new Reference('park_manager.repository.administrator')),
-                'client' => new ServiceClosureArgument(new Reference('park_manager.repository.generic_user')),
-                'private' => new ServiceClosureArgument(new Reference('park_manager.repository.administrator')),
-            ]),
-    ]);
+    $di->set('park_manager.repository.generic_user', DoctrineOrmClientRepository::class)
+        ->alias(ClientRepository::class, 'park_manager.repository.generic_user');
 
     // RoutingLoader
     $di->set(SectionsLoader::class)

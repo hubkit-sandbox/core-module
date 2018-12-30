@@ -14,12 +14,6 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Infrastructure\Security;
 
-use ParkManager\Module\CoreModule\Domain\Administrator\AdministratorId;
-
 final class AdministratorUser extends SecurityUser
 {
-    public function userId(): AdministratorId
-    {
-        return AdministratorId::fromString($this->username);
-    }
 }

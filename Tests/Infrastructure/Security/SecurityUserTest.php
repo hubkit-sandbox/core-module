@@ -14,15 +14,14 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Tests\Infrastructure\Security;
 
-use ParkManager\Module\CoreModule\Domain\User\User;
-use ParkManager\Module\CoreModule\Domain\User\UserId;
 use ParkManager\Module\CoreModule\Infrastructure\Security\SecurityUser;
-use ParkManager\Module\CoreModule\Tests\Infrastructure\Fixtures\Security\SecurityUserExtended;
-use ParkManager\Module\CoreModule\Tests\Infrastructure\Fixtures\Security\SecurityUserSecond;
 use PHPUnit\Framework\TestCase;
 use function serialize;
 use function unserialize;
 
+/**
+ * @internal
+ */
 final class SecurityUserTest extends TestCase
 {
     private const ID1      = '930c3fd0-3bd1-11e7-bb9b-acdc32b58315';
@@ -37,31 +36,27 @@ final class SecurityUserTest extends TestCase
 
         self::assertSame(self::ID1, $securityUser->getUsername());
         self::assertSame(self::ID2, $securityUser2->getUsername());
-        self::assertTrue($securityUser->userId()->equals(UserId::fromString(self::ID1)));
+        self::assertSame(self::ID1, $securityUser->getId());
+        self::assertSame(self::ID2, $securityUser2->getId());
     }
 
     /** @test */
     public function its_password_is_equals_when_provided()
     {
-        $securityUser = $this->createSecurityUser();
-
-        self::assertSame(self::PASSWORD, $securityUser->getPassword());
+        self::assertSame(self::PASSWORD, $this->createSecurityUser()->getPassword());
     }
 
     /** @test */
     public function its_password_is_empty_when_not_provided()
     {
-        $securityUser = $this->createSecurityUser(self::ID1, null);
-
-        self::assertSame('', $securityUser->getPassword());
+        self::assertSame('', $this->createSecurityUser(self::ID1, null)->getPassword());
     }
 
     /** @test */
-    public function it_has_default_role()
+    public function it_has_roles()
     {
-        $securityUser = $this->createSecurityUser();
-
-        self::assertContains(User::DEFAULT_ROLE, $securityUser->getRoles());
+        self::assertSame(['ROLE_USER'], $this->createSecurityUser()->getRoles());
+        self::assertSame(['ROLE_ADMIN'], $this->createSecurityUserSecond()->getRoles());
     }
 
     /** @test */
@@ -104,8 +99,16 @@ final class SecurityUserTest extends TestCase
         return new SecurityUserExtended($id ?? self::ID1, (string) $password, true, ['ROLE_USER']);
     }
 
-    private function createSecurityUserSecond(?string $id = self::ID1, ?string $password = self::PASSWORD): SecurityUser
+    private function createSecurityUserSecond(?string $id = self::ID2, ?string $password = self::PASSWORD): SecurityUser
     {
-        return new SecurityUserSecond($id ?? self::ID1, (string) $password, true, ['ROLE_USER']);
+        return new SecurityUserSecond($id, (string) $password, true, ['ROLE_ADMIN']);
     }
+}
+
+final class SecurityUserExtended extends SecurityUser
+{
+}
+
+final class SecurityUserSecond extends SecurityUser
+{
 }

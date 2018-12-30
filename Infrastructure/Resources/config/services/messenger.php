@@ -14,15 +14,12 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
-use ParkManager\Module\CoreModule\Domain\Shared\UserRepository;
-use ParkManager\Module\CoreModule\Infrastructure\Context\SwitchableUserRepository;
 use ParkManager\Module\CoreModule\Infrastructure\Messenger\Middleware\SecurityMiddleware;
 
 return function (ContainerConfigurator $c) {
     $di = $c->services()->defaults()
         ->autowire()
-        ->private()
-        ->bind(UserRepository::class, ref(SwitchableUserRepository::class));
+        ->private();
 
     $di->set('messenger.middleware.security', SecurityMiddleware::class)
         ->args([ref('security.authorization_checker')])
