@@ -4,13 +4,14 @@
     xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
         http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
-    <entity name="ParkManager\Module\CoreModule\Domain\Administrator\Administrator" table="administrator">
-        <id name="id" type="park_manager_administrator_id">
+    <entity name="ParkManager\Module\CoreModule\Domain\Client\Client" table="client">
+        <id name="id" type="park_manager_client_id">
             <generator strategy="NONE" />
         </id>
         <field name="displayName" column="display_name" type="string" />
 
         <field name="password" column="auth_password" type="text" nullable="true" />
+        <field name="passwordResetEnabled" column="password_reset_enabled" type="boolean" />
         <field name="loginEnabled" column="login_enabled" type="boolean" />
         <field name="roles" type="array_collection" />
 

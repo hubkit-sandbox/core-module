@@ -15,13 +15,19 @@ declare(strict_types=1);
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use ParkManager\Module\CoreModule\Infrastructure\Web\Form\Handler\ServiceBusFormFactory;
+use ParkManager\Module\CoreModule\Infrastructure\Web\Form\Security\ChangePasswordType;
+use ParkManager\Module\CoreModule\Infrastructure\Web\Form\Security\ConfirmPasswordResetType;
 
 return function (ContainerConfigurator $c) {
     $di = $c->services()->defaults()
         ->autowire()
+        ->autoconfigure()
         ->private();
 
     $di->set(ServiceBusFormFactory::class)
         ->arg('$commandBus', ref('park_manager.command_bus'))
         ->arg('$queryBus', ref('park_manager.query_bus'));
+
+    $di->set(ChangePasswordType::class);
+    $di->set(ConfirmPasswordResetType::class);
 };

@@ -16,7 +16,7 @@ namespace ParkManager\Module\CoreModule\Infrastructure\Doctrine;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
-use ParkManager\Module\CoreModule\Domain\EventsRecordingEntity;
+use ParkManager\Module\CoreModule\Domain\RecordsDomainEvents;
 use Symfony\Component\Messenger\MessageBusInterface as MessageBus;
 
 abstract class EventSourcedEntityRepository extends EntityRepository
@@ -31,7 +31,7 @@ abstract class EventSourcedEntityRepository extends EntityRepository
         $this->eventBus    = $eventBus;
     }
 
-    protected function doDispatchEvents(EventsRecordingEntity $aggregateRoot): void
+    protected function doDispatchEvents(RecordsDomainEvents $aggregateRoot): void
     {
         foreach ($aggregateRoot->releaseEvents() as $event) {
             $this->eventBus->dispatch($event);

@@ -46,7 +46,7 @@ class Client implements RecordsDomainEvents
     protected $displayName;
 
     /** @var bool */
-    protected $enabled = true;
+    protected $loginEnabled = true;
 
     /** @var Collection */
     protected $roles;
@@ -97,17 +97,17 @@ class Client implements RecordsDomainEvents
 
     public function isEnabled(): bool
     {
-        return $this->enabled;
+        return $this->loginEnabled;
     }
 
     public function disable(): void
     {
-        $this->enabled = false;
+        $this->loginEnabled = false;
     }
 
     public function enable(): void
     {
-        $this->enabled = true;
+        $this->loginEnabled = true;
     }
 
     public function requestEmailChange(EmailAddress $email, SplitToken $token): bool

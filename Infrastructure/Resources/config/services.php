@@ -36,8 +36,8 @@ return function (ContainerConfigurator $c) {
     $di->set('park_manager.repository.administrator', DoctrineOrmAdministratorRepository::class)
         ->alias(AdministratorRepository::class, 'park_manager.repository.administrator');
 
-    $di->set('park_manager.repository.generic_user', DoctrineOrmClientRepository::class)
-        ->alias(ClientRepository::class, 'park_manager.repository.generic_user');
+    $di->set('park_manager.repository.client_user', DoctrineOrmClientRepository::class)
+        ->alias(ClientRepository::class, 'park_manager.repository.client_user');
 
     // RoutingLoader
     $di->set(SectionsLoader::class)

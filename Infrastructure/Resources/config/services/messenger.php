@@ -27,7 +27,7 @@ return function (ContainerConfigurator $c) {
 
     $applicationDir = __DIR__ . '/../../../../Application/';
     $di->load('ParkManager\Module\CoreModule\Application\Command\\', $applicationDir . 'Command/**/*Handler.php')
-        ->exclude(__DIR__ . '/../../../../Application/Command/User/{RequestConfirmationOfEmailAddressChangeHandler}.php')
+        ->exclude(__DIR__ . '/../../../../Application/Command/Client/{RequestEmailAddressChangeHandler}.php')
         ->tag('messenger.bus', ['bus' => 'park_manager.command_bus']);
 
     $di->load('ParkManager\Module\CoreModule\Application\Query\\', $applicationDir . 'Query/**/*Handler.php')

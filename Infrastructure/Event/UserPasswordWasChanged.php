@@ -14,7 +14,9 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Infrastructure\Event;
 
-final class UserPasswordWasChanged
+use Symfony\Component\EventDispatcher\Event;
+
+final class UserPasswordWasChanged extends Event
 {
     /** @var string */
     private $id;

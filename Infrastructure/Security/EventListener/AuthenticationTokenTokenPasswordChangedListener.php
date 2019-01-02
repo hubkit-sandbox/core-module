@@ -12,9 +12,10 @@ declare(strict_types=1);
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-namespace ParkManager\Module\CoreModule\Infrastructure\Security;
+namespace ParkManager\Module\CoreModule\Infrastructure\Security\EventListener;
 
 use ParkManager\Module\CoreModule\Infrastructure\Event\UserPasswordWasChanged;
+use ParkManager\Module\CoreModule\Infrastructure\Security\SecurityUser;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
@@ -22,7 +23,7 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
  * Updates the current AuthenticationToken when the *current* user changes
  * their login password.
  */
-final class UpdateAuthTokenWhenPasswordWasChanged
+final class AuthenticationTokenTokenPasswordChangedListener
 {
     private $userProvider;
     private $tokenStorage;
@@ -33,7 +34,7 @@ final class UpdateAuthTokenWhenPasswordWasChanged
         $this->tokenStorage = $tokenStorage;
     }
 
-    public function __invoke(UserPasswordWasChanged $event): void
+    public function onUserPasswordWasChanged(UserPasswordWasChanged $event): void
     {
         $token = $this->tokenStorage->getToken();
 
