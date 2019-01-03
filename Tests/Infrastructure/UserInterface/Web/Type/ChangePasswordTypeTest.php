@@ -120,9 +120,7 @@ final class ChangePasswordTypeTest extends TypeTestCase
             'command_builder' => $this->getCommandBuilder(),
             'user_id' => 1,
         ]);
-        $form->submit([
-            'password' => 'Hello there',
-        ]);
+        $form->submit(['password' => 'Hello there']);
 
         self::assertEquals(new ChangeUserPassword('1', ''), $form->getData());
     }

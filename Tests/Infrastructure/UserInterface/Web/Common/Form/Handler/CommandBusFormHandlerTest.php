@@ -14,10 +14,12 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Tests\Infrastructure\UserInterface\Web\Common\Form\Handler;
 
+use Exception;
+use InvalidArgumentException;
 use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Common\Form\Handler\CommandBusFormHandler;
 use ParkManager\Module\CoreModule\Tests\Infrastructure\UserInterface\Web\Common\Form\Handler\Mock\StubCommand;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
+use RuntimeException;
 use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\Exception\AlreadySubmittedException;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
@@ -29,9 +31,11 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormFactoryBuilder;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\MessageBusInterface as MessageBus;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\ValidatorBuilder;
+use Throwable;
 use function explode;
 use function iterator_to_array;
 
@@ -42,82 +46,144 @@ final class CommandBusFormHandlerTest extends TestCase
 {
     public function its_constructable()
     {
-        $commandBusProphecy = $this->prophesize(MessageBus::class);
-        $commandBusProphecy->dispatch(Argument::any())->shouldNotBeCalled();
-        $commandBus = $commandBusProphecy->reveal();
-
-        $form    = $this->createRealForm();
-        $handler = new CommandBusFormHandler($form, $commandBus);
+        $form       = $this->createRealForm();
+        $commandBus = $this->createMessageBus();
+        $handler    = new CommandBusFormHandler($form, $commandBus);
 
         self::assertSame($form, $handler->getForm());
+        $this->assertNoMessagesDispatches($commandBus);
+    }
+
+    private function createRealForm(?object $data = null): FormInterface
+    {
+        $formFactory = (new FormFactoryBuilder())
+            ->addTypeExtension(new FormTypeHttpFoundationExtension())
+            ->addExtension(new ValidatorExtension((new ValidatorBuilder())->getValidator()))
+            ->addTypeExtension(
+                new class() extends AbstractTypeExtension {
+                    public function configureOptions(OptionsResolver $resolver): void
+                    {
+                        $resolver->setDefault('exception_mapping', []);
+                    }
+
+                    public static function getExtendedTypes(): iterable
+                    {
+                        yield FormType::class;
+                    }
+                }
+            )
+            ->getFormFactory();
+
+        $profileContactFormType = $formFactory->createNamedBuilder('contact')
+            ->add('email', TextType::class, ['required' => false])
+            ->add('address', TextType::class, ['required' => false]);
+
+        $profileFormType = $formFactory->createNamedBuilder('profile')
+            ->add('name', TextType::class, ['required' => false])
+            ->add($profileContactFormType);
+
+        $form = $formFactory->createBuilder(FormType::class, $data)
+            ->add('id', IntegerType::class, ['required' => false])
+            ->add('username', TextType::class, ['required' => false])
+            ->add($profileFormType)
+            ->getForm();
+
+        return $form;
+    }
+
+    private function createMessageBus()
+    {
+        $commandBus                     = new class() implements MessageBus {
+            private $dispatchedMessages = [];
+
+            public function dispatch($message): Envelope
+            {
+                $this->dispatchedMessages[] = $message;
+
+                if (! $message instanceof Envelope) {
+                    $message = new Envelope($message);
+                }
+
+                return $message;
+            }
+
+            public function getDispatchedMessages(): array
+            {
+                return $this->dispatchedMessages;
+            }
+        };
+
+        return $commandBus;
+    }
+
+    private function assertNoMessagesDispatches(object $commandBus): void
+    {
+        self::assertSame([], $commandBus->getDispatchedMessages());
     }
 
     /** @test */
     public function it_handles_non_submit_request()
     {
-        $commandBusProphecy = $this->prophesize(MessageBus::class);
-        $commandBusProphecy->dispatch(Argument::any())->shouldNotBeCalled();
-        $commandBus = $commandBusProphecy->reveal();
+        $form       = $this->createRealForm();
+        $commandBus = $this->createMessageBus();
 
-        $form    = $this->createRealForm();
         $handler = new CommandBusFormHandler($form, $commandBus);
-
-        $request = Request::create('/');
-        $handler->handleRequest($request);
+        $handler->handleRequest(Request::create('/'));
 
         self::assertFalse($handler->isReady());
         self::assertFalse($form->isSubmitted());
+        $this->assertNoMessagesDispatches($commandBus);
     }
 
     /** @test */
     public function it_handles_submit_request_for_other_form()
     {
-        $commandBusProphecy = $this->prophesize(MessageBus::class);
-        $commandBusProphecy->dispatch(Argument::any())->shouldNotBeCalled();
-        $commandBus = $commandBusProphecy->reveal();
+        $commandBus = $this->createMessageBus();
+        $form       = $this->createRealForm(new StubCommand());
 
-        $form    = $this->createRealForm(new StubCommand());
         $handler = new CommandBusFormHandler($form, $commandBus);
-
-        $request = Request::create('/', 'POST');
-        $handler->handleRequest($request);
+        $handler->handleRequest(Request::create('/', 'POST'));
 
         self::assertFalse($handler->isReady());
         self::assertFalse($form->isSubmitted());
+        $this->assertNoMessagesDispatches($commandBus);
     }
 
     /** @test */
     public function it_handles_submit_request_without_errors()
     {
-        $commandBusProphecy = $this->prophesize(MessageBus::class);
-        $commandBusProphecy->dispatch(Argument::which('id', 5))->shouldBeCalled();
-        $commandBus = $commandBusProphecy->reveal();
-
-        $form    = $this->createRealForm(new StubCommand());
-        $handler = new CommandBusFormHandler($form, $commandBus);
+        $form       = $this->createRealForm(new StubCommand());
+        $commandBus = $this->createMessageBus();
 
         $request = Request::create('/', 'POST');
         $request->request->set($form->getName(), ['id' => 5]);
 
+        $handler = new CommandBusFormHandler($form, $commandBus);
         $handler->handleRequest($request);
 
         self::assertTrue($handler->isReady());
         self::assertTrue($form->isSubmitted());
+        self::assertEquals(
+            $commandBus->getDispatchedMessages(),
+            [
+                new StubCommand(5, null, [
+                    'name' => null,
+                    'contact' => ['email' => null, 'address' => null],
+                ]),
+            ]
+        );
     }
 
     /** @test */
     public function it_handles_submit_request_with_existing_errors()
     {
-        $commandBusProphecy = $this->prophesize(MessageBus::class);
-        $commandBusProphecy->dispatch(Argument::any())->shouldNotBeCalled();
-        $commandBus = $commandBusProphecy->reveal();
-
-        $form    = $this->createRealForm(new StubCommand());
-        $handler = new CommandBusFormHandler($form, $commandBus);
+        $form       = $this->createRealForm(new StubCommand());
+        $commandBus = $this->createMessageBus();
 
         $request = Request::create('/', 'POST');
         $request->request->set($form->getName(), ['id' => 'nope']);
 
+        $handler = new CommandBusFormHandler($form, $commandBus);
         $handler->handleRequest($request);
 
         self::assertTrue($form->isSubmitted());
@@ -127,22 +193,30 @@ final class CommandBusFormHandlerTest extends TestCase
         $errors = $form->getErrors(true, true);
 
         self::assertCount(1, $errors);
+        $this->assertNoMessagesDispatches($commandBus);
     }
 
     /** @test */
     public function it_forbids_handling_more_then_once()
     {
-        $commandBusProphecy = $this->prophesize(MessageBus::class);
-        $commandBusProphecy->dispatch(Argument::which('id', 5))->shouldBeCalledTimes(1);
-        $commandBus = $commandBusProphecy->reveal();
-
-        $form    = $this->createRealForm(new StubCommand());
-        $handler = new CommandBusFormHandler($form, $commandBus);
+        $form       = $this->createRealForm(new StubCommand());
+        $commandBus = $this->createMessageBus();
 
         $request = Request::create('/', 'POST');
         $request->request->set($form->getName(), ['id' => 5]);
 
+        $handler = new CommandBusFormHandler($form, $commandBus);
         $handler->handleRequest($request);
+
+        self::assertEquals(
+            $commandBus->getDispatchedMessages(),
+            [
+                new StubCommand(5, null, [
+                    'name' => null,
+                    'contact' => ['email' => null, 'address' => null],
+                ]),
+            ]
+        );
 
         $this->expectException(AlreadySubmittedException::class);
         $this->expectExceptionMessage('A form can only be handled once.');
@@ -153,40 +227,50 @@ final class CommandBusFormHandlerTest extends TestCase
     /** @test */
     public function it_does_not_validate_command_if_submitting()
     {
-        $commandBusProphecy = $this->prophesize(MessageBus::class);
-        $commandBusProphecy->dispatch(Argument::which('id', 5))->shouldBeCalledTimes(1);
-        $commandBus = $commandBusProphecy->reveal();
-
-        $form    = $this->createRealForm(new StubCommand());
-        $handler = new CommandBusFormHandler($form, $commandBus, function () {
-            throw new \InvalidArgumentException('This command is not invalid it is not.');
-        });
+        $form       = $this->createRealForm(new StubCommand());
+        $commandBus = $this->createMessageBus();
 
         $request = Request::create('/', 'POST');
         $request->request->set($form->getName(), ['id' => 5]);
+
+        $handler = new CommandBusFormHandler($form, $commandBus, function () {
+            throw new InvalidArgumentException('This command is not invalid it is not.');
+        });
         $handler->handleRequest($request);
 
         self::assertTrue($handler->isReady());
         self::assertTrue($form->isSubmitted());
+        self::assertEquals(
+            $commandBus->getDispatchedMessages(),
+            [
+                new StubCommand(5, null, [
+                    'name' => null,
+                    'contact' => ['email' => null, 'address' => null],
+                ]),
+            ]
+        );
     }
 
     /** @test */
     public function it_validates_command_if_not_submitting()
     {
-        $commandBusProphecy = $this->prophesize(MessageBus::class);
-        $commandBusProphecy->dispatch(Argument::any())->shouldNotBeCalled();
-        $commandBus = $commandBusProphecy->reveal();
+        $handler    = new CommandBusFormHandler(
+            $this->createRealForm(new StubCommand()),
+            $commandBus = $this->createMessageBus(),
+            function () {
+                throw new InvalidArgumentException('This command is not invalid it is not.');
+            }
+        );
 
-        $form    = $this->createRealForm(new StubCommand());
-        $handler = new CommandBusFormHandler($form, $commandBus, function () {
-            throw new \InvalidArgumentException('This command is not invalid it is not.');
-        });
+        try {
+            $request = Request::create('/');
+            $handler->handleRequest($request);
 
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('This command is not invalid it is not.');
-
-        $request = Request::create('/', 'GET');
-        $handler->handleRequest($request);
+            $this->fail('Exception was expected.');
+        } catch (InvalidArgumentException $e) {
+            self::assertSame('This command is not invalid it is not.', $e->getMessage());
+            $this->assertNoMessagesDispatches($commandBus);
+        }
     }
 
     /**
@@ -195,24 +279,21 @@ final class CommandBusFormHandlerTest extends TestCase
      *
      * @param array<FormError[]> $expectedErrors
      */
-    public function it_maps_command_bus_exceptions(\Exception $exception, array $expectedErrors)
+    public function it_maps_command_bus_exceptions(Throwable $exception, array $expectedErrors)
     {
-        $commandBusProphecy = $this->prophesize(MessageBus::class);
-        $commandBusProphecy->dispatch(Argument::which('id', 5))->willThrow($exception);
-        $commandBus = $commandBusProphecy->reveal();
-
-        $form = $this->createRealForm(new StubCommand());
+        $form       = $this->createRealForm(new StubCommand());
+        $commandBus = $this->createExceptionThrowingMessageBus($exception);
 
         $handler = new CommandBusFormHandler($form, $commandBus);
         $handler->mapException(
-            \InvalidArgumentException::class,
-            function (\Throwable $e) {
+            InvalidArgumentException::class,
+            function (Throwable $e) {
                 return new FormError('Root problem is here', null, [], null, $e);
             }
         );
         $handler->mapException(
-            \RuntimeException::class,
-            function (\Throwable $e) {
+            RuntimeException::class,
+            function (Throwable $e) {
                 return [
                     null => new FormError('Root problem is here2', null, [], null, $e),
                     'username' => new FormError('Username problem is here', null, [], null, $e),
@@ -220,7 +301,7 @@ final class CommandBusFormHandlerTest extends TestCase
             }
         );
         $handler->setExceptionFallback(
-            function (\Throwable $e) {
+            function (Throwable $e) {
                 return [
                     'profile.contact.email' => new FormError('Contact Email problem is here', null, [], null, $e),
                 ];
@@ -254,65 +335,45 @@ final class CommandBusFormHandlerTest extends TestCase
         }
     }
 
-    public static function provideExceptions(): array
+    private function createExceptionThrowingMessageBus(Throwable $e)
     {
-        return [
-            'root form error' => [
-                $e = new \InvalidArgumentException('Epon'),
-                [
-                    null => [new FormError('Root problem is here', null, [], null, $e)],
-                ],
-            ],
-            'sub form' => [
-                $e = new \RuntimeException('Ah interesting'),
-                [
-                    null => [new FormError('Root problem is here2', null, [], null, $e)],
-                    'username' => [new FormError('Username problem is here', null, [], null, $e)],
-                ],
-            ],
-            'fallback for form' => [
-                $e = new \Exception('You know nothing'),
-                [
-                    'profile.contact.email' => [new FormError('Contact Email problem is here', null, [], null, $e)],
-                ],
-            ],
-        ];
+        return new class($e) implements MessageBus {
+            private $e;
+
+            public function __construct(Throwable $e)
+            {
+                $this->e = $e;
+            }
+
+            public function dispatch($message): Envelope
+            {
+                throw $this->e;
+            }
+        };
     }
 
-    private function createRealForm(?object $data = null): FormInterface
+    public static function provideExceptions(): iterable
     {
-        $formFactory = (new FormFactoryBuilder())
-            ->addTypeExtension(new FormTypeHttpFoundationExtension())
-            ->addExtension(new ValidatorExtension((new ValidatorBuilder())->getValidator()))
-            ->addTypeExtension(
-                new class() extends AbstractTypeExtension {
-                    public function configureOptions(OptionsResolver $resolver): void
-                    {
-                        $resolver->setDefault('exception_mapping', []);
-                    }
+        yield 'root form error' => [
+            $e = new InvalidArgumentException('Epon'),
+            [
+                null => [new FormError('Root problem is here', null, [], null, $e)],
+            ],
+        ];
 
-                    public function getExtendedType(): string
-                    {
-                        return FormType::class;
-                    }
-                }
-            )
-            ->getFormFactory();
+        yield 'sub form' => [
+            $e = new RuntimeException('Ah interesting'),
+            [
+                null => [new FormError('Root problem is here2', null, [], null, $e)],
+                'username' => [new FormError('Username problem is here', null, [], null, $e)],
+            ],
+        ];
 
-        $profileContactFormType = $formFactory->createNamedBuilder('contact')
-            ->add('email', TextType::class, ['required' => false])
-            ->add('address', TextType::class, ['required' => false]);
-
-        $profileFormType = $formFactory->createNamedBuilder('profile')
-            ->add('name', TextType::class, ['required' => false])
-            ->add($profileContactFormType);
-
-        $form = $formFactory->createBuilder(FormType::class, $data)
-            ->add('id', IntegerType::class, ['required' => false])
-            ->add('username', TextType::class, ['required' => false])
-            ->add($profileFormType)
-            ->getForm();
-
-        return $form;
+        yield 'fallback for form' => [
+            $e = new Exception('You know nothing'),
+            [
+                'profile.contact.email' => [new FormError('Contact Email problem is here', null, [], null, $e)],
+            ],
+        ];
     }
 }
