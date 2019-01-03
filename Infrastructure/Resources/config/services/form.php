@@ -14,9 +14,9 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
-use ParkManager\Module\CoreModule\Infrastructure\Web\Form\Handler\ServiceBusFormFactory;
-use ParkManager\Module\CoreModule\Infrastructure\Web\Form\Security\ChangePasswordType;
-use ParkManager\Module\CoreModule\Infrastructure\Web\Form\Security\ConfirmPasswordResetType;
+use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Common\Form\Handler\ServiceBusFormFactory;
+use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Form\Type\Security\ChangePasswordType;
+use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Form\Type\Security\ConfirmPasswordResetType;
 
 return function (ContainerConfigurator $c) {
     $di = $c->services()->defaults()

@@ -18,11 +18,11 @@ use ParkManager\Module\CoreModule\Application\Service\Crypto\Argon2SplitTokenFac
 use ParkManager\Module\CoreModule\Application\Service\Crypto\SplitTokenFactory;
 use ParkManager\Module\CoreModule\Domain\Administrator\AdministratorRepository;
 use ParkManager\Module\CoreModule\Domain\Client\ClientRepository;
-use ParkManager\Module\CoreModule\Infrastructure\Context\ApplicationContext;
 use ParkManager\Module\CoreModule\Infrastructure\Doctrine\Administrator\DoctrineOrmAdministratorRepository;
 use ParkManager\Module\CoreModule\Infrastructure\Doctrine\Client\DoctrineOrmClientRepository;
-use ParkManager\Module\CoreModule\Infrastructure\Http\ApplicationSectionListener;
 use ParkManager\Module\CoreModule\Infrastructure\Http\SectionsLoader;
+use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Common\ApplicationContext;
+use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\EventListener\ApplicationSectionListener;
 
 return function (ContainerConfigurator $c) {
     $di = $c->services()->defaults()

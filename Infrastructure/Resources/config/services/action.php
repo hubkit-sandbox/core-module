@@ -22,5 +22,8 @@ return function (ContainerConfigurator $c) {
         //->bind('$queryBus', ref('park_manager.query_bus'))
     ;
 
-    $di->load('ParkManager\Module\CoreModule\Infrastructure\Web\Action\\', __DIR__ . '/../../../../Infrastructure/Web/Action/*');
+    $di->load(
+        'ParkManager\\Module\\CoreModule\\Infrastructure\\UserInterface\\Web\Action\\',
+        __DIR__ . '/../../../../Infrastructure/UserInterface/Web/Action'
+    );
 };
