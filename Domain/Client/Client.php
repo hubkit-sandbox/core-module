@@ -52,7 +52,7 @@ class Client implements RecordsDomainEvents
     protected $roles;
 
     /** @var SplitTokenValueHolder|null */
-    protected $emailChangeToken;
+    protected $emailAddressChangeToken;
 
     /** @var string|null */
     protected $password;
@@ -112,11 +112,11 @@ class Client implements RecordsDomainEvents
 
     public function requestEmailChange(EmailAddress $email, SplitToken $token): bool
     {
-        if (! SplitTokenValueHolder::mayReplaceCurrentToken($this->emailChangeToken, ['email' => $email->address()])) {
+        if (! SplitTokenValueHolder::mayReplaceCurrentToken($this->emailAddressChangeToken, ['email' => $email->address()])) {
             return false;
         }
 
-        $this->emailChangeToken = $token->toValueHolder()->withMetadata(['email' => $email->address()]);
+        $this->emailAddressChangeToken = $token->toValueHolder()->withMetadata(['email' => $email->address()]);
         $this->recordThat(new ClientEmailAddressChangeWasRequested($this->id, $token, $email));
 
         return true;
@@ -125,13 +125,13 @@ class Client implements RecordsDomainEvents
     public function confirmEmailChange(SplitToken $token): void
     {
         try {
-            if (! $token->matches($this->emailChangeToken)) {
+            if (! $token->matches($this->emailAddressChangeToken)) {
                 throw new EmailChangeConfirmationRejected();
             }
 
-            $this->changeEmail(new EmailAddress($this->emailChangeToken->metadata()['email']));
+            $this->changeEmail(new EmailAddress($this->emailAddressChangeToken->metadata()['email']));
         } finally {
-            $this->emailChangeToken = null;
+            $this->emailAddressChangeToken = null;
         }
     }
 
