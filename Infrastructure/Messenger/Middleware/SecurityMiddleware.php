@@ -14,7 +14,9 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Infrastructure\Messenger\Middleware;
 
+use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Middleware\MiddlewareInterface;
+use Symfony\Component\Messenger\Middleware\StackInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
@@ -27,8 +29,10 @@ final class SecurityMiddleware implements MiddlewareInterface
         $this->authorizationChecker = $authorizationChecker;
     }
 
-    public function handle($message, callable $next)
+    public function handle(Envelope $envelope, StackInterface $stack): Envelope
     {
+        $message = $envelope->getMessage();
+
         if (! $this->authorizationChecker->isGranted([], $message)) {
             $e = new AccessDeniedException();
             $e->setSubject($message);
@@ -36,6 +40,6 @@ final class SecurityMiddleware implements MiddlewareInterface
             throw $e;
         }
 
-        return $next($message);
+        return $stack->next()->handle($envelope, $stack);
     }
 }
