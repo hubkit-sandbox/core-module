@@ -12,12 +12,13 @@ declare(strict_types=1);
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-namespace ParkManager\Module\CoreModule\Application\Service;
+namespace ParkManager\Module\CoreModule\Application\Service\Mailer;
 
-use ParkManager\Module\CoreModule\Domain\Shared\EmailAddress;
+use DateTimeImmutable;
+use ParkManager\Module\CoreModule\Domain\Client\ClientId;
 use ParkManager\Module\CoreModule\Domain\Shared\SplitToken;
 
-interface PasswordResetMailer
+interface ClientPasswordResetMailer
 {
-    public function send(EmailAddress $emailAddress, SplitToken $splitToken, \DateTimeImmutable $tokenExpiration): void;
+    public function send(ClientId $id, SplitToken $splitToken, DateTimeImmutable $tokenExpiration): void;
 }

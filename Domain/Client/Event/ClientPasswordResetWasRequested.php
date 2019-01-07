@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Domain\Client\Event;
 
+use DateTimeImmutable;
 use ParkManager\Module\CoreModule\Domain\Client\ClientId;
 use ParkManager\Module\CoreModule\Domain\Shared\SplitToken;
 
@@ -25,10 +26,18 @@ final class ClientPasswordResetWasRequested
     /** @var SplitToken */
     private $token;
 
-    public function __construct(ClientId $id, SplitToken $token)
+    /**
+     * READ ONLY.
+     *
+     * @var DateTimeImmutable
+     */
+    public $tokenExpiration;
+
+    public function __construct(ClientId $id, SplitToken $token, DateTimeImmutable $tokenExpiration)
     {
-        $this->id    = $id;
-        $this->token = $token;
+        $this->id              = $id;
+        $this->token           = $token;
+        $this->tokenExpiration = $tokenExpiration;
     }
 
     public function id(): ClientId
