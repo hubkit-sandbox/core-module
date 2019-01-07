@@ -15,7 +15,9 @@ declare(strict_types=1);
 namespace ParkManager\Module\CoreModule\Infrastructure\Messenger\Middleware;
 
 use Psr\Container\ContainerInterface;
+use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Middleware\MiddlewareInterface;
+use Symfony\Component\Messenger\Middleware\StackInterface;
 
 /**
  * Lazily executes a chain of restriction-validators till one throws an exception.
@@ -39,14 +41,16 @@ final class RestrictionValidatorMiddleware implements MiddlewareInterface
         $this->validatorClasses    = $validatorClasses;
     }
 
-    public function handle($message, callable $next)
+    public function handle(Envelope $envelope, StackInterface $stack): Envelope
     {
+        $message = $envelope->getMessage();
+
         foreach ($this->validatorClasses as $class) {
             if ($class::accepts($message)) {
                 $this->validatorsContainer->get($class)->validate($message);
             }
         }
 
-        return $next($message);
+        return $stack->next()->handle($envelope, $stack);
     }
 }

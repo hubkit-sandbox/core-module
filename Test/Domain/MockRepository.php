@@ -35,13 +35,13 @@ trait MockRepository
         resetDomainEvents as protected __resetDomainEvents;
     }
 
-    /** @var object[] */
+    /** @var object[]|RecordsDomainEvents[] */
     protected $storedById = [];
 
-    /** @var object[] */
+    /** @var object[]|RecordsDomainEvents[] */
     protected $savedById = [];
 
-    /** @var object[] */
+    /** @var object[]|RecordsDomainEvents[] */
     protected $removedById = [];
 
     /**
@@ -252,6 +252,10 @@ trait MockRepository
         $excepted($this->storedById[$key]);
     }
 
+    /**
+     * @param string|object $id
+     * @param object[]      $exceptedEvents
+     */
     public function assertHasEntityWithEvents($id, array $exceptedEvents, ?callable $assertionValidator = null): void
     {
         $key = (string) $id;
