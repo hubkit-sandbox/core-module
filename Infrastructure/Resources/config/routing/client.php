@@ -14,12 +14,11 @@ declare(strict_types=1);
 
 namespace Symfony\Component\Routing\Loader\Configurator;
 
+use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Action\Client\ConfirmPasswordResetAction;
+use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Action\Client\RequestPasswordResetAction;
 use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Action\HomepageAction;
-use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Action\Security\{ConfirmPasswordResetAction,
-    LoginAction,
-    RequestPasswordResetAction,
-    SecurityLogoutAction
-};
+use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Action\SecurityLoginAction;
+use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Action\SecurityLogoutAction;
 
 return function (RoutingConfigurator $routes) {
     $client = $routes->collection('park_manager.client.');
@@ -28,7 +27,7 @@ return function (RoutingConfigurator $routes) {
         $security = $client->collection('security_');
 
         $security->add('login', '/login')
-            ->controller(LoginAction::class)
+            ->controller(SecurityLoginAction::class)
             ->methods(['GET', 'POST']);
 
         $security->add('logout', '/logout')
@@ -40,12 +39,9 @@ return function (RoutingConfigurator $routes) {
             ->methods(['GET', 'POST']);
 
         $security->add('confirm_password_reset', '/password-resetting/confirm/{token}')
-            ->requirements(['token' => '.+']) // Token can contain slashes
+            ->requirements(['token' => '.+'])// Token can contain slashes
             ->controller(ConfirmPasswordResetAction::class)
             ->methods(['GET', 'POST']);
 
-    $client->add('home', '/')->controller(HomepageAction::class);
-    $client->add('change_password', '/change-password')
-        ->controller('park_manager.web_action.security.client.change_password')
-        ->methods(['GET', 'POST']);
+        $client->add('home', '/')->controller(HomepageAction::class);
 };
