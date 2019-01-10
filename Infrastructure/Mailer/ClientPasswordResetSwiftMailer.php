@@ -15,12 +15,13 @@ declare(strict_types=1);
 namespace ParkManager\Module\CoreModule\Infrastructure\Mailer;
 
 use DateTimeImmutable;
-use ParkManager\Component\Mailer\Sender;
+use ParkManager\Module\CoreModule\Application\Service\Mailer\Client\RecipientEnvelopeFactory;
 use ParkManager\Module\CoreModule\Application\Service\Mailer\ClientPasswordResetMailer;
 use ParkManager\Module\CoreModule\Domain\Client\ClientId;
 use ParkManager\Module\CoreModule\Domain\Client\ClientRepository;
 use ParkManager\Module\CoreModule\Domain\Shared\SplitToken;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use ParkManager\Module\CoreModule\Infrastructure\Mailer\Sender\Sender;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface as UrlGenerator;
 
 final class ClientPasswordResetSwiftMailer implements ClientPasswordResetMailer
 {
@@ -30,34 +31,33 @@ final class ClientPasswordResetSwiftMailer implements ClientPasswordResetMailer
     /** @var Sender */
     private $sender;
 
-    /** @var UrlGeneratorInterface */
+    /** @var UrlGenerator */
     private $urlGenerator;
 
-    public function __construct(ClientRepository $repository, Sender $sender, UrlGeneratorInterface $urlGenerator)
+    /** @var RecipientEnvelopeFactory */
+    private $envelopeFactory;
+
+    public function __construct(ClientRepository $repository, Sender $sender, UrlGenerator $urlGenerator, RecipientEnvelopeFactory $envelopeFactory)
     {
-        $this->repository   = $repository;
-        $this->sender       = $sender;
-        $this->urlGenerator = $urlGenerator;
+        $this->repository      = $repository;
+        $this->sender          = $sender;
+        $this->urlGenerator    = $urlGenerator;
+        $this->envelopeFactory = $envelopeFactory;
     }
 
     public function send(ClientId $id, SplitToken $splitToken, DateTimeImmutable $tokenExpiration): void
     {
-        $client = $this->repository->get($id);
-        $emailAddress = $client->email();
-
         $this->sender->send(
-            '@ParkManager/email/client/security/password_reset.twig',
-            [$emailAddress->address() => $emailAddress->name()],
-            ['url' => $this->getConfirmUrl($splitToken), 'expiration_date' => $tokenExpiration]
-        );
-    }
-
-    private function getConfirmUrl(SplitToken $splitToken): string
-    {
-        return $this->urlGenerator->generate(
-            'park_manager.client.security_confirm_password_reset',
-            ['token' => $splitToken->token()],
-            UrlGeneratorInterface::ABSOLUTE_URL
+            '@ParkManagerCore/email/client/security/password_reset.twig',
+            [
+                'url' => $this->urlGenerator->generate(
+                    'park_manager.client.security_confirm_password_reset',
+                    ['token' => $splitToken->token()],
+                    UrlGenerator::ABSOLUTE_URL
+                ),
+                'expiration_date' => $tokenExpiration,
+            ],
+            $this->envelopeFactory->create($id)
         );
     }
 }

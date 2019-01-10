@@ -14,36 +14,42 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Infrastructure\Mailer;
 
-use ParkManager\Component\Mailer\Sender;
+use DateTimeImmutable;
 use ParkManager\Module\CoreModule\Application\Service\EmailAddressChangeConfirmationMailer as EmailAddressChangeConfirmationMailerBase;
+use ParkManager\Module\CoreModule\Application\Service\Mailer\Client\RecipientEnvelopeFactory;
+use ParkManager\Module\CoreModule\Domain\Client\ClientId;
 use ParkManager\Module\CoreModule\Domain\Shared\EmailAddress;
 use ParkManager\Module\CoreModule\Domain\Shared\SplitToken;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use ParkManager\Module\CoreModule\Infrastructure\Mailer\Sender\Sender;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface as UrlGenerator;
 
 final class EmailAddressChangeConfirmationMailer implements EmailAddressChangeConfirmationMailerBase
 {
+    /** @var Sender */
     private $sender;
-    private $urlGenerator;
-    private $confirmChangeRoute;
 
-    public function __construct(Sender $mailer, UrlGeneratorInterface $urlGenerator, string $route)
+    /** @var UrlGenerator */
+    private $urlGenerator;
+
+    /** @var RecipientEnvelopeFactory */
+    private $envelopeFactory;
+
+    public function __construct(Sender $mailer, UrlGenerator $urlGenerator, RecipientEnvelopeFactory $envelopeFactory)
     {
-        $this->sender             = $mailer;
-        $this->urlGenerator       = $urlGenerator;
-        $this->confirmChangeRoute = $route;
+        $this->sender          = $mailer;
+        $this->urlGenerator    = $urlGenerator;
+        $this->envelopeFactory = $envelopeFactory;
     }
 
-    public function send(EmailAddress $emailAddress, SplitToken $splitToken, \DateTimeImmutable $tokenExpiration): void
+    public function send(ClientId $id, EmailAddress $newAddress, SplitToken $token, DateTimeImmutable $tokenExpiration): void
     {
         $this->sender->send(
-            '@ParkManagerCore\email\confirm_email_address_change.twig',
-            [$emailAddress->address() => $emailAddress->name()],
-            ['url' => $this->getConfirmUrl($splitToken), 'expiration_date' => $tokenExpiration]
+            '@ParkManagerCore/email/client/confirm_email_address_change.twig',
+            [
+                'url' => $this->urlGenerator->generate('', ['token' => $token->token()], UrlGenerator::ABSOLUTE_URL),
+                'expiration_date' => $tokenExpiration,
+            ],
+            $this->envelopeFactory->createWith($id, $newAddress)
         );
-    }
-
-    private function getConfirmUrl(SplitToken $splitToken): string
-    {
-        return $this->urlGenerator->generate($this->confirmChangeRoute, ['token' => $splitToken->token()], UrlGeneratorInterface::ABSOLUTE_URL);
     }
 }

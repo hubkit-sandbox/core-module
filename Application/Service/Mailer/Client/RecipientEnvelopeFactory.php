@@ -12,14 +12,15 @@ declare(strict_types=1);
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-namespace ParkManager\Module\CoreModule\Application\Service;
+namespace ParkManager\Module\CoreModule\Application\Service\Mailer\Client;
 
-use DateTimeImmutable;
+use ParkManager\Module\CoreModule\Application\Service\Mailer\RecipientEnvelope;
 use ParkManager\Module\CoreModule\Domain\Client\ClientId;
 use ParkManager\Module\CoreModule\Domain\Shared\EmailAddress;
-use ParkManager\Module\CoreModule\Domain\Shared\SplitToken;
 
-interface EmailAddressChangeConfirmationMailer
+interface RecipientEnvelopeFactory
 {
-    public function send(ClientId $id, EmailAddress $newAddress, SplitToken $splitToken, DateTimeImmutable $tokenExpiration): void;
+    public function create(ClientId $id): RecipientEnvelope;
+
+    public function createWith(ClientId $id, EmailAddress $email): RecipientEnvelope;
 }
