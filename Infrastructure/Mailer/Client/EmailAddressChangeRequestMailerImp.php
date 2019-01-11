@@ -12,22 +12,19 @@ declare(strict_types=1);
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-namespace ParkManager\Module\CoreModule\Infrastructure\Mailer;
+namespace ParkManager\Module\CoreModule\Infrastructure\Mailer\Client;
 
 use DateTimeImmutable;
+use ParkManager\Module\CoreModule\Application\Service\Mailer\Client\EmailAddressChangeRequestMailer;
 use ParkManager\Module\CoreModule\Application\Service\Mailer\Client\RecipientEnvelopeFactory;
-use ParkManager\Module\CoreModule\Application\Service\Mailer\ClientPasswordResetMailer;
 use ParkManager\Module\CoreModule\Domain\Client\ClientId;
-use ParkManager\Module\CoreModule\Domain\Client\ClientRepository;
+use ParkManager\Module\CoreModule\Domain\Shared\EmailAddress;
 use ParkManager\Module\CoreModule\Domain\Shared\SplitToken;
 use ParkManager\Module\CoreModule\Infrastructure\Mailer\Sender\Sender;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface as UrlGenerator;
 
-final class ClientPasswordResetSwiftMailer implements ClientPasswordResetMailer
+final class EmailAddressChangeRequestMailerImp implements EmailAddressChangeRequestMailer
 {
-    /** @var ClientRepository */
-    private $repository;
-
     /** @var Sender */
     private $sender;
 
@@ -37,27 +34,22 @@ final class ClientPasswordResetSwiftMailer implements ClientPasswordResetMailer
     /** @var RecipientEnvelopeFactory */
     private $envelopeFactory;
 
-    public function __construct(ClientRepository $repository, Sender $sender, UrlGenerator $urlGenerator, RecipientEnvelopeFactory $envelopeFactory)
+    public function __construct(Sender $mailer, UrlGenerator $urlGenerator, RecipientEnvelopeFactory $envelopeFactory)
     {
-        $this->repository      = $repository;
-        $this->sender          = $sender;
+        $this->sender          = $mailer;
         $this->urlGenerator    = $urlGenerator;
         $this->envelopeFactory = $envelopeFactory;
     }
 
-    public function send(ClientId $id, SplitToken $splitToken, DateTimeImmutable $tokenExpiration): void
+    public function send(ClientId $id, EmailAddress $newAddress, SplitToken $token, DateTimeImmutable $tokenExpiration): void
     {
         $this->sender->send(
-            '@ParkManagerCore/email/client/security/password_reset.twig',
+            '@ParkManagerCore/email/client/confirm_email_address_change.twig',
             [
-                'url' => $this->urlGenerator->generate(
-                    'park_manager.client.security_confirm_password_reset',
-                    ['token' => $splitToken->token()],
-                    UrlGenerator::ABSOLUTE_URL
-                ),
+                'url' => $this->urlGenerator->generate('', ['token' => $token->token()], UrlGenerator::ABSOLUTE_URL),
                 'expiration_date' => $tokenExpiration,
             ],
-            $this->envelopeFactory->create($id)
+            $this->envelopeFactory->createWith($id, $newAddress)
         );
     }
 }

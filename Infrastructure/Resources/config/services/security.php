@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use ParkManager\Module\CoreModule\Application\Service\EventListener\ClientPasswordResetRequestListener;
-use ParkManager\Module\CoreModule\Infrastructure\Mailer\ClientPasswordResetSwiftMailer;
 use ParkManager\Module\CoreModule\Infrastructure\Security\AdministratorUser;
 use ParkManager\Module\CoreModule\Infrastructure\Security\ClientUser;
 use ParkManager\Module\CoreModule\Infrastructure\Security\EventListener\UserPasswordChangeListener;
@@ -47,6 +46,5 @@ return function (ContainerConfigurator $c) {
 
     // Client
     $di->set(ClientPasswordResetRequestListener::class)
-        ->arg('$mailer', ref(ClientPasswordResetSwiftMailer::class))
         ->tag('messenger.message_handler', ['bus' => 'park_manager.event_bus']);
 };

@@ -14,12 +14,12 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
-use ParkManager\Module\CoreModule\Application\Service\EmailAddressChangeConfirmationMailer;
+use ParkManager\Module\CoreModule\Application\Service\Mailer\Client\EmailAddressChangeRequestMailer;
+use ParkManager\Module\CoreModule\Application\Service\Mailer\Client\PasswordResetMailer;
 use ParkManager\Module\CoreModule\Application\Service\Mailer\Client\RecipientEnvelopeFactory;
-use ParkManager\Module\CoreModule\Application\Service\Mailer\ClientPasswordResetMailer;
 use ParkManager\Module\CoreModule\Infrastructure\Mailer\Client\ClientRecipientEnvelopeFactory;
-use ParkManager\Module\CoreModule\Infrastructure\Mailer\ClientPasswordResetSwiftMailer;
-use ParkManager\Module\CoreModule\Infrastructure\Mailer\EmailAddressChangeConfirmationMailer as EmailAddressChangeConfirmationMailerImp;
+use ParkManager\Module\CoreModule\Infrastructure\Mailer\Client\EmailAddressChangeRequestMailerImp as EmailAddressChangeConfirmationMailerImp;
+use ParkManager\Module\CoreModule\Infrastructure\Mailer\Client\PasswordResetMailerImpl;
 use ParkManager\Module\CoreModule\Infrastructure\Mailer\Sender\NullSender;
 use ParkManager\Module\CoreModule\Infrastructure\Mailer\Sender\Sender;
 
@@ -36,9 +36,9 @@ return function (ContainerConfigurator $c) {
     $di->set(ClientRecipientEnvelopeFactory::class);
     $di->alias(RecipientEnvelopeFactory::class, ClientRecipientEnvelopeFactory::class);
 
-    $di->set(ClientPasswordResetSwiftMailer::class);
-    $di->alias(ClientPasswordResetMailer::class, ClientPasswordResetSwiftMailer::class);
+    $di->set(PasswordResetMailerImpl::class);
+    $di->alias(PasswordResetMailer::class, PasswordResetMailerImpl::class);
 
     $di->set(EmailAddressChangeConfirmationMailerImp::class);
-    $di->alias(EmailAddressChangeConfirmationMailer::class, EmailAddressChangeConfirmationMailerImp::class);
+    $di->alias(EmailAddressChangeRequestMailer::class, EmailAddressChangeConfirmationMailerImp::class);
 };
