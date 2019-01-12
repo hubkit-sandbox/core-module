@@ -14,6 +14,8 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Action;
 
+use RuntimeException;
+
 /**
  * @codeCoverageIgnore
  */
@@ -21,6 +23,6 @@ final class SecurityLogoutAction
 {
     public function __invoke()
     {
-        throw new \RuntimeException('You must activate the logout in your security firewall configuration.');
+        throw new RuntimeException('You must activate the logout in your security firewall configuration.');
     }
 }

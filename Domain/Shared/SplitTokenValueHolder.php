@@ -14,6 +14,8 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Domain\Shared;
 
+use DateTimeImmutable;
+
 /**
  * SplitToken keeps SplitToken information for storage.
  *
@@ -36,7 +38,7 @@ final class SplitTokenValueHolder
     private $expiresAt;
     private $metadata = [];
 
-    public function __construct(string $selector, string $verifierHash, ?\DateTimeImmutable $expiresAt = null, array $metadata = [])
+    public function __construct(string $selector, string $verifierHash, ?DateTimeImmutable $expiresAt = null, array $metadata = [])
     {
         $this->selector     = $selector;
         $this->verifierHash = $verifierHash;
@@ -92,16 +94,16 @@ final class SplitTokenValueHolder
         return $this->metadata ?? [];
     }
 
-    public function isExpired(?\DateTimeImmutable $datetime = null): bool
+    public function isExpired(?DateTimeImmutable $datetime = null): bool
     {
         if ($this->expiresAt === null) {
             return false;
         }
 
-        return $this->expiresAt->getTimestamp() < ($datetime ?? new \DateTimeImmutable())->getTimestamp();
+        return $this->expiresAt->getTimestamp() < ($datetime ?? new DateTimeImmutable())->getTimestamp();
     }
 
-    public function expiresAt(): ?\DateTimeImmutable
+    public function expiresAt(): ?DateTimeImmutable
     {
         return $this->expiresAt;
     }

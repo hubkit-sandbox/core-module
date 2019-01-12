@@ -26,16 +26,14 @@ class RequestPasswordResetType extends AbstractType
     {
         $builder
             ->setDataMapper(new RequestPasswordResetDataMapper($options['command_builder']))
-            ->add('email', EmailType::class, ['label' => 'label.email'])
-        ;
+            ->add('email', EmailType::class, ['label' => 'label.email']);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver
             ->setRequired(['command_builder'])
-            ->setAllowedTypes('command_builder', [Closure::class])
-        ;
+            ->setAllowedTypes('command_builder', [Closure::class]);
     }
 
     public function getBlockPrefix(): ?string

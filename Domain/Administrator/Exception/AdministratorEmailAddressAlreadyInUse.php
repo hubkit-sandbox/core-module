@@ -14,9 +14,10 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Domain\Administrator\Exception;
 
+use InvalidArgumentException;
 use ParkManager\Module\CoreModule\Domain\Administrator\AdministratorId;
 
-final class AdministratorEmailAddressAlreadyInUse extends \InvalidArgumentException
+final class AdministratorEmailAddressAlreadyInUse extends InvalidArgumentException
 {
     /** @var AdministratorId */
     private $id;

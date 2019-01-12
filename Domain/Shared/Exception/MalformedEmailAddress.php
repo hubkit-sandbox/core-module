@@ -14,6 +14,8 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Domain\Shared\Exception;
 
-final class MalformedEmailAddress extends \InvalidArgumentException
+use InvalidArgumentException;
+
+final class MalformedEmailAddress extends InvalidArgumentException
 {
 }

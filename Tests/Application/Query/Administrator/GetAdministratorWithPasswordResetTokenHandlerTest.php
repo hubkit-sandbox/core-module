@@ -68,7 +68,7 @@ final class GetAdministratorWithPasswordResetTokenHandlerTest extends TestCase
             $handler(new GetAdministratorWithPasswordResetToken($invalidToken));
         } catch (PasswordResetTokenNotAccepted $e) {
             $repository->assertEntitiesWereSaved();
-            $repository->assertHasEntity($administrator->getId(), function (Administrator $administrator) {
+            $repository->assertHasEntity($administrator->getId(), static function (Administrator $administrator) {
                 self::assertEquals('', $administrator->getPasswordResetToken());
             });
         }

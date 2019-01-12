@@ -14,7 +14,9 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Common;
 
+use InvalidArgumentException;
 use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Common\Form\Handler\FormHandler;
+use RuntimeException;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
@@ -53,7 +55,7 @@ class TwigResponse extends Response
     {
         if (! is_array($variables)) {
             if (! ($variables instanceof Form) && ! ($variables instanceof FormHandler)) {
-                throw new \InvalidArgumentException(sprintf('TwigResponse $variables expects an array, %s or %s object.', Form::class, FormHandler::class));
+                throw new InvalidArgumentException(sprintf('TwigResponse $variables expects an array, %s or %s object.', Form::class, FormHandler::class));
             }
 
             $variables = ['form' => $variables->createView()];
@@ -81,7 +83,7 @@ class TwigResponse extends Response
         }
 
         if ($this->twig === null) {
-            throw new \RuntimeException(sprintf('No Twig renderer set for response with template "%s".', $this->template));
+            throw new RuntimeException(sprintf('No Twig renderer set for response with template "%s".', $this->template));
         }
 
         echo $this->twig->render($this->template, $this->variables);

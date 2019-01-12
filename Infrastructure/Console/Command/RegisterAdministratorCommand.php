@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Infrastructure\Console\Command;
 
+use InvalidArgumentException;
 use ParkManager\Module\CoreModule\Application\Command\Administrator\RegisterAdministrator;
 use ParkManager\Module\CoreModule\Domain\Administrator\AdministratorId;
 use ParkManager\Module\CoreModule\Infrastructure\Security\AdministratorUser;
@@ -63,7 +64,7 @@ EOT
             $violationList = $this->validator->validate($value, [new NotBlank(), new Email()]);
 
             if ($violationList->count() > 0) {
-                throw new \InvalidArgumentException((string) $violationList);
+                throw new InvalidArgumentException((string) $violationList);
             }
 
             return $value;

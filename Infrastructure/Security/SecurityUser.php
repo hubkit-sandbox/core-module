@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Infrastructure\Security;
 
+use Serializable;
 use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use function get_class;
@@ -27,7 +28,7 @@ use function unserialize;
  * To ensure password-encoders work properly this class must to be extended
  * for each each user-type (Client and Administrator).
  */
-abstract class SecurityUser implements UserInterface, EquatableInterface, \Serializable
+abstract class SecurityUser implements UserInterface, EquatableInterface, Serializable
 {
     protected $username;
     protected $password;
@@ -102,7 +103,7 @@ abstract class SecurityUser implements UserInterface, EquatableInterface, \Seria
      */
     public function isEqualTo(UserInterface $user): bool
     {
-        if (get_class($user) !== get_class($this)) {
+        if (get_class($user) !== static::class) {
             return false;
         }
 

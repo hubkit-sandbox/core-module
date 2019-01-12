@@ -26,7 +26,7 @@ final class RequestPasswordResetAction
     public function __invoke(Request $request, ServiceBusFormFactory $formFactory): object
     {
         $handler = $formFactory->createForCommand(RequestPasswordResetType::class, null, [
-            'command_builder' => function (string $email) {
+            'command_builder' => static function (string $email) {
                 return new RequestPasswordReset($email);
             },
         ]);

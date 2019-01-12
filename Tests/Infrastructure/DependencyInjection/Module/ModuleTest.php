@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace ParkManager\Module\CoreModule\Tests\Infrastructure\DependencyInjection\Module;
 
 use Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass;
+use LogicException;
 use ParkManager\Module\CoreModule\Infrastructure\DependencyInjection\Module\AbstractParkManagerModule;
 use ParkManager\Module\CoreModule\Tests\Infrastructure\DependencyInjection\Module\Fixtures\DoctrineMappingsModule\DoctrineMappingsModule;
 use ParkManager\Module\CoreModule\Tests\Infrastructure\DependencyInjection\Module\Fixtures\ExtensionAbsentModule\ExtensionAbsentModule;
@@ -49,13 +50,14 @@ class ModuleTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \LogicException
-     * @expectedExceptionMessage must implement Symfony\Component\DependencyInjection\Extension\ExtensionInterface
      */
     public function it_throws_a_LogicException_when_extension_class_is_invalid()
     {
         $module = new ExtensionNotValidModule();
+
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage('must implement Symfony\Component\DependencyInjection\Extension\ExtensionInterface');
+
         $module->getContainerExtension();
     }
 

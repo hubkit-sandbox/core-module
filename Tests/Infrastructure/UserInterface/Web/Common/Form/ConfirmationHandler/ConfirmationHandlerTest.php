@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Tests\Infrastructure\UserInterface\Web\Common\Form\ConfirmationHandler;
 
+use BadMethodCallException;
 use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Common\Form\ConfirmationHandler\ConfirmationHandler;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
@@ -91,7 +92,7 @@ final class ConfirmationHandlerTest extends TestCase
             $this->createTokenManagerWithValid($this->createTokenId([self::ID1]))
         );
 
-        $this->expectException(\BadMethodCallException::class);
+        $this->expectException(BadMethodCallException::class);
         $this->expectExceptionMessage('Unable perform operation, call handleRequest() first.');
 
         $confirmationHandler->isConfirmed();

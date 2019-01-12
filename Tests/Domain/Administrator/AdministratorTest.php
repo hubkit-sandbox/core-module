@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace ParkManager\Module\CoreModule\Tests\Domain\Administrator;
 
 use Assert\AssertionFailedException;
+use DateTimeImmutable;
 use ParkManager\Module\CoreModule\Domain\Administrator\Administrator;
 use ParkManager\Module\CoreModule\Domain\Administrator\AdministratorId;
 use ParkManager\Module\CoreModule\Domain\Administrator\Event\AdministratorNameWasChanged;
@@ -168,7 +169,7 @@ final class AdministratorTest extends TestCase
 
     public function testRequestPasswordReset()
     {
-        $token = $this->createTimeLimitedSplitToken(new \DateTimeImmutable('+ 5 minutes UTC'));
+        $token = $this->createTimeLimitedSplitToken(new DateTimeImmutable('+ 5 minutes UTC'));
 
         $user  = $this->registerAdministrator('pass-my-word');
         $user->requestPasswordReset($token);
@@ -178,7 +179,7 @@ final class AdministratorTest extends TestCase
 
     public function testChangesPasswordWhenTokenIsCorrect()
     {
-        $token = $this->createTimeLimitedSplitToken(new \DateTimeImmutable('+ 5 minutes UTC'));
+        $token = $this->createTimeLimitedSplitToken(new DateTimeImmutable('+ 5 minutes UTC'));
         $user  = $this->registerAdministrator('pass-my-word');
         $id    = $user->getId();
 
@@ -197,7 +198,7 @@ final class AdministratorTest extends TestCase
 
     public function testPasswordResetIsRejectedForInvalidToken()
     {
-        $correctToken = $this->createTimeLimitedSplitToken(new \DateTimeImmutable('+ 5 minutes UTC'));
+        $correctToken = $this->createTimeLimitedSplitToken(new DateTimeImmutable('+ 5 minutes UTC'));
         $invalidToken = $this->generateSecondToken();
 
         $user  = $this->registerAdministrator('pass-my-word');
@@ -227,7 +228,7 @@ final class AdministratorTest extends TestCase
     /** @test */
     public function testPasswordResetIsRejectedWhenTokenHasExpired()
     {
-        $token = $this->createTimeLimitedSplitToken(new \DateTimeImmutable('- 5 minutes UTC'));
+        $token = $this->createTimeLimitedSplitToken(new DateTimeImmutable('- 5 minutes UTC'));
         $user  = $this->registerAdministrator('pass-my-word');
         $user->requestPasswordReset($token);
 

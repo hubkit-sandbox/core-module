@@ -82,13 +82,11 @@ final class CommandBusFormHandlerTest extends TestCase
             ->add('name', TextType::class, ['required' => false])
             ->add($profileContactFormType);
 
-        $form = $formFactory->createBuilder(FormType::class, $data)
+        return $formFactory->createBuilder(FormType::class, $data)
             ->add('id', IntegerType::class, ['required' => false])
             ->add('username', TextType::class, ['required' => false])
             ->add($profileFormType)
             ->getForm();
-
-        return $form;
     }
 
     private function createMessageBus()
@@ -233,7 +231,7 @@ final class CommandBusFormHandlerTest extends TestCase
         $request = Request::create('/', 'POST');
         $request->request->set($form->getName(), ['id' => 5]);
 
-        $handler = new CommandBusFormHandler($form, $commandBus, function () {
+        $handler = new CommandBusFormHandler($form, $commandBus, static function () {
             throw new InvalidArgumentException('This command is not invalid it is not.');
         });
         $handler->handleRequest($request);
@@ -257,7 +255,7 @@ final class CommandBusFormHandlerTest extends TestCase
         $handler    = new CommandBusFormHandler(
             $this->createRealForm(new StubCommand()),
             $commandBus = $this->createMessageBus(),
-            function () {
+            static function () {
                 throw new InvalidArgumentException('This command is not invalid it is not.');
             }
         );
@@ -274,10 +272,10 @@ final class CommandBusFormHandlerTest extends TestCase
     }
 
     /**
+     * @param array<FormError[]> $expectedErrors
+     *
      * @test
      * @dataProvider provideExceptions
-     *
-     * @param array<FormError[]> $expectedErrors
      */
     public function it_maps_command_bus_exceptions(Throwable $exception, array $expectedErrors)
     {
@@ -287,13 +285,13 @@ final class CommandBusFormHandlerTest extends TestCase
         $handler = new CommandBusFormHandler($form, $commandBus);
         $handler->mapException(
             InvalidArgumentException::class,
-            function (Throwable $e) {
+            static function (Throwable $e) {
                 return new FormError('Root problem is here', null, [], null, $e);
             }
         );
         $handler->mapException(
             RuntimeException::class,
-            function (Throwable $e) {
+            static function (Throwable $e) {
                 return [
                     null => new FormError('Root problem is here2', null, [], null, $e),
                     'username' => new FormError('Username problem is here', null, [], null, $e),
@@ -301,7 +299,7 @@ final class CommandBusFormHandlerTest extends TestCase
             }
         );
         $handler->setExceptionFallback(
-            function (Throwable $e) {
+            static function (Throwable $e) {
                 return [
                     'profile.contact.email' => new FormError('Contact Email problem is here', null, [], null, $e),
                 ];

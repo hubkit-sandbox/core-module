@@ -14,8 +14,10 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Tests\Infrastructure\UserInterface\Web\Form\Type;
 
+use Closure;
 use ParkManager\Module\CoreModule\Infrastructure\Security\ClientUser;
 use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Form\Type\Security\ChangePasswordType;
+use RuntimeException;
 use Symfony\Component\Form\Test\Traits\ValidatorExtensionTrait;
 use Symfony\Component\Form\Test\TypeTestCase;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
@@ -63,7 +65,7 @@ final class ChangePasswordTypeTest extends TypeTestCase
             public function getEncoder($user): PasswordEncoderInterface
             {
                 if ($user !== ClientUser::class) {
-                    throw new \RuntimeException('Nope, that is not the right user.');
+                    throw new RuntimeException('Nope, that is not the right user.');
                 }
 
                 return $this->encoder;
@@ -138,9 +140,9 @@ final class ChangePasswordTypeTest extends TypeTestCase
         self::assertNull($form->getData());
     }
 
-    private function getCommandBuilder(): \Closure
+    private function getCommandBuilder(): Closure
     {
-        return function ($token, $password) {
+        return static function ($token, $password) {
             return new ChangeUserPassword($token, $password);
         };
     }

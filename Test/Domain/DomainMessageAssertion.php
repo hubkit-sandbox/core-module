@@ -15,6 +15,8 @@ declare(strict_types=1);
 namespace ParkManager\Module\CoreModule\Test\Domain;
 
 use PHPUnit\Framework\Assert;
+use ReflectionMethod;
+use ReflectionObject;
 use function get_class;
 use function is_object;
 use function method_exists;
@@ -39,7 +41,7 @@ final class DomainMessageAssertion
 
     private static function findPublicEventMethods(object $event): iterable
     {
-        foreach ((new \ReflectionObject($event))->getMethods(\ReflectionMethod::IS_PUBLIC) as $methodReflection) {
+        foreach ((new ReflectionObject($event))->getMethods(ReflectionMethod::IS_PUBLIC) as $methodReflection) {
             if ($methodReflection->isStatic() || $methodReflection->getNumberOfRequiredParameters() > 0) {
                 continue;
             }

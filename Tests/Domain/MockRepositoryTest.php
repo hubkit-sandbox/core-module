@@ -65,8 +65,8 @@ final class MockRepositoryTest extends TestCase
 
         $repository->assertNoEntitiesWereSaved();
         $repository->assertNoEntitiesWereRemoved();
-        $repository->assertHasEntity($entity1->id(), function () { });
-        $repository->assertHasEntity($entity2->id(), function () { });
+        $repository->assertHasEntity($entity1->id(), static function () { });
+        $repository->assertHasEntity($entity2->id(), static function () { });
         self::assertSame($entity1, $repository->get($entity1->id()));
         self::assertSame($entity2, $repository->get($entity2->id()));
     }
@@ -148,7 +148,7 @@ final class MockRepositoryTest extends TestCase
 
             protected function getFieldsIndexMapping(): array
             {
-                return ['last_name' => function (MockEntity $entity) { return mb_strtolower($entity->lastName()); }];
+                return ['last_name' => static function (MockEntity $entity) { return mb_strtolower($entity->lastName()); }];
             }
 
             public function getByLastName(string $name): MockEntity
@@ -298,7 +298,7 @@ final class MockRepositoryTest extends TestCase
         $repository->assertNoEntitiesWereSaved();
 
         $repository->assertEntitiesWereRemoved([$entity1]);
-        $repository->assertHasEntity($entity2->id(), function () { });
+        $repository->assertHasEntity($entity2->id(), static function () { });
         self::assertSame($entity2, $repository->get($entity2->id()));
 
         $this->expectException(InvalidArgumentException::class);

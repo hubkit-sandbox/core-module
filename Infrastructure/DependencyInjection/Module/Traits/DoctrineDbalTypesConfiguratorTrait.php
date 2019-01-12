@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace ParkManager\Module\CoreModule\Infrastructure\DependencyInjection\Module\Traits;
 
 use Doctrine\DBAL\Types\Type as DbalType;
+use ReflectionClass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Finder\Finder;
 use function class_exists;
@@ -56,7 +57,7 @@ trait DoctrineDbalTypesConfiguratorTrait
             $className = $namespace . str_replace('/', '\\', mb_substr($node->getRelativePathname(), 0, -4));
 
             if (class_exists($className) && is_subclass_of($className, DbalType::class)) {
-                $r = new \ReflectionClass($className);
+                $r = new ReflectionClass($className);
 
                 if ($r->isAbstract() || $r->isInterface() || $r->isTrait()) {
                     continue;

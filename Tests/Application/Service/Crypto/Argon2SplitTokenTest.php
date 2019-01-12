@@ -18,6 +18,7 @@ use DateTimeImmutable;
 use ParagonIE\Halite\HiddenString;
 use ParkManager\Module\CoreModule\Application\Service\Crypto\Argon2SplitToken as SplitToken;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 use function hex2bin;
 
 /**
@@ -43,7 +44,7 @@ final class Argon2SplitTokenTest extends TestCase
      */
     public function it_validates_the_correct_length()
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Invalid token-data provided, expected exactly 42 bytes.');
 
         SplitToken::create(new HiddenString('NanananaBatNan', false, true));
@@ -156,7 +157,7 @@ final class Argon2SplitTokenTest extends TestCase
      */
     public function it_fails_when_creating_holder_with_string_constructed()
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('toValueHolder() does not work SplitToken object created with fromString().');
 
         SplitToken::fromString(self::FULL_TOKEN)->toValueHolder();

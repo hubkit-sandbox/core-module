@@ -18,16 +18,12 @@ use DateTimeImmutable;
 use ParkManager\Module\CoreModule\Application\Service\Mailer\Client\PasswordResetMailer;
 use ParkManager\Module\CoreModule\Application\Service\Mailer\Client\RecipientEnvelopeFactory;
 use ParkManager\Module\CoreModule\Domain\Client\ClientId;
-use ParkManager\Module\CoreModule\Domain\Client\ClientRepository;
 use ParkManager\Module\CoreModule\Domain\Shared\SplitToken;
 use ParkManager\Module\CoreModule\Infrastructure\Mailer\Sender\Sender;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface as UrlGenerator;
 
 final class PasswordResetMailerImpl implements PasswordResetMailer
 {
-    /** @var ClientRepository */
-    private $repository;
-
     /** @var Sender */
     private $sender;
 
@@ -37,9 +33,8 @@ final class PasswordResetMailerImpl implements PasswordResetMailer
     /** @var RecipientEnvelopeFactory */
     private $envelopeFactory;
 
-    public function __construct(ClientRepository $repository, Sender $sender, UrlGenerator $urlGenerator, RecipientEnvelopeFactory $envelopeFactory)
+    public function __construct(Sender $sender, UrlGenerator $urlGenerator, RecipientEnvelopeFactory $envelopeFactory)
     {
-        $this->repository      = $repository;
         $this->sender          = $sender;
         $this->urlGenerator    = $urlGenerator;
         $this->envelopeFactory = $envelopeFactory;

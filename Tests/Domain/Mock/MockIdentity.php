@@ -14,10 +14,12 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Tests\Domain\Mock;
 
+use JsonSerializable;
 use ParkManager\Module\CoreModule\Domain\UuidTrait;
+use Serializable;
 
 /** @internal */
-final class MockIdentity implements \Serializable, \JsonSerializable
+final class MockIdentity implements Serializable, JsonSerializable
 {
     use UuidTrait;
 }

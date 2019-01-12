@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Action;
 
 use Closure;
+use Exception;
 use ParkManager\Module\CoreModule\Application\Service\Crypto\SplitTokenFactory;
 use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Common\Form\Handler\ServiceBusFormFactory;
 use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Common\TwigResponse;
@@ -36,7 +37,7 @@ abstract class AbstractConfirmPasswordResetAction
     {
         try {
             $splitToken = $this->tokenFactory->fromString($token);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return new TwigResponse($this->getTemplate(), ['error' => 'password_reset.invalid_token'], 404);
         }
 

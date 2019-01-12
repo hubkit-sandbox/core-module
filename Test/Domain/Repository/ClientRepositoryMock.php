@@ -27,14 +27,14 @@ use ParkManager\Module\CoreModule\Test\Domain\MockRepository;
 
 final class ClientRepositoryMock implements ClientRepository
 {
-    public const USER_ID1 = '01dd5964-5426-11e7-be03-acbc32b58315';
-
     use MockRepository;
+
+    public const USER_ID1 = '01dd5964-5426-11e7-be03-acbc32b58315';
 
     protected function getFieldsIndexMapping(): array
     {
         return [
-            'email' => function (Client $client) {
+            'email' => static function (Client $client) {
                 return $client->email()->canonical();
             },
         ];
@@ -43,10 +43,10 @@ final class ClientRepositoryMock implements ClientRepository
     protected function getEventsIndexMapping(): array
     {
         return [
-            ClientPasswordResetWasRequested::class => function (ClientPasswordResetWasRequested $e) {
+            ClientPasswordResetWasRequested::class => static function (ClientPasswordResetWasRequested $e) {
                 return $e->token()->selector();
             },
-            ClientEmailAddressChangeWasRequested::class => function (ClientEmailAddressChangeWasRequested $e) {
+            ClientEmailAddressChangeWasRequested::class => static function (ClientEmailAddressChangeWasRequested $e) {
                 return $e->token()->selector();
             },
         ];

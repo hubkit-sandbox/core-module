@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Application\Command\Client;
 
+use DateTimeImmutable;
 use ParkManager\Module\CoreModule\Application\Service\Crypto\SplitTokenFactory;
 use ParkManager\Module\CoreModule\Application\Service\Mailer\Client\EmailAddressChangeRequestMailer as ConfirmationMailer;
 use ParkManager\Module\CoreModule\Domain\Client\ClientRepository;
@@ -54,7 +55,7 @@ final class RequestEmailAddressChangeHandler
         $id     = $command->id();
         $client = $this->repository->get($id);
 
-        $tokenExpiration = new \DateTimeImmutable('+ ' . $this->tokenTTL . ' seconds');
+        $tokenExpiration = new DateTimeImmutable('+ ' . $this->tokenTTL . ' seconds');
         $splitToken      = $this->splitTokenFactory->generate()->expireAt($tokenExpiration);
 
         if ($client->requestEmailChange($email, $splitToken)) {

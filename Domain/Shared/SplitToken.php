@@ -18,6 +18,7 @@ use DateTimeImmutable;
 use ParagonIE\ConstantTime\Base64UrlSafe;
 use ParagonIE\ConstantTime\Binary;
 use ParagonIE\Halite\HiddenString;
+use RuntimeException;
 use function sodium_memzero;
 use function sprintf;
 
@@ -111,7 +112,7 @@ abstract class SplitToken
 
     private function __construct(HiddenString $token, string $selector, string $verifier)
     {
-        $this->token = $token;
+        $this->token    = $token;
         $this->selector = $selector;
         $this->verifier = $verifier;
     }
@@ -132,7 +133,7 @@ abstract class SplitToken
 
         if (Binary::safeStrlen($bytesString) < self::TOKEN_DATA_LENGTH) {
             // Don't zero memory as the value is invalid.
-            throw new \RuntimeException(sprintf('Invalid token-data provided, expected exactly %s bytes.', static::VERIFIER_BYTES + static::SELECTOR_BYTES));
+            throw new RuntimeException(sprintf('Invalid token-data provided, expected exactly %s bytes.', static::VERIFIER_BYTES + static::SELECTOR_BYTES));
         }
 
         $selector = Base64UrlSafe::encode(Binary::safeSubstr($bytesString, 0, self::SELECTOR_BYTES));
@@ -172,7 +173,7 @@ abstract class SplitToken
     {
         if (Binary::safeStrlen($token) < self::TOKEN_CHAR_LENGTH) {
             // Don't zero memory as the value is invalid.
-            throw new \RuntimeException('Invalid token provided.');
+            throw new RuntimeException('Invalid token provided.');
         }
 
         $selector = Binary::safeSubstr($token, 0, 32);
@@ -232,7 +233,7 @@ abstract class SplitToken
     public function toValueHolder(array $metadata = []): SplitTokenValueHolder
     {
         if ($this->verifierHash === null) {
-            throw new \RuntimeException('toValueHolder() does not work SplitToken object created with fromString().');
+            throw new RuntimeException('toValueHolder() does not work SplitToken object created with fromString().');
         }
 
         return new SplitTokenValueHolder($this->selector, $this->verifierHash, $this->expiresAt, $metadata);

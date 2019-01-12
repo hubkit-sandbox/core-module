@@ -14,7 +14,9 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Domain\Client\Exception;
 
-final class PasswordResetConfirmationRejected extends \InvalidArgumentException
+use InvalidArgumentException;
+
+final class PasswordResetConfirmationRejected extends InvalidArgumentException
 {
     public function __construct()
     {

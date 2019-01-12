@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Tests\Application\Command\Client;
 
+use DateTimeImmutable;
 use ParkManager\Module\CoreModule\Application\Command\Client\RequestEmailAddressChange;
 use ParkManager\Module\CoreModule\Application\Command\Client\RequestEmailAddressChangeHandler;
 use ParkManager\Module\CoreModule\Application\Service\Mailer\Client\EmailAddressChangeRequestMailer;
@@ -62,18 +63,18 @@ final class RequestEmailAddressChangeTest extends TestCase
             [
                 new ClientEmailAddressChangeWasRequested(
                     $client->id(),
-                    FakeSplitTokenFactory::instance()->generate()->expireAt(new \DateTimeImmutable('+ 10 seconds')),
+                    FakeSplitTokenFactory::instance()->generate()->expireAt(new DateTimeImmutable('+ 10 seconds')),
                     new EmailAddress('John2@example.com')
                 ),
             ],
-            function (ClientEmailAddressChangeWasRequested $expected, ClientEmailAddressChangeWasRequested $actual) {
+            static function (ClientEmailAddressChangeWasRequested $expected, ClientEmailAddressChangeWasRequested $actual) {
                 self::assertTrue($expected->id()->equals($actual->id()));
                 self::assertTrue($expected->token()->equals($actual->token()));
                 self::assertEquals($expected->getNewEmail(), $actual->getNewEmail());
 
                 $token = $expected->token()->toValueHolder();
-                self::assertFalse($token->isExpired(new \DateTimeImmutable('+ 5 seconds')));
-                self::assertTrue($token->isExpired(new \DateTimeImmutable('+ 11 seconds')));
+                self::assertFalse($token->isExpired(new DateTimeImmutable('+ 5 seconds')));
+                self::assertTrue($token->isExpired(new DateTimeImmutable('+ 11 seconds')));
             }
         );
     }
@@ -102,7 +103,7 @@ final class RequestEmailAddressChangeTest extends TestCase
             ClientId::fromString(self::USER_ID),
             $email,
             Argument::that(
-                function (SplitToken $splitToken) {
+                static function (SplitToken $splitToken) {
                     return $splitToken->token()->getString() !== '';
                 }
             ),

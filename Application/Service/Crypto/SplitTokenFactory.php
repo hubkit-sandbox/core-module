@@ -30,10 +30,7 @@ interface SplitTokenFactory
      * );
      * ```
      *
-     *
-     *
      * @see \ParagonIE\Halite\HiddenString
-     * @return SplitToken
      */
     public function generate(): SplitToken;
 

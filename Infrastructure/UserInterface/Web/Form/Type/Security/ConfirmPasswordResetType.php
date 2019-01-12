@@ -70,18 +70,17 @@ class ConfirmPasswordResetType extends AbstractType
             ->setRequired(['token', 'user_class', 'command_builder'])
             ->setDefault('password_constraints', [])
             ->setDefault('exception_mapping', [
-                PasswordResetTokenNotAccepted::class => function (PasswordResetTokenNotAccepted $e) {
+                PasswordResetTokenNotAccepted::class => static function (PasswordResetTokenNotAccepted $e) {
                     return new FormError('password_reset.invalid_token', null, [], null, $e);
                 },
-                DisabledException::class => function (DisabledException $e) {
+                DisabledException::class => static function (DisabledException $e) {
                     return new FormError('password_reset.access_disabled', null, [], null, $e);
                 },
             ])
             ->setAllowedTypes('token', [SplitToken::class])
             ->setAllowedTypes('user_class', ['string'])
             ->setAllowedTypes('command_builder', [Closure::class])
-            ->setAllowedTypes('password_constraints', ['array', Constraint::class])
-        ;
+            ->setAllowedTypes('password_constraints', ['array', Constraint::class]);
     }
 
     public function getBlockPrefix(): string

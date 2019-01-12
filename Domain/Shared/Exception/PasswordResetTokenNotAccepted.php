@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Domain\Shared\Exception;
 
+use DomainException;
 use ParkManager\Module\CoreModule\Domain\Shared\SplitToken;
 use ParkManager\Module\CoreModule\Domain\Shared\SplitTokenValueHolder;
 
@@ -23,7 +24,7 @@ use ParkManager\Module\CoreModule\Domain\Shared\SplitTokenValueHolder;
  *
  * Do not disclose specific details as these could be abused!
  */
-final class PasswordResetTokenNotAccepted extends \DomainException
+final class PasswordResetTokenNotAccepted extends DomainException
 {
     private $storedToken;
     private $providedToken;

@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Tests\Infrastructure\UserInterface\Web\Common\Form\ConfirmationHandler;
 
+use BadMethodCallException;
 use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Common\Form\ConfirmationHandler\CheckedConfirmationHandler;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
@@ -106,10 +107,10 @@ final class CheckedConfirmationHandlerTest extends TestCase
     }
 
     /**
+     * @param mixed $value
+     *
      * @test
      * @dataProvider provideInvalidValues
-     *
-     * @param mixed $value
      */
     public function it_returns_request_was_not_submitted_when_value_does_not_match($value)
     {
@@ -151,7 +152,7 @@ final class CheckedConfirmationHandlerTest extends TestCase
             $this->createTokenManagerWithValid($this->createTokenId([self::ID1]))
         );
 
-        $this->expectException(\BadMethodCallException::class);
+        $this->expectException(BadMethodCallException::class);
         $this->expectExceptionMessage('Unable perform operation, call handleRequest() first.');
 
         $confirmationHandler->isConfirmed();

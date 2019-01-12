@@ -28,7 +28,7 @@ final class ConfirmPasswordResetAction extends AbstractConfirmPasswordResetActio
 
     protected function createCommand(): Closure
     {
-        return function (SplitToken $splitToken, string $password) {
+        return static function (SplitToken $splitToken, string $password) {
             return new ConfirmPasswordReset($splitToken, $password);
         };
     }

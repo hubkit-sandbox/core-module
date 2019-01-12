@@ -25,14 +25,14 @@ use ParkManager\Module\CoreModule\Test\Domain\MockRepository;
 
 final class AdministratorRepositoryMock implements AdministratorRepository
 {
-    public const USER_ID1 = '126fb452-0a96-11e9-abf1-acbc32b58315';
-
     use MockRepository;
+
+    public const USER_ID1 = '126fb452-0a96-11e9-abf1-acbc32b58315';
 
     protected function getFieldsIndexMapping(): array
     {
         return [
-            'email' => function (Administrator $client) {
+            'email' => static function (Administrator $client) {
                 return $client->getEmailAddress()->canonical();
             },
         ];
@@ -41,7 +41,7 @@ final class AdministratorRepositoryMock implements AdministratorRepository
     protected function getEventsIndexMapping(): array
     {
         return [
-            AdministratorPasswordResetWasRequested::class => function (AdministratorPasswordResetWasRequested $e) {
+            AdministratorPasswordResetWasRequested::class => static function (AdministratorPasswordResetWasRequested $e) {
                 return $e->getToken()->selector();
             },
         ];

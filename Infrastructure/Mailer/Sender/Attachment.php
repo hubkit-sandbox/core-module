@@ -20,8 +20,6 @@ interface Attachment
 
     /**
      * Returns the attachment's size in bytes.
-     *
-     * @return int
      */
     public function getSize(): int;
 

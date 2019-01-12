@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Tests\Application\Command\Client;
 
+use DateTimeImmutable;
 use ParkManager\Module\CoreModule\Application\Command\Client\RequestPasswordReset;
 use ParkManager\Module\CoreModule\Application\Command\Client\RequestPasswordResetHandler;
 use ParkManager\Module\CoreModule\Domain\Client\Client;
@@ -46,7 +47,7 @@ final class RequestPasswordResetHandlerTest extends TestCase
 
         $repository->assertHasEntity(
             $client->id(),
-            function (Client $entity) {
+            static function (Client $entity) {
                 $events = $entity->releaseEvents();
 
                 self::assertCount(1, $events);
@@ -54,8 +55,8 @@ final class RequestPasswordResetHandlerTest extends TestCase
 
                 /** @var ClientPasswordResetWasRequested $event */
                 $valueHolder = $event->token()->toValueHolder();
-                self::assertFalse($valueHolder->isExpired(new \DateTimeImmutable('+ 120 seconds')));
-                self::assertTrue($valueHolder->isExpired(new \DateTimeImmutable('+ 125 seconds')));
+                self::assertFalse($valueHolder->isExpired(new DateTimeImmutable('+ 120 seconds')));
+                self::assertTrue($valueHolder->isExpired(new DateTimeImmutable('+ 125 seconds')));
             }
         );
     }

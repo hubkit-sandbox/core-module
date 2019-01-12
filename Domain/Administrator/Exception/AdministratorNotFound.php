@@ -14,11 +14,12 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Domain\Administrator\Exception;
 
+use InvalidArgumentException;
 use ParkManager\Module\CoreModule\Domain\Administrator\AdministratorId;
 use ParkManager\Module\CoreModule\Domain\Shared\EmailAddress;
 use function sprintf;
 
-final class AdministratorNotFound extends \InvalidArgumentException
+final class AdministratorNotFound extends InvalidArgumentException
 {
     public static function withId(AdministratorId $id): self
     {

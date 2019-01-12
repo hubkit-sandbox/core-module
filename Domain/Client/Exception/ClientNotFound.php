@@ -14,11 +14,12 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Domain\Client\Exception;
 
+use InvalidArgumentException;
 use ParkManager\Module\CoreModule\Domain\Client\ClientId;
 use ParkManager\Module\CoreModule\Domain\Shared\EmailAddress;
 use function sprintf;
 
-final class ClientNotFound extends \InvalidArgumentException
+final class ClientNotFound extends InvalidArgumentException
 {
     public static function withId(ClientId $clientId): self
     {

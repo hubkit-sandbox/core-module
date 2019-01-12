@@ -55,7 +55,7 @@ final class ConfirmEmailAddressChangeHandlerTest extends TestCase
         $repository->assertEntitiesWereSaved();
         $repository->assertHasEntity(
             $client->id(),
-            function (Client $entity) {
+            static function (Client $entity) {
                 self::assertEquals(new EmailAddress('janet@example.com'), $entity->email());
             }
         );
@@ -79,7 +79,7 @@ final class ConfirmEmailAddressChangeHandlerTest extends TestCase
             $repository->assertEntitiesWereSaved();
             $repository->assertHasEntity(
                 $client->id(),
-                function (Client $entity) {
+                static function (Client $entity) {
                     self::assertEquals(new EmailAddress('janE@example.com'), $entity->email());
                 }
             );

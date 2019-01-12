@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Form\Type\Security;
 
 use ParkManager\Module\CoreModule\Application\Service\Crypto\SplitTokenFactory;
+use RuntimeException;
 use Symfony\Component\Form\DataMapperInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 use Symfony\Component\Form\FormInterface;
@@ -49,8 +50,8 @@ final class ConfirmPasswordResetDataMapper implements DataMapperInterface
 
         try {
             $token = (string) $formsArray['reset_token']->getData();
-            $token = ($this->splitTokenFactory)->fromString($token);
-        } catch (\RuntimeException $e) {
+            $token = $this->splitTokenFactory->fromString($token);
+        } catch (RuntimeException $e) {
             throw new TransformationFailedException('Invalid token', 0, $e);
         }
 

@@ -19,7 +19,6 @@ use ParkManager\Module\CoreModule\Domain\Administrator\Administrator;
 use ParkManager\Module\CoreModule\Domain\Administrator\AdministratorId;
 use ParkManager\Module\CoreModule\Domain\Administrator\AdministratorRepository;
 use ParkManager\Module\CoreModule\Domain\Administrator\Exception\AdministratorNotFound;
-use ParkManager\Module\CoreModule\Domain\Client\Exception\EmailChangeConfirmationRejected;
 use ParkManager\Module\CoreModule\Domain\Shared\EmailAddress;
 use ParkManager\Module\CoreModule\Domain\Shared\Exception\PasswordResetTokenNotAccepted;
 use ParkManager\Module\CoreModule\Infrastructure\Doctrine\EventSourcedEntityRepository;
@@ -60,46 +59,31 @@ final class DoctrineOrmAdministratorRepository extends EventSourcedEntityReposit
 
     public function getByEmail(EmailAddress $email): Administrator
     {
-        $client = $this->createQueryBuilder('u')
+        $administrator = $this->createQueryBuilder('u')
             ->where('u.email.canonical = :email')
             ->getQuery()
             ->setParameter('email', $email->canonical())
             ->getOneOrNullResult();
 
-        if ($client === null) {
+        if ($administrator === null) {
             throw AdministratorNotFound::withEmail($email);
         }
 
-        return $client;
-    }
-
-    public function getByEmailAddressChangeToken(string $selector): Administrator
-    {
-        $client = $this->createQueryBuilder('u')
-            ->where('u.emailAddressChangeToken.selector = :selector')
-            ->getQuery()
-            ->setParameter('selector', $selector)
-            ->getOneOrNullResult();
-
-        if ($client === null) {
-            throw new EmailChangeConfirmationRejected();
-        }
-
-        return $client;
+        return $administrator;
     }
 
     public function getByPasswordResetToken(string $selector): Administrator
     {
-        $client = $this->createQueryBuilder('u')
+        $administrator = $this->createQueryBuilder('u')
             ->where('u.passwordResetToken.selector = :selector')
             ->getQuery()
             ->setParameter('selector', $selector)
             ->getOneOrNullResult();
 
-        if ($client === null) {
+        if ($administrator === null) {
             throw new PasswordResetTokenNotAccepted();
         }
 
-        return $client;
+        return $administrator;
     }
 }

@@ -49,6 +49,6 @@ final class EnvVariableResource implements SelfCheckingResourceInterface
 
     public function unserialize($serialized)
     {
-        list($this->resource, $this->value) = unserialize($serialized, ['allowed_classes' => false]);
+        [$this->resource, $this->value] = unserialize($serialized, ['allowed_classes' => false]);
     }
 }

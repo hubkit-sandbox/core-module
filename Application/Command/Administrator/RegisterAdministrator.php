@@ -32,7 +32,7 @@ final class RegisterAdministrator
     private $password;
 
     /**
-     * @param null|string $password Null (no password) or an encoded password string (not plain)
+     * @param string|null $password Null (no password) or an encoded password string (not plain)
      */
     public function __construct(string $id, string $email, string $displayName, ?string $password = null)
     {

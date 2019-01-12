@@ -14,7 +14,9 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Infrastructure\DependencyInjection\Module;
 
+use DirectoryIterator;
 use Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass;
+use LogicException;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
@@ -34,7 +36,7 @@ abstract class AbstractParkManagerModule extends Bundle implements ParkManagerMo
 
             if ($extension !== null) {
                 if (! $extension instanceof ExtensionInterface) {
-                    throw new \LogicException(
+                    throw new LogicException(
                         sprintf(
                             'Extension %s must implement Symfony\Component\DependencyInjection\Extension\ExtensionInterface.',
                             get_class($extension)
@@ -47,7 +49,7 @@ abstract class AbstractParkManagerModule extends Bundle implements ParkManagerMo
                 $expectedAlias = Container::underscore(preg_replace('/Module$/', '', $this->getName()));
 
                 if ($expectedAlias !== $extension->getAlias()) {
-                    throw new \LogicException(
+                    throw new LogicException(
                         sprintf(
                             'Users will expect the alias of the default extension of a module to be the underscored version of the module name ("%s"). ' .
                             'You can override "AbstractParkManagerModule::getContainerExtension()" if you want to use "%s" or another alias.',
@@ -109,7 +111,7 @@ abstract class AbstractParkManagerModule extends Bundle implements ParkManagerMo
         $mappings = [];
 
         if (file_exists($path)) {
-            foreach (new \DirectoryIterator($path) as $node) {
+            foreach (new DirectoryIterator($path) as $node) {
                 if ($node->isDot()) {
                     continue;
                 }

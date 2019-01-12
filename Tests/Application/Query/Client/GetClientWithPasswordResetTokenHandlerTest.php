@@ -68,7 +68,7 @@ final class GetClientWithPasswordResetTokenHandlerTest extends TestCase
             $handler(new GetClientWithPasswordResetToken($invalidToken));
         } catch (PasswordResetTokenNotAccepted $e) {
             $repository->assertEntitiesWereSaved();
-            $repository->assertHasEntity($client->id(), function (Client $client) {
+            $repository->assertHasEntity($client->id(), static function (Client $client) {
                 self::assertEquals('', $client->passwordResetToken());
             });
         }

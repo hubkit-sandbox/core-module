@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Application\Service\Crypto;
 
+use DateTimeImmutable;
 use ParagonIE\Halite\HiddenString;
 use ParkManager\Module\CoreModule\Domain\Shared\SplitToken;
 use function random_bytes;
@@ -35,7 +36,7 @@ final class Argon2SplitTokenFactory implements SplitTokenFactory
     /**
      * @param int[] $config
      */
-    public function __construct(array $config = [], ?\DateTimeImmutable $defaultExpirationTimestamp = null)
+    public function __construct(array $config = [], ?DateTimeImmutable $defaultExpirationTimestamp = null)
     {
         $this->config                     = $config;
         $this->defaultExpirationTimestamp = $defaultExpirationTimestamp;

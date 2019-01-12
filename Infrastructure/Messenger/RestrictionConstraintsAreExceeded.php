@@ -14,6 +14,8 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Infrastructure\Messenger;
 
-final class RestrictionConstraintsAreExceeded extends \LogicException
+use LogicException;
+
+final class RestrictionConstraintsAreExceeded extends LogicException
 {
 }

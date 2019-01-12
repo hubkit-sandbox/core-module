@@ -14,6 +14,8 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Common;
 
+use InvalidArgumentException;
+use RuntimeException;
 use function sprintf;
 
 /**
@@ -37,7 +39,7 @@ class ApplicationContext
     public function setActiveSection(string $section): void
     {
         if (! isset(self::SECTIONS[$section])) {
-            throw new \InvalidArgumentException(sprintf('Section "%s" is not supported.', $section));
+            throw new InvalidArgumentException(sprintf('Section "%s" is not supported.', $section));
         }
 
         $this->privateSection = $section === 'private';
@@ -74,7 +76,7 @@ class ApplicationContext
     private function guardRepositoryIsActive(): void
     {
         if ($this->activeSection === null) {
-            throw new \RuntimeException('No active section was set.');
+            throw new RuntimeException('No active section was set.');
         }
     }
 }

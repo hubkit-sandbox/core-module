@@ -42,7 +42,7 @@ final class HashedSecurityPasswordTypeTest extends TypeTestCase
             'password',
             HashedPasswordType::class,
             [
-                'algorithm' => function (string $value) {
+                'algorithm' => static function (string $value) {
                     return 'encoded(' . $value . ')';
                 },
             ]
@@ -64,7 +64,7 @@ final class HashedSecurityPasswordTypeTest extends TypeTestCase
             'password',
             HashedPasswordType::class,
             [
-                'algorithm' => function (string $value) {
+                'algorithm' => static function (string $value) {
                     return 'encoded(' . $value . ')';
                 },
             ]
@@ -82,7 +82,7 @@ final class HashedSecurityPasswordTypeTest extends TypeTestCase
         $builder = $this->factory->createBuilder();
         $builder->add('password', HashedPasswordType::class, [
             'password_confirm' => true,
-            'algorithm' => function (string $value) {
+            'algorithm' => static function (string $value) {
                 return 'encoded(' . $value . ')';
             },
         ]);

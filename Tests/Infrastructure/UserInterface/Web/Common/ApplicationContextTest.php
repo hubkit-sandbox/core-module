@@ -14,8 +14,10 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Tests\Infrastructure\UserInterface\Web\Common;
 
+use InvalidArgumentException;
 use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Common\ApplicationContext;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 
 /**
  * @internal
@@ -27,7 +29,7 @@ final class ApplicationContextTest extends TestCase
     {
         $context = new ApplicationContext();
 
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Section "frontend" is not supported.');
 
         $context->setActiveSection('frontend');
@@ -41,7 +43,7 @@ final class ApplicationContextTest extends TestCase
     {
         $context = new ApplicationContext();
 
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('No active section was set.');
 
         $context->{$method}();
@@ -58,7 +60,7 @@ final class ApplicationContextTest extends TestCase
 
         $context->reset();
 
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('No active section was set.');
 
         $context->getActiveSection();

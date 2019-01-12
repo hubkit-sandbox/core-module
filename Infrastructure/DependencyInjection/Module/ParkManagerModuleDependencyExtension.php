@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace ParkManager\Module\CoreModule\Infrastructure\DependencyInjection\Module;
 
 use ParkManager\Module\CoreModule\Infrastructure\DependencyInjection\Module\Traits\ServiceLoaderTrait;
+use ReflectionObject;
 use Rollerworks\Bundle\RouteAutowiringBundle\RouteImporter;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -57,9 +58,9 @@ abstract class ParkManagerModuleDependencyExtension extends Extension implements
      * Configures a number of common operations.
      * Use loadModule() to load additional configurations.
      *
-     * @param array[] $configs
-     *
      * @internal
+     *
+     * @param array[] $configs
      */
     final public function load(array $configs, ContainerBuilder $container): void
     {
@@ -168,7 +169,7 @@ abstract class ParkManagerModuleDependencyExtension extends Extension implements
     final protected function initModuleDirectory(): void
     {
         if ($this->moduleDir === null) {
-            $this->moduleDir = dirname((new \ReflectionObject($this))->getFileName(), 3);
+            $this->moduleDir = dirname((new ReflectionObject($this))->getFileName(), 3);
         }
     }
 }
