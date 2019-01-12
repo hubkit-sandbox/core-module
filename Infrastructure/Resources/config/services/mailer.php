@@ -14,14 +14,11 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
-use ParkManager\Module\CoreModule\Application\Service\Mailer\Client\EmailAddressChangeRequestMailer;
-use ParkManager\Module\CoreModule\Application\Service\Mailer\Client\PasswordResetMailer;
-use ParkManager\Module\CoreModule\Application\Service\Mailer\Client\RecipientEnvelopeFactory;
+use ParkManager\Module\CoreModule\Infrastructure\DependencyInjection\AutoServiceConfigurator;
 use ParkManager\Module\CoreModule\Infrastructure\Mailer\Client\ClientRecipientEnvelopeFactory;
-use ParkManager\Module\CoreModule\Infrastructure\Mailer\Client\EmailAddressChangeRequestMailerImp as EmailAddressChangeConfirmationMailerImp;
+use ParkManager\Module\CoreModule\Infrastructure\Mailer\Client\EmailAddressChangeRequestMailerImp;
 use ParkManager\Module\CoreModule\Infrastructure\Mailer\Client\PasswordResetMailerImpl;
 use ParkManager\Module\CoreModule\Infrastructure\Mailer\Sender\NullSender;
-use ParkManager\Module\CoreModule\Infrastructure\Mailer\Sender\Sender;
 
 return function (ContainerConfigurator $c) {
     $di = $c->services()->defaults()
@@ -29,16 +26,11 @@ return function (ContainerConfigurator $c) {
         ->autoconfigure(false)
         ->private();
 
-    $di->set(NullSender::class);
-    $di->alias(Sender::class, NullSender::class);
+    $autoDi = new AutoServiceConfigurator($di);
+    $autoDi->set(NullSender::class);
 
     // Client
-    $di->set(ClientRecipientEnvelopeFactory::class);
-    $di->alias(RecipientEnvelopeFactory::class, ClientRecipientEnvelopeFactory::class);
-
-    $di->set(PasswordResetMailerImpl::class);
-    $di->alias(PasswordResetMailer::class, PasswordResetMailerImpl::class);
-
-    $di->set(EmailAddressChangeConfirmationMailerImp::class);
-    $di->alias(EmailAddressChangeRequestMailer::class, EmailAddressChangeConfirmationMailerImp::class);
+    $autoDi->set(ClientRecipientEnvelopeFactory::class);
+    $autoDi->set(EmailAddressChangeRequestMailerImp::class);
+    $autoDi->set(PasswordResetMailerImpl::class);
 };

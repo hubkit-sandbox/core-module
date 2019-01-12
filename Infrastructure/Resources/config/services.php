@@ -15,9 +15,7 @@ declare(strict_types=1);
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use ParkManager\Module\CoreModule\Application\Service\Crypto\Argon2SplitTokenFactory;
-use ParkManager\Module\CoreModule\Application\Service\Crypto\SplitTokenFactory;
-use ParkManager\Module\CoreModule\Domain\Administrator\AdministratorRepository;
-use ParkManager\Module\CoreModule\Domain\Client\ClientRepository;
+use ParkManager\Module\CoreModule\Infrastructure\DependencyInjection\AutoServiceConfigurator;
 use ParkManager\Module\CoreModule\Infrastructure\Doctrine\Administrator\DoctrineOrmAdministratorRepository;
 use ParkManager\Module\CoreModule\Infrastructure\Doctrine\Client\DoctrineOrmClientRepository;
 use ParkManager\Module\CoreModule\Infrastructure\Http\SectionsLoader;
@@ -30,14 +28,11 @@ return function (ContainerConfigurator $c) {
         ->private()
         ->bind('$eventBus', ref('park_manager.event_bus'));
 
-    $di->set(Argon2SplitTokenFactory::class)
-        ->alias(SplitTokenFactory::class, Argon2SplitTokenFactory::class);
+    $autoDi = new AutoServiceConfigurator($di);
 
-    $di->set('park_manager.repository.administrator', DoctrineOrmAdministratorRepository::class)
-        ->alias(AdministratorRepository::class, 'park_manager.repository.administrator');
-
-    $di->set('park_manager.repository.client_user', DoctrineOrmClientRepository::class)
-        ->alias(ClientRepository::class, 'park_manager.repository.client_user');
+    $autoDi->set(Argon2SplitTokenFactory::class);
+    $autoDi->set('park_manager.repository.administrator', DoctrineOrmAdministratorRepository::class);
+    $autoDi->set('park_manager.repository.client_user', DoctrineOrmClientRepository::class);
 
     // RoutingLoader
     $di->set(SectionsLoader::class)
@@ -46,8 +41,7 @@ return function (ContainerConfigurator $c) {
         ->arg('$primaryHost', '%park_manager.config.primary_host%')
         ->arg('$isSecure', '%park_manager.config.is_secure%');
 
-    $di->alias(ApplicationContext::class, 'park_manager.application_context');
-    $di->set('park_manager.application_context', ApplicationContext::class);
+    $autoDi->set('park_manager.application_context', ApplicationContext::class);
 
     $di->set(ApplicationSectionListener::class)
         ->tag('kernel.event_subscriber')
