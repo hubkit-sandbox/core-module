@@ -65,7 +65,7 @@ final class Argon2SplitTokenTest extends TestCase
      */
     public function it_creates_a_split_token_with_id()
     {
-        $splitToken = SplitToken::create($fullToken = self::$randValue, '50');
+        $splitToken = SplitToken::create($fullToken = self::$randValue);
 
         self::assertEquals(self::FULL_TOKEN, $token  = $splitToken->token()->getString());
         self::assertEquals(self::SELECTOR, $selector = $splitToken->selector());
@@ -88,7 +88,7 @@ final class Argon2SplitTokenTest extends TestCase
      */
     public function it_creates_a_split_token_with_custom_config()
     {
-        $splitToken = SplitToken::create(self::$randValue, null, [
+        $splitToken = SplitToken::create(self::$randValue, [
             'memory_cost' => 512,
             'time_cost' => 1,
             'threads' => 1,
@@ -165,7 +165,7 @@ final class Argon2SplitTokenTest extends TestCase
     /**
      * @test
      */
-    public function it_verifies_SplitToken_from_string_and_no_id()
+    public function it_verifies_SplitToken()
     {
         // Stored.
         $splitTokenHolder = SplitToken::create(self::$randValue)->toValueHolder();
@@ -174,7 +174,6 @@ final class Argon2SplitTokenTest extends TestCase
         $fromString = SplitToken::fromString(self::FULL_TOKEN);
 
         self::assertTrue($fromString->matches($splitTokenHolder));
-        self::assertFalse($fromString->matches($splitTokenHolder, '50'));
     }
 
     /**
@@ -190,32 +189,16 @@ final class Argon2SplitTokenTest extends TestCase
     /**
      * @test
      */
-    public function it_verifies_SplitToken_from_string_SplitToken_and_id()
-    {
-        // Stored.
-        $splitTokenHolder = SplitToken::create(self::$randValue, '50')->toValueHolder();
-
-        // Reconstructed.
-        $fromString = SplitToken::fromString(self::FULL_TOKEN);
-
-        self::assertTrue($fromString->matches($splitTokenHolder, '50'));
-        self::assertFalse($fromString->matches($splitTokenHolder, '60'));
-        self::assertFalse($fromString->matches($splitTokenHolder));
-    }
-
-    /**
-     * @test
-     */
     public function it_verifies_SplitToken_from_string_selector()
     {
         // Stored.
-        $splitTokenHolder = SplitToken::create(self::$randValue, '50')->toValueHolder();
+        $splitTokenHolder = SplitToken::create(self::$randValue)->toValueHolder();
 
         // Reconstructed.
         $fromString = SplitToken::fromString('12UeXUvr4LKymANBB_bLEqiP5GPr-Pha_OR6OOnV1o8Vy_rWhDoxKNIt');
 
         self::assertFalse($fromString->matches($splitTokenHolder));
-        self::assertFalse($fromString->matches($splitTokenHolder, '50'));
+        self::assertFalse($fromString->matches($splitTokenHolder));
     }
 
     /**
@@ -232,6 +215,6 @@ final class Argon2SplitTokenTest extends TestCase
         $fromString = SplitToken::fromString(self::FULL_TOKEN);
 
         self::assertFalse($fromString->matches($splitTokenHolder));
-        self::assertFalse($fromString->matches($splitTokenHolder, '50'));
+        self::assertFalse($fromString->matches($splitTokenHolder));
     }
 }

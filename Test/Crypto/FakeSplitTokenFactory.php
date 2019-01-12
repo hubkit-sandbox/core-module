@@ -48,9 +48,9 @@ final class FakeSplitTokenFactory implements SplitTokenFactory
         $this->randomValue = $randomValue ?? hex2bin('d7351e5d4bebe0b2b298034107f6cb12a88fe463ebf8f85afce47a38e9d5d68f15cbfad6843a3128d22d');
     }
 
-    public function generate(?string $id = null): SplitToken
+    public function generate(): SplitToken
     {
-        return FakeSplitToken::create(new HiddenString($this->randomValue, false, true), $id);
+        return FakeSplitToken::create(new HiddenString($this->randomValue, false, true));
     }
 
     public function fromString(string $token): SplitToken

@@ -33,8 +33,9 @@ interface SplitTokenFactory
      *
      *
      * @see \ParagonIE\Halite\HiddenString
+     * @return SplitToken
      */
-    public function generate(?string $id = null): SplitToken;
+    public function generate(): SplitToken;
 
     /**
      * Recreates a SplitToken object from a HiddenString (provided by eg. a user).

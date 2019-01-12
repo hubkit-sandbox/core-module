@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Domain\Shared;
 
+use DateTimeImmutable;
 use ParagonIE\ConstantTime\Base64UrlSafe;
 use ParagonIE\ConstantTime\Binary;
 use ParagonIE\Halite\HiddenString;
@@ -49,12 +50,10 @@ use function sprintf;
  * Example (for illustration):
  *
  * <code>
- * $userId = ...; // Can be null
- *
  * // Create
  * $splitTokenFactory = ...;
  *
- * $token = $splitTokenFactory->create($userId);
+ * $token = $splitTokenFactory->create();
  *
  * // The $authToken is to be shared with the receiver (eg. the user) only.
  * // And is URI safe.
@@ -80,7 +79,7 @@ use function sprintf;
  * // $result = SELECT user_id, recover_verifier, recovery_expires_at, recovery_metadata WHERE recover_selector = $token->selector()
  * $holder = new SplitTokenValueHolder($token->selector(), $result['recovery_verifier'], $result['recovery_expires_at'], $result['recovery_metadata']);
  *
- * $accepted = $token->matches($holder, $result['user_id']);
+ * $accepted = $token->matches($holder);
  * <code>
  *
  * Note: Invoking toValueHolder() doesn't work for a reconstructed SplitToken object.
@@ -92,12 +91,30 @@ abstract class SplitToken
     public const TOKEN_DATA_LENGTH = (self::VERIFIER_BYTES + self::SELECTOR_BYTES);
     public const TOKEN_CHAR_LENGTH = (self::SELECTOR_BYTES * 4 / 3) + (self::VERIFIER_BYTES * 4 / 3);
 
+    /** @var array */
     protected $config = [];
-    private $selector;
-    private $verifier;
-    private $verifierHash;
+
+    /** @var HiddenString */
     private $token;
+
+    /** @var string */
+    private $selector;
+
+    /** @var string */
+    private $verifier;
+
+    /** @var string|null */
+    private $verifierHash;
+
+    /** @var DateTimeImmutable|null */
     private $expiresAt;
+
+    private function __construct(HiddenString $token, string $selector, string $verifier)
+    {
+        $this->token = $token;
+        $this->selector = $selector;
+        $this->verifier = $verifier;
+    }
 
     /**
      * Creates a new SplitToken object based of the $token.
@@ -105,13 +122,11 @@ abstract class SplitToken
      * The $randomBytes argument must provide a crypto-random string (wrapped in
      * a HiddenString object) of exactly {@see static::getLength()} bytes.
      *
-     * @param null|string $id     Optional id to bind the token a specific entity
-     *                            (highly recommended)
-     * @param mixed[]     $config Configuration for the hasher method (implementation specific)
+     * @param mixed[] $config Configuration for the hasher method (implementation specific)
      *
      * @return static
      */
-    public static function create(HiddenString $randomBytes, ?string $id = null, array $config = [])
+    public static function create(HiddenString $randomBytes, array $config = [])
     {
         $bytesString = $randomBytes->getString();
 
@@ -120,13 +135,14 @@ abstract class SplitToken
             throw new \RuntimeException(sprintf('Invalid token-data provided, expected exactly %s bytes.', static::VERIFIER_BYTES + static::SELECTOR_BYTES));
         }
 
-        $instance           = new static();
-        $instance->selector = Base64UrlSafe::encode(Binary::safeSubstr($bytesString, 0, self::SELECTOR_BYTES));
-        $instance->verifier = Base64UrlSafe::encode(Binary::safeSubstr($bytesString, self::SELECTOR_BYTES, self::VERIFIER_BYTES));
-        $instance->token    = new HiddenString($instance->selector . $instance->verifier, false, true);
+        $selector = Base64UrlSafe::encode(Binary::safeSubstr($bytesString, 0, self::SELECTOR_BYTES));
+        $verifier = Base64UrlSafe::encode(Binary::safeSubstr($bytesString, self::SELECTOR_BYTES, self::VERIFIER_BYTES));
+        $token    = new HiddenString($selector . $verifier, false, true);
+
+        $instance = new static($token, $selector, $verifier);
         $instance->configureHasher($config);
 
-        $instance->verifierHash = $instance->hashVerifier($instance->verifier . ':' . ($id ?? '\0'));
+        $instance->verifierHash = $instance->hashVerifier($instance->verifier);
 
         sodium_memzero($instance->verifier);
         sodium_memzero($bytesString);
@@ -137,7 +153,7 @@ abstract class SplitToken
     /**
      * @return static
      */
-    public function expireAt(?\DateTimeImmutable $expiresAt = null)
+    public function expireAt(?DateTimeImmutable $expiresAt = null)
     {
         $instance            = clone $this;
         $instance->expiresAt = $expiresAt;
@@ -148,7 +164,7 @@ abstract class SplitToken
     /**
      * Recreates a SplitToken object from a string.
      *
-     * Note: The provided $token is zeroed from memory when it's valid.
+     * Note: The provided $token is zeroed from memory when it's length is valid.
      *
      * @return static
      */
@@ -159,11 +175,10 @@ abstract class SplitToken
             throw new \RuntimeException('Invalid token provided.');
         }
 
-        $instance           = new static();
-        $instance->token    = new HiddenString($token);
-        $instance->selector = Binary::safeSubstr($token, 0, 32);
-        $instance->verifier = Binary::safeSubstr($token, 32);
+        $selector = Binary::safeSubstr($token, 0, 32);
+        $verifier = Binary::safeSubstr($token, 32);
 
+        $instance = new static(new HiddenString($token), $selector, $verifier);
         // Don't (re)generate as this needs the salt of the stored hash.
         $instance->verifierHash = null;
 
@@ -193,10 +208,8 @@ abstract class SplitToken
      *
      * This method is to be used once the SplitToken is reconstructed
      * from a user-provided string.
-     *
-     * @param null|string $id Id this token was bound to during generation
      */
-    final public function matches(?SplitTokenValueHolder $token, ?string $id = null): bool
+    final public function matches(?SplitTokenValueHolder $token): bool
     {
         if (SplitTokenValueHolder::isEmpty($token)) {
             return false;
@@ -206,7 +219,7 @@ abstract class SplitToken
             return false;
         }
 
-        return $this->verifyHash($token->verifierHash(), $this->verifier . ':' . ($id ?? '\0'));
+        return $this->verifyHash($token->verifierHash(), $this->verifier);
     }
 
     /**

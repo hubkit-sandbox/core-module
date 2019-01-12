@@ -68,7 +68,7 @@ final class RecipientEnvelope
         return $this;
     }
 
-    public function withPriority(string $priority): self
+    public function withPriority(int $priority): self
     {
         $this->priority = $priority;
 

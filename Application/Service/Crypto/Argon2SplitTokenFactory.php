@@ -41,12 +41,11 @@ final class Argon2SplitTokenFactory implements SplitTokenFactory
         $this->defaultExpirationTimestamp = $defaultExpirationTimestamp;
     }
 
-    public function generate(?string $id = null): SplitToken
+    public function generate(): SplitToken
     {
         $splitToken = Argon2SplitToken::create(
             // DO NOT ENCODE HERE (always provide as raw binary)!
             new HiddenString(random_bytes(SplitToken::TOKEN_CHAR_LENGTH), false, true),
-            $id,
             $this->config
         );
 
