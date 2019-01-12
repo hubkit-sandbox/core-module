@@ -248,6 +248,11 @@ abstract class SplitToken
         return $other->selector === $this->selector && $other->verifierHash === $this->verifierHash;
     }
 
+    public function getExpirationTime(): ?DateTimeImmutable
+    {
+        return $this->expiresAt;
+    }
+
     /**
      * This method is called in create() before the verifier is hashed,
      * allowing to set-up configuration for the hashing method.
