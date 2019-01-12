@@ -17,6 +17,7 @@ namespace ParkManager\Module\CoreModule\Tests\Application\Command\Client;
 use ParkManager\Module\CoreModule\Application\Command\Client\RequestEmailAddressChange;
 use ParkManager\Module\CoreModule\Application\Command\Client\RequestEmailAddressChangeHandler;
 use ParkManager\Module\CoreModule\Application\Service\Mailer\Client\EmailAddressChangeRequestMailer;
+use ParkManager\Module\CoreModule\Domain\Client\ClientId;
 use ParkManager\Module\CoreModule\Domain\Client\Event\ClientEmailAddressChangeWasRequested;
 use ParkManager\Module\CoreModule\Domain\Shared\EmailAddress;
 use ParkManager\Module\CoreModule\Domain\Shared\SplitToken;
@@ -94,10 +95,11 @@ final class RequestEmailAddressChangeTest extends TestCase
         $repository->assertNoEntitiesWereSaved();
     }
 
-    private function createConfirmationMailer(string $email): \ParkManager\Module\CoreModule\Application\Service\Mailer\Client\EmailAddressChangeRequestMailer
+    private function createConfirmationMailer(string $email): EmailAddressChangeRequestMailer
     {
-        $confirmationMailerProphecy = $this->prophesize(\ParkManager\Module\CoreModule\Application\Service\Mailer\Client\EmailAddressChangeRequestMailer::class);
+        $confirmationMailerProphecy = $this->prophesize(EmailAddressChangeRequestMailer::class);
         $confirmationMailerProphecy->send(
+            ClientId::fromString(self::USER_ID),
             $email,
             Argument::that(
                 function (SplitToken $splitToken) {
@@ -112,7 +114,7 @@ final class RequestEmailAddressChangeTest extends TestCase
 
     private function expectNoConfirmationIsSendMailer(): EmailAddressChangeRequestMailer
     {
-        $confirmationMailerProphecy = $this->prophesize(\ParkManager\Module\CoreModule\Application\Service\Mailer\Client\EmailAddressChangeRequestMailer::class);
+        $confirmationMailerProphecy = $this->prophesize(EmailAddressChangeRequestMailer::class);
         $confirmationMailerProphecy->send(Argument::any(), Argument::any(), Argument::any())->shouldNotBeCalled();
 
         return $confirmationMailerProphecy->reveal();

@@ -15,11 +15,8 @@ declare(strict_types=1);
 namespace Symfony\Component\Routing\Loader\Configurator;
 
 use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Action\HomepageAction;
-use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Action\Security\{ConfirmPasswordResetAction,
-    LoginAction,
-    RequestPasswordResetAction,
-    SecurityLogoutAction
-};
+use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Action\SecurityLoginAction;
+use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Action\SecurityLogoutAction;
 
 return function (RoutingConfigurator $routes) {
     $admin = $routes->collection('park_manager.admin.');
@@ -28,24 +25,12 @@ return function (RoutingConfigurator $routes) {
         $security = $admin->collection('security_');
 
         $security->add('login', '/login')
-            ->controller(LoginAction::class)
+            ->controller(SecurityLoginAction::class)
             ->methods(['GET', 'POST']);
 
         $security->add('logout', '/logout')
             ->controller(SecurityLogoutAction::class)
             ->methods(['GET']);
 
-        $security->add('request_password_reset', '/password-resetting')
-            ->controller(RequestPasswordResetAction::class)
-            ->methods(['GET', 'POST']);
-
-        $security->add('confirm_password_reset', '/password-resetting/confirm/{token}')
-            ->requirements(['token' => '.+']) // Token can contain slashes
-            ->controller(ConfirmPasswordResetAction::class)
-            ->methods(['GET', 'POST']);
-
     $admin->add('home', '/')->controller(HomepageAction::class);
-    $admin->add('change_password', '/change-password')
-        ->controller('park_manager.web_action.security.administrator.change_password')
-        ->methods(['GET', 'POST']);
 };

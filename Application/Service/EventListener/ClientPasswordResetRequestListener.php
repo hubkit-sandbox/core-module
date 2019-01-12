@@ -32,7 +32,7 @@ final class ClientPasswordResetRequestListener
         $this->mailer->send(
             $event->id(),
             $event->token(),
-            $event->tokenExpiration
+            $event->token()->getExpirationTime()
         );
     }
 }

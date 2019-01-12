@@ -261,6 +261,10 @@ trait MockRepository
         $key = (string) $id;
 
         Assert::arrayHasKey($key);
-        self::assertDomainEvents($this->storedById[$key], $exceptedEvents, $assertionValidator);
+
+        /** @var RecordsDomainEvents $entity */
+        $entity = $this->storedById[$key];
+
+        self::assertDomainEvents($entity, $exceptedEvents, $assertionValidator);
     }
 }

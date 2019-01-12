@@ -44,7 +44,7 @@ final class SecurityMiddlewareTest extends MiddlewareTestCase
     /** @test */
     public function it_throws_access_denied_when_access_is_denied()
     {
-        $envelope  = new Envelope(new MockMessage());
+        $envelope             = new Envelope(new MockMessage());
         $authorizationChecker = $this->createMock(AuthorizationCheckerInterface::class);
         $authorizationChecker
             ->expects(self::once())

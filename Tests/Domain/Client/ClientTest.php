@@ -217,7 +217,7 @@ final class ClientTest extends TestCase
     /** @test */
     public function rejects_email_change_confirmation_when_token_was_not_set()
     {
-        $token   = FakeSplitTokenFactory::instance()->generate(self::ID1);
+        $token   = FakeSplitTokenFactory::instance()->generate();
         $client  = $this->registerClient();
 
         $this->assertEmailChangeThrowsRejected($client, $token);
