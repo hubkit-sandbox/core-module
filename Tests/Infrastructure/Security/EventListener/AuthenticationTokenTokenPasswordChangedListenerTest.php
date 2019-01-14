@@ -12,7 +12,7 @@ declare(strict_types=1);
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-namespace ParkManager\Module\CoreModule\Tests\Infrastructure\Security;
+namespace ParkManager\Module\CoreModule\Tests\Infrastructure\Security\EventListener;
 
 use ParkManager\Module\CoreModule\Infrastructure\Event\UserPasswordWasChanged;
 use ParkManager\Module\CoreModule\Infrastructure\Security\EventListener\AuthenticationTokenTokenPasswordChangedListener;

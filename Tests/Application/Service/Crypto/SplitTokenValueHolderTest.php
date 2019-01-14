@@ -12,7 +12,7 @@ declare(strict_types=1);
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-namespace Application\Service\Crypto;
+namespace ParkManager\Module\CoreModule\Tests\Application\Service\Crypto;
 
 use DateTimeImmutable;
 use Doctrine\Instantiator\Instantiator;

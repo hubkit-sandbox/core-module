@@ -91,27 +91,7 @@ final class CommandBusFormHandlerTest extends TestCase
 
     private function createMessageBus()
     {
-        $commandBus                     = new class() implements MessageBus {
-            private $dispatchedMessages = [];
-
-            public function dispatch($message): Envelope
-            {
-                $this->dispatchedMessages[] = $message;
-
-                if (! $message instanceof Envelope) {
-                    $message = new Envelope($message);
-                }
-
-                return $message;
-            }
-
-            public function getDispatchedMessages(): array
-            {
-                return $this->dispatchedMessages;
-            }
-        };
-
-        return $commandBus;
+        return new SpyingMessageBus();
     }
 
     private function assertNoMessagesDispatches(object $commandBus): void
@@ -373,5 +353,26 @@ final class CommandBusFormHandlerTest extends TestCase
                 'profile.contact.email' => [new FormError('Contact Email problem is here', null, [], null, $e)],
             ],
         ];
+    }
+}
+
+class SpyingMessageBus implements MessageBus
+{
+    private $dispatchedMessages = [];
+
+    public function dispatch($message): Envelope
+    {
+        $this->dispatchedMessages[] = $message;
+
+        if (! $message instanceof Envelope) {
+            $message = new Envelope($message);
+        }
+
+        return $message;
+    }
+
+    public function getDispatchedMessages(): array
+    {
+        return $this->dispatchedMessages;
     }
 }

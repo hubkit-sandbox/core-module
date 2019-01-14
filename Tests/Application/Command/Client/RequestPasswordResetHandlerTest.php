@@ -51,9 +51,12 @@ final class RequestPasswordResetHandlerTest extends TestCase
                 $events = $entity->releaseEvents();
 
                 self::assertCount(1, $events);
-                self::assertInstanceOf(ClientPasswordResetWasRequested::class, $event = array_pop($events));
 
                 /** @var ClientPasswordResetWasRequested $event */
+                $event = array_pop($events);
+
+                self::assertInstanceOf(ClientPasswordResetWasRequested::class, $event);
+
                 $valueHolder = $event->token()->toValueHolder();
                 self::assertFalse($valueHolder->isExpired(new DateTimeImmutable('+ 120 seconds')));
                 self::assertTrue($valueHolder->isExpired(new DateTimeImmutable('+ 125 seconds')));
