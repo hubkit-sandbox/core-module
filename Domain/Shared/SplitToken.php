@@ -17,7 +17,7 @@ namespace ParkManager\Module\CoreModule\Domain\Shared;
 use DateTimeImmutable;
 use ParagonIE\ConstantTime\Base64UrlSafe;
 use ParagonIE\ConstantTime\Binary;
-use ParagonIE\Halite\HiddenString;
+use ParagonIE\HiddenString\HiddenString;
 use RuntimeException;
 use function sodium_memzero;
 use function sprintf;

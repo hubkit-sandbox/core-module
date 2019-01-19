@@ -17,6 +17,7 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Common\Form\Handler\ServiceBusFormFactory;
 use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Form\Type\Security\ChangePasswordType;
 use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Form\Type\Security\ConfirmPasswordResetType;
+use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Form\Type\Security\SplitTokenType;
 
 return function (ContainerConfigurator $c) {
     $di = $c->services()->defaults()
@@ -27,6 +28,8 @@ return function (ContainerConfigurator $c) {
     $di->set(ServiceBusFormFactory::class)
         ->arg('$commandBus', ref('park_manager.command_bus'))
         ->arg('$queryBus', ref('park_manager.query_bus'));
+
+    $di->set(SplitTokenType::class);
 
     $di->set(ChangePasswordType::class);
     $di->set(ConfirmPasswordResetType::class);
