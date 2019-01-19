@@ -18,6 +18,7 @@ use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Common\Form\H
 use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Form\Type\Security\ChangePasswordType;
 use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Form\Type\Security\ConfirmPasswordResetType;
 use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Form\Type\Security\SplitTokenType;
+use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Form\Type\Security\SecurityUserHashedPasswordType;
 
 return function (ContainerConfigurator $c) {
     $di = $c->services()->defaults()
@@ -30,6 +31,7 @@ return function (ContainerConfigurator $c) {
         ->arg('$queryBus', ref('park_manager.query_bus'));
 
     $di->set(SplitTokenType::class);
+    $di->set(SecurityUserHashedPasswordType::class);
 
     $di->set(ChangePasswordType::class);
     $di->set(ConfirmPasswordResetType::class);

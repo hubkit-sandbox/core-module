@@ -21,6 +21,7 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraint;
 use function array_merge;
 use function gettype;
 use function is_string;
@@ -48,12 +49,12 @@ final class HashedPasswordType extends AbstractType
                 [
                     'type' => PasswordType::class,
                     'invalid_message' => 'password_not_the_same',
-                    'first_options' => ['label' => 'label.password'],
+                    'first_options' => ['label' => 'label.password', 'constraints' => $options['password_constraints']],
                     'second_options' => ['label' => 'label.password2'],
                 ] + $passwordOptions
             );
         } else {
-            $builder->add('password', PasswordType::class, $passwordOptions);
+            $builder->add('password', PasswordType::class, $passwordOptions + ['constraints' => $options['password_constraints']]);
         }
 
         $encoder = $options['algorithm'];
@@ -88,10 +89,11 @@ final class HashedPasswordType extends AbstractType
             'inherit_data' => true,
             'password_options' => [],
             'password_confirm' => false,
+            'password_constraints' => [],
         ]);
-
         $resolver->setAllowedTypes('algorithm', 'callable');
         $resolver->setAllowedTypes('password_options', ['array']);
         $resolver->setAllowedTypes('password_confirm', ['bool']);
+        $resolver->setAllowedTypes('password_constraints', ['array', Constraint::class]);
     }
 }
