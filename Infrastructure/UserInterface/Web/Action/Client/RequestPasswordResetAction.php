@@ -36,7 +36,7 @@ final class RequestPasswordResetAction
             return new RouteRedirectResponse('park_manager.client.security_login');
         }
 
-        $response = new TwigResponse('@ParkManagerCore/client/password_reset.html.twig', $handler);
+        $response = new TwigResponse('@ParkManagerCore/client/security/password_reset.html.twig', $handler);
         $response->setPrivate();
         $response->setMaxAge(1);
 

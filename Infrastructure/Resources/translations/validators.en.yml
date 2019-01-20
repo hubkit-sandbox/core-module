@@ -1,7 +1,7 @@
 password_not_the_same: Passwords are not the same
 
 password_reset:
-    invalid_token: Invalid password reset token.
+    invalid_token: Invalid password reset token. Plesse request a new one.
     access_disabled: Cannot reset password because access is disabled for this account.
 
 invalid_split_token: The verification token is invalid or expired. Plesse request a new one.

@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace Symfony\Component\Routing\Loader\Configurator;
 
+use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Action\Client\ConfirmPasswordResetAction;
 use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Action\HomepageAction;
 use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Action\SecurityLoginAction;
 use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Action\SecurityLogoutAction;
@@ -31,6 +32,12 @@ return function (RoutingConfigurator $routes) {
         $security->add('logout', '/logout')
             ->controller(SecurityLogoutAction::class)
             ->methods(['GET']);
+
+
+    $security->add('confirm_password_reset', '/password-reset/confirm/{token}')
+        ->requirements(['token' => '.+'])// Token can contain slashes
+        ->controller(ConfirmPasswordResetAction::class)
+        ->methods(['GET', 'POST']);
 
     $admin->add('home', '/')->controller(HomepageAction::class);
 };

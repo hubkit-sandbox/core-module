@@ -34,11 +34,11 @@ return function (RoutingConfigurator $routes) {
             ->controller(SecurityLogoutAction::class)
             ->methods(['GET']);
 
-        $security->add('request_password_reset', '/password-resetting')
+        $security->add('request_password_reset', '/password-reset')
             ->controller(RequestPasswordResetAction::class)
             ->methods(['GET', 'POST']);
 
-        $security->add('confirm_password_reset', '/password-resetting/confirm/{token}')
+        $security->add('confirm_password_reset', '/password-reset/confirm/{token}')
             ->requirements(['token' => '.+'])// Token can contain slashes
             ->controller(ConfirmPasswordResetAction::class)
             ->methods(['GET', 'POST']);

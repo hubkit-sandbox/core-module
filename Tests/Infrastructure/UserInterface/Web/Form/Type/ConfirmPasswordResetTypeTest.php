@@ -18,12 +18,15 @@ use Closure;
 use ParkManager\Module\CoreModule\Domain\Shared\SplitToken;
 use ParkManager\Module\CoreModule\Infrastructure\Security\ClientUser;
 use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Form\Type\Security\ConfirmPasswordResetType;
+use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Form\Type\Security\SecurityUserHashedPasswordType;
+use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Form\Type\Security\SplitTokenType;
 use ParkManager\Module\CoreModule\Test\Crypto\FakeSplitTokenFactory;
 use RuntimeException;
 use Symfony\Component\Form\Test\Traits\ValidatorExtensionTrait;
 use Symfony\Component\Form\Test\TypeTestCase;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
+use Symfony\Component\Translation\IdentityTranslator;
 
 /**
  * @internal
@@ -37,13 +40,6 @@ final class ConfirmPasswordResetTypeTest extends TypeTestCase
 
     /** @var EncoderFactoryInterface */
     private $encoderFactory;
-
-    protected function getExtensions()
-    {
-        return [
-            $this->getValidatorExtension(),
-        ];
-    }
 
     protected function setUp()
     {
@@ -84,18 +80,18 @@ final class ConfirmPasswordResetTypeTest extends TypeTestCase
     protected function getTypes()
     {
         return [
-            new ConfirmPasswordResetType($this->splitTokenFactory, $this->encoderFactory),
+            new SplitTokenType($this->splitTokenFactory, new IdentityTranslator()),
+            new SecurityUserHashedPasswordType($this->encoderFactory),
         ];
     }
 
     /** @test */
-    public function it_hashes_password()
+    public function it_builds_a_confirm_command()
     {
         $token = $this->splitTokenFactory->fromString(FakeSplitTokenFactory::FULL_TOKEN);
-        $form  = $this->factory->create(ConfirmPasswordResetType::class, null, [
-            'token' => $token,
-            'user_class' => ClientUser::class,
+        $form  = $this->factory->create(ConfirmPasswordResetType::class, ['reset_token' => $token], [
             'command_builder' => $this->getCommandBuilder(),
+            'user_class' => ClientUser::class,
         ]);
         $form->submit([
             'password' => ['password' => ['first' => 'Hello there', 'second' => 'Hello there']],
@@ -107,44 +103,11 @@ final class ConfirmPasswordResetTypeTest extends TypeTestCase
     }
 
     /** @test */
-    public function it_does_not_accept_invalid_input()
-    {
-        $token = $this->splitTokenFactory->fromString(FakeSplitTokenFactory::FULL_TOKEN);
-        $form  = $this->factory->create(ConfirmPasswordResetType::class, null, [
-            'token' => $token,
-            'user_class' => ClientUser::class,
-            'command_builder' => $this->getCommandBuilder(),
-        ]);
-        $form->submit([
-            'password' => 'Hello there',
-            'reset_token' => FakeSplitTokenFactory::FULL_TOKEN,
-        ]);
-
-        self::assertEquals(new ConfirmUserPasswordReset($token, ''), $form->getData());
-    }
-
-    /** @test */
-    public function it_does_not_accept_invalid_token()
-    {
-        $token = $this->splitTokenFactory->fromString(FakeSplitTokenFactory::FULL_TOKEN);
-        $form  = $this->factory->create(ConfirmPasswordResetType::class, null, [
-            'token' => $token,
-            'user_class' => ClientUser::class,
-            'command_builder' => $this->getCommandBuilder(),
-        ]);
-        $form->submit(['password' => 'Hello there']);
-
-        self::assertNull($form->getData());
-    }
-
-    /** @test */
     public function it_gives_null_for_model_password()
     {
-        $token = $this->splitTokenFactory->fromString(FakeSplitTokenFactory::FULL_TOKEN);
-        $form  = $this->factory->create(ConfirmPasswordResetType::class, null, [
-            'token' => $token,
-            'user_class' => ClientUser::class,
+        $form = $this->factory->create(ConfirmPasswordResetType::class, null, [
             'command_builder' => $this->getCommandBuilder(),
+            'user_class' => ClientUser::class,
         ]);
 
         self::assertFalse($form->isSubmitted());

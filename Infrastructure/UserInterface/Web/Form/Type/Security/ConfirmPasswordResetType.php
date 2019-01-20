@@ -15,69 +15,61 @@ declare(strict_types=1);
 namespace ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Form\Type\Security;
 
 use Closure;
-use ParkManager\Module\CoreModule\Application\Service\Crypto\SplitTokenFactory;
 use ParkManager\Module\CoreModule\Domain\Shared\Exception\PasswordResetTokenNotAccepted;
-use ParkManager\Module\CoreModule\Domain\Shared\SplitToken;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface as EncoderFactory;
 use Symfony\Component\Security\Core\Exception\DisabledException;
 use Symfony\Component\Validator\Constraint;
-use function Sodium\memzero;
 
 class ConfirmPasswordResetType extends AbstractType
 {
-    /** @var SplitTokenFactory */
-    private $splitTokenFactory;
-
-    /** @var EncoderFactory */
-    private $encoderFactory;
-
-    public function __construct(SplitTokenFactory $splitTokenFactory, EncoderFactory $encoderFactory)
-    {
-        $this->splitTokenFactory = $splitTokenFactory;
-        $this->encoderFactory    = $encoderFactory;
-    }
-
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $userClass = $options['user_class'];
         $builder
-            ->setDataMapper(new ConfirmPasswordResetDataMapper($this->splitTokenFactory, $options['command_builder']))
-            ->add('reset_token', HiddenType::class, ['data' => $options['token']->token()->getString()])
-            ->add('password', HashedPasswordType::class, [
+            ->setDataMapper(new ConfirmPasswordResetDataMapper($options['command_builder']))
+            ->add('reset_token', SplitTokenType::class, ['invalid_message' => 'password_reset.invalid_token'])
+            ->add('password', SecurityUserHashedPasswordType::class, [
                 'required' => true,
                 'password_confirm' => true,
-                'password_options' => [
-                    'constraints' => $options['password_constraints'],
-                ],
-                'algorithm' => function (string $value) use ($userClass) {
-                    $encoded = $this->encoderFactory->getEncoder($userClass)->encodePassword($value, '');
-
-                    memzero($value);
-
-                    return $encoded;
-                },
+                'password_constraints' => $options['password_constraints'],
+                'user_class' => $options['user_class'],
             ]);
+    }
+
+    public function buildView(FormView $view, FormInterface $form, array $options): void
+    {
+        $view->vars['token_invalid'] = false;
+
+        foreach ($form->getErrors() as $error) {
+            if ($error instanceof FormError && $error->getOrigin()->getName() === 'reset_token') {
+                $view->vars['token_invalid'] = true;
+
+                break;
+            }
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver
-            ->setRequired(['token', 'user_class', 'command_builder'])
+            ->setRequired(['user_class', 'command_builder'])
             ->setDefault('password_constraints', [])
             ->setDefault('exception_mapping', [
                 PasswordResetTokenNotAccepted::class => static function (PasswordResetTokenNotAccepted $e) {
+                    if ($e->storedToken() === null) {
+                        return new FormError('password_reset.no_token', null, [], null, $e);
+                    }
+
                     return new FormError('password_reset.invalid_token', null, [], null, $e);
                 },
                 DisabledException::class => static function (DisabledException $e) {
                     return new FormError('password_reset.access_disabled', null, [], null, $e);
                 },
             ])
-            ->setAllowedTypes('token', [SplitToken::class])
             ->setAllowedTypes('user_class', ['string'])
             ->setAllowedTypes('command_builder', [Closure::class])
             ->setAllowedTypes('password_constraints', ['array', Constraint::class]);

@@ -14,11 +14,10 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Form\Type\Security;
 
-use ParkManager\Module\CoreModule\Application\Service\Crypto\SplitTokenFactory;
-use RuntimeException;
 use Symfony\Component\Form\DataMapperInterface;
-use Symfony\Component\Form\Exception\TransformationFailedException;
+use Symfony\Component\Form\Exception\UnexpectedTypeException;
 use Symfony\Component\Form\FormInterface;
+use function is_array;
 use function iterator_to_array;
 
 /**
@@ -26,21 +25,32 @@ use function iterator_to_array;
  */
 final class ConfirmPasswordResetDataMapper implements DataMapperInterface
 {
-    /** @var SplitTokenFactory */
-    private $splitTokenFactory;
-
     /** @var callable */
     private $commandBuilder;
 
-    public function __construct(SplitTokenFactory $splitTokenFactory, callable $commandBuilder)
+    public function __construct(callable $commandBuilder)
     {
-        $this->splitTokenFactory = $splitTokenFactory;
         $this->commandBuilder    = $commandBuilder;
     }
 
     public function mapDataToForms($data, $forms)
     {
-        // No-op
+        $empty = $data === null || $data === [];
+
+        if (! $empty && ! is_array($data)) {
+            throw new UnexpectedTypeException($data, 'array or empty');
+        }
+
+        foreach ($forms as $form) {
+            $propertyPath = $form->getPropertyPath();
+            $config = $form->getConfig();
+
+            if (! $empty && $config->getMapped()) {
+                $form->setData($data[$config->getName()] ?? null);
+            } else {
+                $form->setData($form->getConfig()->getData());
+            }
+        }
     }
 
     public function mapFormsToData($forms, &$data)
@@ -48,13 +58,9 @@ final class ConfirmPasswordResetDataMapper implements DataMapperInterface
         /** @var FormInterface[] $formsArray */
         $formsArray = iterator_to_array($forms);
 
-        try {
-            $token = (string) $formsArray['reset_token']->getData();
-            $token = $this->splitTokenFactory->fromString($token);
-        } catch (RuntimeException $e) {
-            throw new TransformationFailedException('Invalid token', 0, $e);
-        }
-
-        $data = ($this->commandBuilder)($token, (string) $formsArray['password']->getData());
+        $data = ($this->commandBuilder)(
+            $formsArray['reset_token']->getData(),
+            (string) $formsArray['password']->getData()
+        );
     }
 }

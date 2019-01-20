@@ -12,11 +12,11 @@ declare(strict_types=1);
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-namespace ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Action\Client;
+namespace ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Action\Admin;
 
-use ParkManager\Module\CoreModule\Application\Command\Client\ConfirmPasswordReset;
+use ParkManager\Module\CoreModule\Application\Command\Administrator\ConfirmPasswordReset;
 use ParkManager\Module\CoreModule\Domain\Shared\SplitToken;
-use ParkManager\Module\CoreModule\Infrastructure\Security\ClientUser;
+use ParkManager\Module\CoreModule\Infrastructure\Security\AdministratorUser;
 use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Common\Form\Handler\ServiceBusFormFactory;
 use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Common\TwigResponse;
 use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Form\Type\Security\ConfirmPasswordResetType;
@@ -31,7 +31,7 @@ final class ConfirmPasswordResetAction
     public function __invoke(Request $request, string $token, ServiceBusFormFactory $formFactory)
     {
         $handler = $formFactory->createForCommand(ConfirmPasswordResetType::class, ['reset_token' => $token], [
-            'user_class' => ClientUser::class,
+            'user_class' => AdministratorUser::class,
             'command_builder' => static function (SplitToken $splitToken, string $password) {
                 return new ConfirmPasswordReset($splitToken, $password);
             },
@@ -39,10 +39,10 @@ final class ConfirmPasswordResetAction
         $handler->handleRequest($request);
 
         if ($handler->isReady()) {
-            return new RouteRedirectResponse('park_manager.client.security_login');
+            return new RouteRedirectResponse('park_manager.admin.security_login');
         }
 
-        $response = new TwigResponse('@ParkManagerCore/client/security/password_reset_confirm.html.twig', $handler);
+        $response = new TwigResponse('@ParkManagerCore/admin/security/password_reset_confirm.html.twig', $handler);
         $response->setPrivate();
         $response->setMaxAge(1);
 
