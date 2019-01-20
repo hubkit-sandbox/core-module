@@ -1,6 +1,6 @@
-{% extends '@ParkManagerCore/security/layout.html.twig' %}
+{% extends '@ParkManagerCore/client/security/layout.html.twig' %}
 
-{% set page_heading = ('login.'~ app_context.activeSection ~ '_heading')|trans %}
+{% set page_heading = ('login.client_heading')|trans %}
 {% if error is defined and error is not empty %}
     {% set error = error.messageKey|trans(error.messageData, 'security')|e %}
 {% endif %}

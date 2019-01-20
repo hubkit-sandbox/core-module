@@ -16,17 +16,20 @@ namespace ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Action;
 
 use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Common\ApplicationContext;
 use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Common\TwigResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
-final class SecurityLoginAction
+final class SecurityLoginAction extends AbstractController
 {
-    public function __invoke(Request $request, AuthenticationUtils $authUtils, ApplicationContext $appContext): TwigResponse
+    public function __invoke(Request $request, ApplicationContext $appContext): TwigResponse
     {
-        return new TwigResponse('@ParkManagerCore/' . $appContext->getRouteNamePrefix() . '/login.html.twig', [
+        // Adding an ArgumentResolver for this single service would be overkill.
+        $authenticationUtils = $this->get('security.authentication_utils');
+
+        return new TwigResponse('@ParkManagerCore/' . $appContext->getRouteNamePrefix() . '/security/login.html.twig', [
             'route' => 'park_manager.' . $appContext->getRouteNamePrefix() . '.security_login',
-            'last_username' => $authUtils->getLastUsername(),
-            'error' => $authUtils->getLastAuthenticationError(),
+            'last_username' => $authenticationUtils->getLastUsername(),
+            'error' => $authenticationUtils->getLastAuthenticationError(),
         ]);
     }
 }
