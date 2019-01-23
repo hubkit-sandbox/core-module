@@ -23,9 +23,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Twig\Environment;
-use function ob_end_clean;
-use function ob_get_contents;
-use function ob_start;
 
 /**
  * @internal
@@ -45,15 +42,27 @@ final class TwigResponseListenerTest extends TestCase
     }
 
     /** @test */
-    public function it_ignores_when_content_is_already_set()
+    public function it_ignores_empty_response()
     {
-        $container = $this->createUsedContainer('@CoreModule/client/show_user.html.twig', ['He' => 'you']);
+        $container = $this->createUnusedContainer();
         $listener  = new TwigResponseListener($container);
 
-        $event = $this->createEvent(($response = new TwigResponse('Nope'))->setContent('Something'));
+        $event = $this->createEvent(new TwigResponse('Nope', [], 204));
         $listener->onKernelResponse($event);
 
-        self::assertSame('Something', $this->getContentsOfResponse($response));
+        self::assertSame('', $event->getResponse()->getContent());
+    }
+
+    /** @test */
+    public function it_ignores_when_content_is_already_set()
+    {
+        $container = $this->createUnusedContainer();
+        $listener  = new TwigResponseListener($container);
+
+        $event = $this->createEvent((new TwigResponse('Nope'))->setContent('Something'));
+        $listener->onKernelResponse($event);
+
+        self::assertSame('Something', $event->getResponse()->getContent());
     }
 
     /** @test */
@@ -62,10 +71,10 @@ final class TwigResponseListenerTest extends TestCase
         $container = $this->createUsedContainer('@CoreModule/client/show_user.html.twig', ['He' => 'you']);
         $listener  = new TwigResponseListener($container);
 
-        $event = $this->createEvent($response = new TwigResponse('@CoreModule/client/show_user.html.twig', ['He' => 'you']));
+        $event = $this->createEvent(new TwigResponse('@CoreModule/client/show_user.html.twig', ['He' => 'you']));
         $listener->onKernelResponse($event);
 
-        self::assertSame('It was like this when I got here.', $this->getContentsOfResponse($response));
+        self::assertSame('It was like this when I got here.', $event->getResponse()->getContent());
     }
 
     private function createUnusedContainer(): ContainerInterface
@@ -95,15 +104,5 @@ final class TwigResponseListenerTest extends TestCase
             HttpKernelInterface::MASTER_REQUEST,
             $response
         );
-    }
-
-    private function getContentsOfResponse(Response $response)
-    {
-        ob_start();
-        $response->sendContent();
-        $contents = ob_get_contents();
-        ob_end_clean();
-
-        return $contents;
     }
 }

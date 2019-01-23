@@ -28,9 +28,6 @@ class TwigResponse extends Response
     private $template;
     private $variables;
 
-    /** @var Environment|null */
-    private $twig;
-
     /**
      * @param array|Form|FormHandler $variables A Form or FormHandler object is passed as [form => createView()]
      */
@@ -67,27 +64,5 @@ class TwigResponse extends Response
     public function getTemplateVariables(): array
     {
         return $this->variables;
-    }
-
-    public function setRenderer(Environment $twig): void
-    {
-        $this->twig = $twig;
-    }
-
-    public function sendContent()
-    {
-        if ($this->content !== '') {
-            echo $this->content;
-
-            return $this;
-        }
-
-        if ($this->twig === null) {
-            throw new RuntimeException(sprintf('No Twig renderer set for response with template "%s".', $this->template));
-        }
-
-        echo $this->twig->render($this->template, $this->variables);
-
-        return $this;
     }
 }
