@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace ParkManager\Module\CoreModule\Application\Service\Crypto;
 
 use DateTimeImmutable;
-use ParagonIE\Halite\HiddenString;
+use ParagonIE\HiddenString\HiddenString;
 use ParkManager\Module\CoreModule\Domain\Shared\SplitToken;
 use function random_bytes;
 
@@ -46,7 +46,7 @@ final class Argon2SplitTokenFactory implements SplitTokenFactory
     {
         $splitToken = Argon2SplitToken::create(
             // DO NOT ENCODE HERE (always provide as raw binary)!
-            new HiddenString(random_bytes(SplitToken::TOKEN_CHAR_LENGTH), false, true),
+            new HiddenString(random_bytes((int) SplitToken::TOKEN_CHAR_LENGTH), false, true),
             $this->config
         );
 

@@ -29,6 +29,7 @@ use ParkManager\Module\CoreModule\Domain\RecordsDomainEvents;
 use ParkManager\Module\CoreModule\Domain\Shared\EmailAddress;
 use ParkManager\Module\CoreModule\Domain\Shared\SplitToken;
 use ParkManager\Module\CoreModule\Domain\Shared\SplitTokenValueHolder;
+use RuntimeException;
 
 class Client implements RecordsDomainEvents
 {
@@ -129,6 +130,7 @@ class Client implements RecordsDomainEvents
                 throw new EmailChangeConfirmationRejected();
             }
 
+            /** @psalm-suppress PossiblyNullReference */
             $this->changeEmail(new EmailAddress($this->emailAddressChangeToken->metadata()['email']));
         } finally {
             $this->emailAddressChangeToken = null;
