@@ -27,9 +27,8 @@ use ParkManager\Module\CoreModule\Domain\Client\Exception\PasswordResetConfirmat
 use ParkManager\Module\CoreModule\Domain\DomainEventsCollectionTrait;
 use ParkManager\Module\CoreModule\Domain\RecordsDomainEvents;
 use ParkManager\Module\CoreModule\Domain\Shared\EmailAddress;
-use ParkManager\Module\CoreModule\Domain\Shared\SplitToken;
-use ParkManager\Module\CoreModule\Domain\Shared\SplitTokenValueHolder;
-use RuntimeException;
+use Rollerworks\Component\SplitToken\SplitToken;
+use Rollerworks\Component\SplitToken\SplitTokenValueHolder;
 
 class Client implements RecordsDomainEvents
 {

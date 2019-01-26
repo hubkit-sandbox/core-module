@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace ParkManager\Module\CoreModule\Tests\Infrastructure\UserInterface\Web\Form\Type\Security;
 
 use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Form\Type\Security\SplitTokenType;
-use ParkManager\Module\CoreModule\Test\Crypto\FakeSplitTokenFactory;
+use Rollerworks\Component\SplitToken\FakeSplitTokenFactory;
 use Symfony\Component\Form\Extension\Core\Type\TransformationFailureExtension;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\Test\Traits\ValidatorExtensionTrait;

@@ -19,9 +19,9 @@ use ParkManager\Module\CoreModule\Application\Command\Client\RequestPasswordRese
 use ParkManager\Module\CoreModule\Application\Command\Client\RequestPasswordResetHandler;
 use ParkManager\Module\CoreModule\Domain\Client\Client;
 use ParkManager\Module\CoreModule\Domain\Client\Event\ClientPasswordResetWasRequested;
-use ParkManager\Module\CoreModule\Test\Crypto\FakeSplitTokenFactory;
 use ParkManager\Module\CoreModule\Test\Domain\Repository\ClientRepositoryMock;
 use PHPUnit\Framework\TestCase;
+use Rollerworks\Component\SplitToken\FakeSplitTokenFactory;
 use function array_pop;
 
 /**

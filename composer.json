@@ -28,6 +28,7 @@
         "ramsey/uuid": "^3.0",
         "rollerworks/route-autofill-bundle": "^0.1.0",
         "rollerworks/route-autowiring-bundle": "^1.0.2",
+        "rollerworks/split-token": "^0.1.0",
         "sensio/framework-extra-bundle": "^5.2",
         "symfony/asset": "^4.2",
         "symfony/console": "^4.2",

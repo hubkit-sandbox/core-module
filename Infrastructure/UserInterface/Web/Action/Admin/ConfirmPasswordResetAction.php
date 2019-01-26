@@ -15,12 +15,12 @@ declare(strict_types=1);
 namespace ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Action\Admin;
 
 use ParkManager\Module\CoreModule\Application\Command\Administrator\ConfirmPasswordReset;
-use ParkManager\Module\CoreModule\Domain\Shared\SplitToken;
 use ParkManager\Module\CoreModule\Infrastructure\Security\AdministratorUser;
 use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Common\Form\Handler\ServiceBusFormFactory;
 use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Common\TwigResponse;
 use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Form\Type\Security\ConfirmPasswordResetType;
 use Rollerworks\Bundle\RouteAutofillBundle\Response\RouteRedirectResponse;
+use Rollerworks\Component\SplitToken\SplitToken;
 use Symfony\Component\HttpFoundation\Request;
 
 final class ConfirmPasswordResetAction

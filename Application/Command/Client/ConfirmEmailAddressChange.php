@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Application\Command\Client;
 
-use ParkManager\Module\CoreModule\Domain\Shared\SplitToken;
+use Rollerworks\Component\SplitToken\SplitToken;
 
 final class ConfirmEmailAddressChange
 {

@@ -24,10 +24,10 @@ use ParkManager\Module\CoreModule\Domain\Client\Event\ClientPasswordWasChanged;
 use ParkManager\Module\CoreModule\Domain\Client\Exception\EmailChangeConfirmationRejected;
 use ParkManager\Module\CoreModule\Domain\Client\Exception\PasswordResetConfirmationRejected;
 use ParkManager\Module\CoreModule\Domain\Shared\EmailAddress;
-use ParkManager\Module\CoreModule\Domain\Shared\SplitToken;
-use ParkManager\Module\CoreModule\Test\Crypto\FakeSplitTokenFactory;
 use ParkManager\Module\CoreModule\Test\Domain\EventsRecordingEntityAssertionTrait;
 use PHPUnit\Framework\TestCase;
+use Rollerworks\Component\SplitToken\FakeSplitTokenFactory;
+use Rollerworks\Component\SplitToken\SplitToken;
 use function str_repeat;
 
 /**

@@ -15,12 +15,12 @@ declare(strict_types=1);
 namespace ParkManager\Module\CoreModule\Tests\Infrastructure\UserInterface\Web\Form\Type;
 
 use Closure;
-use ParkManager\Module\CoreModule\Domain\Shared\SplitToken;
 use ParkManager\Module\CoreModule\Infrastructure\Security\ClientUser;
 use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Form\Type\Security\ConfirmPasswordResetType;
 use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Form\Type\Security\SecurityUserHashedPasswordType;
 use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Form\Type\Security\SplitTokenType;
-use ParkManager\Module\CoreModule\Test\Crypto\FakeSplitTokenFactory;
+use Rollerworks\Component\SplitToken\FakeSplitTokenFactory;
+use Rollerworks\Component\SplitToken\SplitToken;
 use RuntimeException;
 use Symfony\Component\Form\Test\Traits\ValidatorExtensionTrait;
 use Symfony\Component\Form\Test\TypeTestCase;

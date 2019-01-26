@@ -21,6 +21,7 @@ use ParkManager\Module\CoreModule\Infrastructure\Http\CookiesRequestMatcher;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\HttpFoundation\RequestMatcher;
+use function realpath;
 
 class ParkManagerCoreModule extends AbstractParkManagerModule
 {
@@ -58,5 +59,12 @@ class ParkManagerCoreModule extends AbstractParkManagerModule
             $container->getDefinition('park_manager.section.private.request_matcher')->setArgument(1, $primaryHost);
             $container->getDefinition('park_manager.section.api.request_matcher')->setArguments(['/', '^api\.']);
         }
+    }
+
+    protected function getDoctrineOrmMappings(): array
+    {
+        $mapping = parent::getDoctrineOrmMappings();
+        $mapping[realpath(__DIR__ . '/Infrastructure/Doctrine/SecurityMapping')] = 'Rollerworks\\Component\\SplitToken';
+        return $mapping;
     }
 }

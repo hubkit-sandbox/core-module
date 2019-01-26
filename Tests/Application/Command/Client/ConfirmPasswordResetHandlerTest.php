@@ -18,10 +18,10 @@ use ParkManager\Module\CoreModule\Application\Command\Client\ConfirmPasswordRese
 use ParkManager\Module\CoreModule\Application\Command\Client\ConfirmPasswordResetHandler;
 use ParkManager\Module\CoreModule\Domain\Client\Event\ClientPasswordWasChanged;
 use ParkManager\Module\CoreModule\Domain\Client\Exception\PasswordResetConfirmationRejected;
-use ParkManager\Module\CoreModule\Domain\Shared\SplitToken;
-use ParkManager\Module\CoreModule\Test\Crypto\FakeSplitTokenFactory;
 use ParkManager\Module\CoreModule\Test\Domain\Repository\ClientRepositoryMock;
 use PHPUnit\Framework\TestCase;
+use Rollerworks\Component\SplitToken\FakeSplitTokenFactory;
+use Rollerworks\Component\SplitToken\SplitToken;
 use function str_rot13;
 
 /**

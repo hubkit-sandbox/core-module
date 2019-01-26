@@ -15,8 +15,8 @@ declare(strict_types=1);
 namespace ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Form\Type\Security;
 
 use Exception;
-use ParkManager\Module\CoreModule\Application\Service\Crypto\SplitTokenFactory;
 use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Form\DataTransformer\SplitTokenToStringTransformer;
+use Rollerworks\Component\SplitToken\SplitTokenFactory;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;

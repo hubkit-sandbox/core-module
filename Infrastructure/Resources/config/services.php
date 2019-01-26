@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
-use ParkManager\Module\CoreModule\Application\Service\Crypto\Argon2SplitTokenFactory;
+use Rollerworks\Component\SplitToken\Argon2SplitTokenFactory;
 use ParkManager\Module\CoreModule\Infrastructure\DependencyInjection\AutoServiceConfigurator;
 use ParkManager\Module\CoreModule\Infrastructure\Doctrine\Administrator\DoctrineOrmAdministratorRepository;
 use ParkManager\Module\CoreModule\Infrastructure\Doctrine\Client\DoctrineOrmClientRepository;

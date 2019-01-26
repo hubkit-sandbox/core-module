@@ -19,10 +19,10 @@ use ParkManager\Module\CoreModule\Application\Command\Client\ConfirmEmailAddress
 use ParkManager\Module\CoreModule\Domain\Client\Client;
 use ParkManager\Module\CoreModule\Domain\Client\Exception\EmailChangeConfirmationRejected;
 use ParkManager\Module\CoreModule\Domain\Shared\EmailAddress;
-use ParkManager\Module\CoreModule\Domain\Shared\SplitToken;
-use ParkManager\Module\CoreModule\Test\Crypto\FakeSplitTokenFactory;
 use ParkManager\Module\CoreModule\Test\Domain\Repository\ClientRepositoryMock;
 use PHPUnit\Framework\TestCase;
+use Rollerworks\Component\SplitToken\FakeSplitTokenFactory;
+use Rollerworks\Component\SplitToken\SplitToken;
 use function str_rot13;
 
 /**

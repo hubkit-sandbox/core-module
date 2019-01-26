@@ -18,10 +18,10 @@ use ParkManager\Module\CoreModule\Application\Query\Administrator\GetAdministrat
 use ParkManager\Module\CoreModule\Application\Query\Administrator\GetAdministratorWithPasswordResetTokenHandler;
 use ParkManager\Module\CoreModule\Domain\Administrator\Administrator;
 use ParkManager\Module\CoreModule\Domain\Shared\Exception\PasswordResetTokenNotAccepted;
-use ParkManager\Module\CoreModule\Domain\Shared\SplitToken;
-use ParkManager\Module\CoreModule\Test\Crypto\FakeSplitTokenFactory;
 use ParkManager\Module\CoreModule\Test\Domain\Repository\AdministratorRepositoryMock;
 use PHPUnit\Framework\TestCase;
+use Rollerworks\Component\SplitToken\FakeSplitTokenFactory;
+use Rollerworks\Component\SplitToken\SplitToken;
 use function str_rot13;
 
 /**

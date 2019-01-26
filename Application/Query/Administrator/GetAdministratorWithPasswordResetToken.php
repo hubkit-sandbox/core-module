@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Application\Query\Administrator;
 
-use ParkManager\Module\CoreModule\Domain\Shared\SplitToken;
+use Rollerworks\Component\SplitToken\SplitToken;
 
 final class GetAdministratorWithPasswordResetToken
 {

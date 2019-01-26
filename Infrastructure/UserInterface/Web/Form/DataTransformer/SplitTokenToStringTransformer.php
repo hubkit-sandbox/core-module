@@ -15,8 +15,8 @@ declare(strict_types=1);
 namespace ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Form\DataTransformer;
 
 use Exception;
-use ParkManager\Module\CoreModule\Application\Service\Crypto\SplitTokenFactory;
-use ParkManager\Module\CoreModule\Domain\Shared\SplitToken;
+use Rollerworks\Component\SplitToken\SplitToken;
+use Rollerworks\Component\SplitToken\SplitTokenFactory;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 use function is_string;

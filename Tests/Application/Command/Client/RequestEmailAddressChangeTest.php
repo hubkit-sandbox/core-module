@@ -21,11 +21,11 @@ use ParkManager\Module\CoreModule\Application\Service\Mailer\Client\EmailAddress
 use ParkManager\Module\CoreModule\Domain\Client\ClientId;
 use ParkManager\Module\CoreModule\Domain\Client\Event\ClientEmailAddressChangeWasRequested;
 use ParkManager\Module\CoreModule\Domain\Shared\EmailAddress;
-use ParkManager\Module\CoreModule\Domain\Shared\SplitToken;
-use ParkManager\Module\CoreModule\Test\Crypto\FakeSplitTokenFactory;
 use ParkManager\Module\CoreModule\Test\Domain\Repository\ClientRepositoryMock;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Rollerworks\Component\SplitToken\FakeSplitTokenFactory;
+use Rollerworks\Component\SplitToken\SplitToken;
 
 /**
  * @internal

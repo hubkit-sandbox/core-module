@@ -15,9 +15,9 @@ declare(strict_types=1);
 namespace ParkManager\Module\CoreModule\Application\Command\Administrator;
 
 use DateTimeImmutable;
-use ParkManager\Module\CoreModule\Application\Service\Crypto\SplitTokenFactory;
 use ParkManager\Module\CoreModule\Domain\Administrator\AdministratorRepository;
 use ParkManager\Module\CoreModule\Domain\Administrator\Exception\AdministratorNotFound;
+use Rollerworks\Component\SplitToken\SplitTokenFactory;
 
 final class RequestPasswordResetHandler
 {

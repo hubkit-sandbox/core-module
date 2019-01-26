@@ -16,7 +16,7 @@ namespace ParkManager\Module\CoreModule\Domain\Client\Event;
 
 use ParkManager\Module\CoreModule\Domain\Client\ClientId;
 use ParkManager\Module\CoreModule\Domain\Shared\EmailAddress;
-use ParkManager\Module\CoreModule\Domain\Shared\SplitToken;
+use Rollerworks\Component\SplitToken\SplitToken;
 
 final class ClientEmailAddressChangeWasRequested
 {

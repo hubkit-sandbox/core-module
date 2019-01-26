@@ -16,8 +16,8 @@
         <field name="roles" type="array_collection" />
 
         <embedded name="email" class="ParkManager\Module\CoreModule\Domain\Shared\EmailAddress" column-prefix="email_"  />
-        <embedded name="emailAddressChangeToken" class="ParkManager\Module\CoreModule\Domain\Shared\SplitTokenValueHolder" column-prefix="email_change_"  />
-        <embedded name="passwordResetToken" class="ParkManager\Module\CoreModule\Domain\Shared\SplitTokenValueHolder" column-prefix="password_reset_" />
+        <embedded name="emailAddressChangeToken" class="Rollerworks\Component\SplitToken\SplitTokenValueHolder" column-prefix="email_change_"  />
+        <embedded name="passwordResetToken" class="Rollerworks\Component\SplitToken\SplitTokenValueHolder" column-prefix="password_reset_" />
 
         <unique-constraints>
             <unique-constraint columns="email_address" />

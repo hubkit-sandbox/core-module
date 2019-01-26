@@ -19,8 +19,8 @@ use ParkManager\Module\CoreModule\Application\Service\Mailer\Client\EmailAddress
 use ParkManager\Module\CoreModule\Application\Service\Mailer\Client\RecipientEnvelopeFactory;
 use ParkManager\Module\CoreModule\Domain\Client\ClientId;
 use ParkManager\Module\CoreModule\Domain\Shared\EmailAddress;
-use ParkManager\Module\CoreModule\Domain\Shared\SplitToken;
 use ParkManager\Module\CoreModule\Infrastructure\Mailer\Sender\Sender;
+use Rollerworks\Component\SplitToken\SplitToken;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface as UrlGenerator;
 
 final class EmailAddressChangeRequestMailerImp implements EmailAddressChangeRequestMailer

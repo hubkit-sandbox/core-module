@@ -15,8 +15,8 @@ declare(strict_types=1);
 namespace ParkManager\Module\CoreModule\Tests\Application\Command\Client;
 
 use ParkManager\Module\CoreModule\Application\Command\Client\ConfirmPasswordReset;
-use ParkManager\Module\CoreModule\Test\Crypto\FakeSplitTokenFactory;
 use PHPUnit\Framework\TestCase;
+use Rollerworks\Component\SplitToken\FakeSplitTokenFactory;
 
 /**
  * @internal

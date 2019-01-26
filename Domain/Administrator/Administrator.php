@@ -25,8 +25,8 @@ use ParkManager\Module\CoreModule\Domain\Administrator\Exception\CannotDisableSu
 use ParkManager\Module\CoreModule\Domain\DomainEventsCollectionTrait;
 use ParkManager\Module\CoreModule\Domain\RecordsDomainEvents;
 use ParkManager\Module\CoreModule\Domain\Shared\EmailAddress;
-use ParkManager\Module\CoreModule\Domain\Shared\SplitToken;
-use ParkManager\Module\CoreModule\Domain\Shared\SplitTokenValueHolder;
+use Rollerworks\Component\SplitToken\SplitToken;
+use Rollerworks\Component\SplitToken\SplitTokenValueHolder;
 
 /**
  * @final

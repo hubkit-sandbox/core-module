@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace ParkManager\Module\CoreModule\Domain\Administrator\Event;
 
 use ParkManager\Module\CoreModule\Domain\Administrator\AdministratorId;
-use ParkManager\Module\CoreModule\Domain\Shared\SplitToken;
+use Rollerworks\Component\SplitToken\SplitToken;
 
 final class AdministratorPasswordResetWasRequested
 {
