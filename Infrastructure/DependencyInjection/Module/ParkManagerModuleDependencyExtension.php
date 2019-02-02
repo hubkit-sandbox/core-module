@@ -213,6 +213,20 @@ abstract class ParkManagerModuleDependencyExtension extends Extension implements
             );
         }
     }
+
+    protected function registerWebUIActions(LoaderInterface $loader): void
+    {
+        /** @var GlobFileLoader $resolver */
+        $resolver = $loader->getResolver()->resolve('*', 'glob');
+
+        if (file_exists($this->moduleDir . '/Infrastructure/UserInterface/Web/Action')) {
+            $resolver->registerClasses(
+                (new Definition())->setAutowired(true)
+                    ->setAutoconfigured(true)
+                    ->setPrivate(true),
+                $this->moduleNamespace . '\\Infrastructure\\UserInterface\\Web\\Action\\',
+                $this->moduleDir . '/Infrastructure/UserInterface/Web/Action/**/*.php'
+            );
         }
     }
 }

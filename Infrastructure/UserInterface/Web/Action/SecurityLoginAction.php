@@ -18,6 +18,7 @@ use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Common\Applic
 use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Common\TwigResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 final class SecurityLoginAction extends AbstractController
 {
@@ -31,5 +32,12 @@ final class SecurityLoginAction extends AbstractController
             'last_username' => $authenticationUtils->getLastUsername(),
             'error' => $authenticationUtils->getLastAuthenticationError(),
         ]);
+    }
+
+    public static function getSubscribedServices(): array
+    {
+        return [
+            'security.authentication_utils' => AuthenticationUtils::class
+        ];
     }
 }
