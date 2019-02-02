@@ -24,12 +24,4 @@ return function (ContainerConfigurator $c) {
     $di->set('messenger.middleware.security', SecurityMiddleware::class)
         ->args([ref('security.authorization_checker')])
         ->abstract();
-
-    $applicationDir = __DIR__ . '/../../../../Application/';
-    $di->load('ParkManager\Module\CoreModule\Application\Command\\', $applicationDir . 'Command/**/*Handler.php')
-        ->exclude(__DIR__ . '/../../../../Application/Command/Client/{RequestEmailAddressChangeHandler}.php')
-        ->tag('messenger.message_handler', ['bus' => 'park_manager.command_bus']);
-
-    $di->load('ParkManager\Module\CoreModule\Application\Query\\', $applicationDir . 'Query/**/*Handler.php')
-        ->tag('messenger.message_handler', ['bus' => 'park_manager.query_bus']);
 };

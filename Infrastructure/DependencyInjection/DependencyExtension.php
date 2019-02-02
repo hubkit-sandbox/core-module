@@ -42,6 +42,8 @@ final class DependencyExtension extends ParkManagerModuleDependencyExtension imp
     {
         $loader->load('services.php');
         $loader->load('services/*.php', 'glob');
+
+        $this->registerMessageBusHandlers($loader);
     }
 
     protected function prependExtra(ContainerBuilder $container): void

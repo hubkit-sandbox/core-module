@@ -15,11 +15,13 @@ declare(strict_types=1);
 namespace ParkManager\Module\CoreModule\Infrastructure\DependencyInjection\Module;
 
 use ParkManager\Module\CoreModule\Infrastructure\DependencyInjection\Module\Traits\ServiceLoaderTrait;
-use ReflectionObject;
+use ReflectionClass;
 use Rollerworks\Bundle\RouteAutowiringBundle\RouteImporter;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
+use Symfony\Component\DependencyInjection\Loader\GlobFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use function dirname;
 use function is_dir;
@@ -46,6 +48,9 @@ abstract class ParkManagerModuleDependencyExtension extends Extension implements
 
     /** @var string|null */
     protected $moduleDir;
+
+    /** @var string|null */
+    protected $moduleNamespace;
 
     /**
      * Name of this Module (with vendor namespace).
@@ -169,7 +174,45 @@ abstract class ParkManagerModuleDependencyExtension extends Extension implements
     final protected function initModuleDirectory(): void
     {
         if ($this->moduleDir === null) {
-            $this->moduleDir = dirname((new ReflectionObject($this))->getFileName(), 3);
+            $r = new ReflectionClass(static::class);
+            $namespace = $r->getNamespaceName();
+
+            if (substr($namespace, -35) !== '\\Infrastructure\\DependencyInjection') {
+                throw new \LogicException(sprintf('The namespace "%s" is expected to end with "\\Infrastructure\\DependencyInjection".', $namespace));
+            }
+
+            $this->moduleNamespace = substr($namespace, 0, -35);
+            $this->moduleDir = dirname($r->getFileName(), 3);
+        }
+    }
+
+    protected function registerMessageBusHandlers(LoaderInterface $loader): void
+    {
+        /** @var GlobFileLoader $resolver */
+        $resolver = $loader->getResolver()->resolve('*', 'glob');
+
+        if (file_exists($this->moduleDir . '/Application/Command')) {
+            $resolver->registerClasses(
+                (new Definition())->setAutowired(true)
+                    ->setAutoconfigured(true)
+                    ->setPrivate(true)
+                    ->addTag('messenger.message_handler', ['bus' => 'park_manager.command_bus']),
+                $this->moduleNamespace . '\\Application\\Command\\',
+                $this->moduleDir . '/Application/Command/**/*Handler.php'
+            );
+        }
+
+        if (file_exists($this->moduleDir . '/Application/Query')) {
+            $resolver->registerClasses(
+                (new Definition())->setAutowired(true)
+                    ->setAutoconfigured(true)
+                    ->setPrivate(true)
+                    ->addTag('messenger.message_handler', ['bus' => 'park_manager.query_bus']),
+                $this->moduleNamespace . '\\Application\\Query\\',
+                $this->moduleDir . '/Application/Query/**/*Handler.php'
+            );
+        }
+    }
         }
     }
 }
