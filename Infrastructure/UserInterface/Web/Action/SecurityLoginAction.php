@@ -37,7 +37,7 @@ final class SecurityLoginAction extends AbstractController
     public static function getSubscribedServices(): array
     {
         return [
-            'security.authentication_utils' => AuthenticationUtils::class
+            'security.authentication_utils' => AuthenticationUtils::class,
         ];
     }
 }

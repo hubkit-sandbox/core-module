@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Infrastructure\DependencyInjection\Module;
 
+use LogicException;
 use ParkManager\Module\CoreModule\Infrastructure\DependencyInjection\Module\Traits\ServiceLoaderTrait;
 use ReflectionClass;
 use Rollerworks\Bundle\RouteAutowiringBundle\RouteImporter;
@@ -24,8 +25,11 @@ use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\GlobFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use function dirname;
+use function file_exists;
 use function is_dir;
 use function realpath;
+use function sprintf;
+use function substr;
 
 /**
  * The ParkManagerModuleDependencyExtension provides an addition
@@ -178,7 +182,7 @@ abstract class ParkManagerModuleDependencyExtension extends Extension implements
             $namespace = $r->getNamespaceName();
 
             if (substr($namespace, -35) !== '\\Infrastructure\\DependencyInjection') {
-                throw new \LogicException(sprintf('The namespace "%s" is expected to end with "\\Infrastructure\\DependencyInjection".', $namespace));
+                throw new LogicException(sprintf('The namespace "%s" is expected to end with "\\Infrastructure\\DependencyInjection".', $namespace));
             }
 
             $this->moduleNamespace = substr($namespace, 0, -35);
