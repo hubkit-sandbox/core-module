@@ -46,7 +46,7 @@ class ApplicationContext
         $this->activeSection  = $section === 'private' ? 'client' : $section;
     }
 
-    public function reset()
+    public function reset(): void
     {
         $this->activeSection  = null;
         $this->privateSection = false;

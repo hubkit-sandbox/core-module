@@ -56,7 +56,7 @@ final class ApplicationSectionListener implements EventSubscriberInterface
         }
     }
 
-    public function reset()
+    public function reset(): void
     {
         $this->applicationContext->reset();
     }

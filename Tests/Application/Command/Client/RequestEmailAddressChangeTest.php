@@ -47,7 +47,7 @@ final class RequestEmailAddressChangeTest extends TestCase
     }
 
     /** @test */
-    public function it_handles_emailAddress_change_request()
+    public function it_handles_emailAddress_change_request(): void
     {
         $handler = new RequestEmailAddressChangeHandler(
             $repository = new ClientRepositoryMock([$client = ClientRepositoryMock::createClient()]),
@@ -80,7 +80,7 @@ final class RequestEmailAddressChangeTest extends TestCase
     }
 
     /** @test */
-    public function it_handles_emailAddress_change_request_with_emailAddress_already_in_use()
+    public function it_handles_emailAddress_change_request_with_emailAddress_already_in_use(): void
     {
         $handler = new RequestEmailAddressChangeHandler(
             $repository = new ClientRepositoryMock([

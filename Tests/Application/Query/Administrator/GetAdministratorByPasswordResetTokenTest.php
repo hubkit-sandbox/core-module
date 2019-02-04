@@ -24,7 +24,7 @@ use Rollerworks\Component\SplitToken\FakeSplitTokenFactory;
 final class GetAdministratorByPasswordResetTokenTest extends TestCase
 {
     /** @test */
-    public function it_constructable()
+    public function it_constructable(): void
     {
         $message = new GetAdministratorWithPasswordResetToken(
             $token = FakeSplitTokenFactory::instance()->fromString('S1th74ywhDETYAaXWi-2Bee2_ltx-JPGKs9SVvbZCkMi8ZxiEVMBw68S')

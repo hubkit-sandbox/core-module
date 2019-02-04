@@ -27,7 +27,7 @@ final class HashedSecurityPasswordTypeTest extends TypeTestCase
 {
     use ValidatorExtensionTrait;
 
-    protected function getExtensions()
+    protected function getExtensions(): array
     {
         return [
             $this->getValidatorExtension(),
@@ -35,7 +35,7 @@ final class HashedSecurityPasswordTypeTest extends TypeTestCase
     }
 
     /** @test */
-    public function it_hashes_password()
+    public function it_hashes_password(): void
     {
         $builder = $this->factory->createBuilder();
         $builder->add(
@@ -56,7 +56,7 @@ final class HashedSecurityPasswordTypeTest extends TypeTestCase
     }
 
     /** @test */
-    public function it_gives_null_for_model_password()
+    public function it_gives_null_for_model_password(): void
     {
         $builder = $this->factory->createBuilder(FormType::class, ['name' => 'Ruby']);
         $builder->add('name', TextType::class);
@@ -77,7 +77,7 @@ final class HashedSecurityPasswordTypeTest extends TypeTestCase
     }
 
     /** @test */
-    public function it_works_with_repeated_password()
+    public function it_works_with_repeated_password(): void
     {
         $builder = $this->factory->createBuilder();
         $builder->add('password', HashedPasswordType::class, [

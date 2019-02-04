@@ -28,7 +28,7 @@ use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 final class ApplicationSectionListenerTest extends TestCase
 {
     /** @test */
-    public function it_does_nothing_when_no_section_was_matched()
+    public function it_does_nothing_when_no_section_was_matched(): void
     {
         $listener = new ApplicationSectionListener(
             ['client' => new RequestMatcher('^/nope')],
@@ -43,7 +43,7 @@ final class ApplicationSectionListenerTest extends TestCase
     }
 
     /** @test */
-    public function it_does_nothing_when_not_in_master_request()
+    public function it_does_nothing_when_not_in_master_request(): void
     {
         $listener = new ApplicationSectionListener(
             ['client' => new RequestMatcher('^/')],
@@ -58,7 +58,7 @@ final class ApplicationSectionListenerTest extends TestCase
     }
 
     /** @test */
-    public function it_sets_active_section_when_matched()
+    public function it_sets_active_section_when_matched(): void
     {
         $listener = new ApplicationSectionListener(
             [

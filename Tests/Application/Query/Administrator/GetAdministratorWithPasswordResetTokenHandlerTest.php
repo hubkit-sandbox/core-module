@@ -42,7 +42,7 @@ final class GetAdministratorWithPasswordResetTokenHandlerTest extends TestCase
     }
 
     /** @test */
-    public function it_gets_administratorId()
+    public function it_gets_administratorId(): void
     {
         $administrator = AdministratorRepositoryMock::createAdministrator();
         $administrator->requestPasswordReset($this->fullToken);
@@ -55,7 +55,7 @@ final class GetAdministratorWithPasswordResetTokenHandlerTest extends TestCase
     }
 
     /** @test */
-    public function it_clears_password_when_token_verifier_does_not_match()
+    public function it_clears_password_when_token_verifier_does_not_match(): void
     {
         $administrator = AdministratorRepositoryMock::createAdministrator();
         $administrator->requestPasswordReset($this->fullToken);

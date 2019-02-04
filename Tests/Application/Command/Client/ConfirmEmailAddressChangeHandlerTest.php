@@ -43,7 +43,7 @@ final class ConfirmEmailAddressChangeHandlerTest extends TestCase
     }
 
     /** @test */
-    public function it_handles_emailAddress_change_confirmation()
+    public function it_handles_emailAddress_change_confirmation(): void
     {
         $client = ClientRepositoryMock::createClient();
         $client->requestEmailChange(new EmailAddress('janet@example.com'), $this->fullToken);
@@ -62,7 +62,7 @@ final class ConfirmEmailAddressChangeHandlerTest extends TestCase
     }
 
     /** @test */
-    public function it_handles_emailAddress_change_confirmation_with_failure()
+    public function it_handles_emailAddress_change_confirmation_with_failure(): void
     {
         $client = ClientRepositoryMock::createClient();
         $client->requestEmailChange(new EmailAddress('janet@example.com'), $this->fullToken);
@@ -87,7 +87,7 @@ final class ConfirmEmailAddressChangeHandlerTest extends TestCase
     }
 
     /** @test */
-    public function it_handles_emailAddress_change_confirmation_with_no_result()
+    public function it_handles_emailAddress_change_confirmation_with_no_result(): void
     {
         $client     = ClientRepositoryMock::createClient();
         $repository = new ClientRepositoryMock([$client]);

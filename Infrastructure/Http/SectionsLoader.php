@@ -34,7 +34,7 @@ final class SectionsLoader extends Loader
         $this->isSecure    = $isSecure;
     }
 
-    public function load($resource, $type = null)
+    public function load($resource, $type = null): RouteCollection
     {
         $collection = new RouteCollection();
         $collection->addCollection($this->loadAdminSection());

@@ -41,7 +41,7 @@ final class ConfirmPasswordResetTypeTest extends TypeTestCase
     /** @var EncoderFactoryInterface */
     private $encoderFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $encoder = new class() implements PasswordEncoderInterface {
             public function encodePassword($raw, $salt): string
@@ -77,7 +77,7 @@ final class ConfirmPasswordResetTypeTest extends TypeTestCase
         parent::setUp();
     }
 
-    protected function getTypes()
+    protected function getTypes(): array
     {
         return [
             new SplitTokenType($this->splitTokenFactory, new IdentityTranslator()),
@@ -86,7 +86,7 @@ final class ConfirmPasswordResetTypeTest extends TypeTestCase
     }
 
     /** @test */
-    public function it_builds_a_confirm_command()
+    public function it_builds_a_confirm_command(): void
     {
         $token = $this->splitTokenFactory->fromString(FakeSplitTokenFactory::FULL_TOKEN);
         $form  = $this->factory->create(ConfirmPasswordResetType::class, ['reset_token' => $token], [
@@ -103,7 +103,7 @@ final class ConfirmPasswordResetTypeTest extends TypeTestCase
     }
 
     /** @test */
-    public function it_gives_null_for_model_password()
+    public function it_gives_null_for_model_password(): void
     {
         $form = $this->factory->create(ConfirmPasswordResetType::class, null, [
             'command_builder' => $this->getCommandBuilder(),

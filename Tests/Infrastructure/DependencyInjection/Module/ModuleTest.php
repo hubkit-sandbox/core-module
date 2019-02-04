@@ -28,30 +28,24 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class ModuleTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function it_get_extension_class_if_present()
+    /** @test */
+    public function it_get_extension_class_if_present(): void
     {
         $module = new ExtensionPresentModule();
 
         $this->assertInstanceOf(DependencyExtension::class, $module->getContainerExtension());
     }
 
-    /**
-     * @test
-     */
-    public function it_ignores_extension_class_if_absent()
+    /** @test */
+    public function it_ignores_extension_class_if_absent(): void
     {
         $module = new ExtensionAbsentModule();
 
         $this->assertNull($module->getContainerExtension());
     }
 
-    /**
-     * @test
-     */
-    public function it_throws_a_LogicException_when_extension_class_is_invalid()
+    /** @test */
+    public function it_throws_a_LogicException_when_extension_class_is_invalid(): void
     {
         $module = new ExtensionNotValidModule();
 
@@ -61,10 +55,8 @@ class ModuleTest extends TestCase
         $module->getContainerExtension();
     }
 
-    /**
-     * @test
-     */
-    public function it_throws_a_LogicException_when_extension_alias_is_not_expected()
+    /** @test */
+    public function it_throws_a_LogicException_when_extension_alias_is_not_expected(): void
     {
         $module = new ExtensionAliasNotValidModule();
 
@@ -79,10 +71,8 @@ class ModuleTest extends TestCase
         $module->getContainerExtension();
     }
 
-    /**
-     * @test
-     */
-    public function it_guesses_name_of_the_module()
+    /** @test */
+    public function it_guesses_name_of_the_module(): void
     {
         $module = new GuessedNameModule();
 
@@ -90,10 +80,8 @@ class ModuleTest extends TestCase
         $this->assertSame('GuessedNameModule', $module->getName());
     }
 
-    /**
-     * @test
-     */
-    public function its_module_can_be_explicitly_provided()
+    /** @test */
+    public function its_module_can_be_explicitly_provided(): void
     {
         $module = new NamedModule();
 
@@ -101,10 +89,8 @@ class ModuleTest extends TestCase
         $this->assertSame('ParkManager\Module\CoreModule\Tests\Infrastructure\DependencyInjection\Module', $module->getNamespace());
     }
 
-    /**
-     * @test
-     */
-    public function it_ignored_doctrine_mapping_when_absent()
+    /** @test */
+    public function it_ignored_doctrine_mapping_when_absent(): void
     {
         $containerBuilder = new ContainerBuilder();
 
@@ -117,10 +103,8 @@ class ModuleTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function it_registers_doctrine_mapping_when_present()
+    /** @test */
+    public function it_registers_doctrine_mapping_when_present(): void
     {
         $containerBuilder = new ContainerBuilder();
 

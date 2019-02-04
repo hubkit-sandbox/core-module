@@ -26,7 +26,7 @@ final class ConfirmPasswordResetTest extends TestCase
     private const TOKEN_STRING = 'S1th74ywhDETYAaXWi-2Bee2_ltx-JPGKs9SVvbZCkMi8ZxiEVMBw68S';
 
     /** @test */
-    public function its_constructable()
+    public function its_constructable(): void
     {
         $password = 'my-password-I-forgot';
         $token    = FakeSplitTokenFactory::instance()->fromString(self::TOKEN_STRING);

@@ -30,7 +30,7 @@ final class SecurityUserHashedPasswordType extends AbstractType
         $this->encoderFactory = $encoderFactory;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver
             ->setRequired(['user_class'])
@@ -48,7 +48,7 @@ final class SecurityUserHashedPasswordType extends AbstractType
             ->setAllowedTypes('user_class', ['string']);
     }
 
-    public function getParent()
+    public function getParent(): string
     {
         return HashedPasswordType::class;
     }

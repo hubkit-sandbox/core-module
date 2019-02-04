@@ -45,7 +45,7 @@ final class RegisterAdministratorCommand extends Command
         $this->commandBus      = $commandBus;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setDescription('Registers a new Administrator user')

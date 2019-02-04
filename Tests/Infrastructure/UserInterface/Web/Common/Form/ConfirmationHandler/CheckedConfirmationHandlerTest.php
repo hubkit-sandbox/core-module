@@ -38,7 +38,7 @@ final class CheckedConfirmationHandlerTest extends TestCase
      * @test
      * @dataProvider provideValidValues
      */
-    public function it_returns_request_was_submitted_for_post_request(string $reqValue, string $value)
+    public function it_returns_request_was_submitted_for_post_request(string $reqValue, string $value): void
     {
         $confirmationHandler = new CheckedConfirmationHandler(
             $this->createTwigEnvironment(),
@@ -68,7 +68,7 @@ final class CheckedConfirmationHandlerTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_request_was_not_submitted_for_get_request()
+    public function it_returns_request_was_not_submitted_for_get_request(): void
     {
         $confirmationHandler = new CheckedConfirmationHandler(
             $this->createTwigEnvironment(),
@@ -81,7 +81,7 @@ final class CheckedConfirmationHandlerTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_request_was_not_submitted_when_CSRF_token_is_missing()
+    public function it_returns_request_was_not_submitted_when_CSRF_token_is_missing(): void
     {
         $confirmationHandler = new CheckedConfirmationHandler(
             $this->createTwigEnvironment(),
@@ -94,7 +94,7 @@ final class CheckedConfirmationHandlerTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_request_was_not_submitted_when_CSRF_token_is_invalid()
+    public function it_returns_request_was_not_submitted_when_CSRF_token_is_invalid(): void
     {
         $confirmationHandler = new CheckedConfirmationHandler(
             $this->createTwigEnvironment(),
@@ -110,9 +110,10 @@ final class CheckedConfirmationHandlerTest extends TestCase
      * @param mixed $value
      *
      * @test
+     *
      * @dataProvider provideInvalidValues
      */
-    public function it_returns_request_was_not_submitted_when_value_does_not_match($value)
+    public function it_returns_request_was_not_submitted_when_value_does_not_match($value): void
     {
         $confirmationHandler = new CheckedConfirmationHandler(
             $this->createTwigEnvironment(),
@@ -145,7 +146,7 @@ final class CheckedConfirmationHandlerTest extends TestCase
     }
 
     /** @test */
-    public function it_fails_when_checking_confirmation_without_handled_request()
+    public function it_fails_when_checking_confirmation_without_handled_request(): void
     {
         $confirmationHandler = new CheckedConfirmationHandler(
             $this->createTwigEnvironment(),
@@ -159,7 +160,7 @@ final class CheckedConfirmationHandlerTest extends TestCase
     }
 
     /** @test */
-    public function it_renders_template_with_token_validity()
+    public function it_renders_template_with_token_validity(): void
     {
         $confirmationHandler = new CheckedConfirmationHandler(
             $this->createTwigEnvironment(),

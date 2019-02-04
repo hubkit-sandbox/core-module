@@ -34,7 +34,7 @@ final class CookiesRequestMatcher extends RequestMatcher
      *
      * @param array $cookies An array of names and a _regexp pattern_ to match there value against
      */
-    public function matchCookies(array $cookies)
+    public function matchCookies(array $cookies): void
     {
         $this->cookies = $cookies;
     }

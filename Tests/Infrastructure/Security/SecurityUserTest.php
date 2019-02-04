@@ -29,7 +29,7 @@ final class SecurityUserTest extends TestCase
     private const PASSWORD = 'my-password-is-better-then-your-password';
 
     /** @test */
-    public function its_username_equals_UserId()
+    public function its_username_equals_UserId(): void
     {
         $securityUser  = $this->createSecurityUser();
         $securityUser2 = $this->createSecurityUser(self::ID2);
@@ -41,26 +41,26 @@ final class SecurityUserTest extends TestCase
     }
 
     /** @test */
-    public function its_password_is_equals_when_provided()
+    public function its_password_is_equals_when_provided(): void
     {
         self::assertSame(self::PASSWORD, $this->createSecurityUser()->getPassword());
     }
 
     /** @test */
-    public function its_password_is_empty_when_not_provided()
+    public function its_password_is_empty_when_not_provided(): void
     {
         self::assertSame('', $this->createSecurityUser(self::ID1, null)->getPassword());
     }
 
     /** @test */
-    public function it_has_roles()
+    public function it_has_roles(): void
     {
         self::assertSame(['ROLE_USER'], $this->createSecurityUser()->getRoles());
         self::assertSame(['ROLE_ADMIN'], $this->createSecurityUserSecond()->getRoles());
     }
 
     /** @test */
-    public function it_equals_other_instance_with_same_information()
+    public function it_equals_other_instance_with_same_information(): void
     {
         $securityUser1 = $this->createSecurityUser();
         $securityUser2 = $this->createSecurityUser();
@@ -69,7 +69,7 @@ final class SecurityUserTest extends TestCase
     }
 
     /** @test */
-    public function it_does_not_equal_other_instance_with_different_information()
+    public function it_does_not_equal_other_instance_with_different_information(): void
     {
         $securityUser1 = $this->createSecurityUser();
         $securityUser2 = $this->createSecurityUser(self::ID2); // id
@@ -86,7 +86,7 @@ final class SecurityUserTest extends TestCase
     }
 
     /** @test */
-    public function its_serializable()
+    public function its_serializable(): void
     {
         $securityUser = new SecurityUserExtended(self::ID1, self::PASSWORD, false, ['ROLE_USER', 'ROLE_OPERATOR']);
         $unserialized = unserialize(serialize($securityUser), []);

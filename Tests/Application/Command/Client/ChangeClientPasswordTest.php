@@ -26,7 +26,7 @@ final class ChangeClientPasswordTest extends TestCase
     private const USER_ID = '45a8ce38-5405-11e7-8853-acbc32b58315';
 
     /** @test */
-    public function its_constructable()
+    public function its_constructable(): void
     {
         $command = new ChangeClientPassword($id = self::USER_ID, 'empty');
 
@@ -35,7 +35,7 @@ final class ChangeClientPasswordTest extends TestCase
     }
 
     /** @test */
-    public function its_password_can_be_null()
+    public function its_password_can_be_null(): void
     {
         $command = new ChangeClientPassword($id = self::USER_ID, null);
 

@@ -80,7 +80,7 @@ class Client implements RecordsDomainEvents
         return $client;
     }
 
-    public function id()
+    public function id(): ClientId
     {
         return $this->id;
     }

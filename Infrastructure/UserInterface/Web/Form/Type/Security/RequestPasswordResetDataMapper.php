@@ -31,12 +31,12 @@ final class RequestPasswordResetDataMapper implements DataMapperInterface
         $this->commandBuilder = $commandBuilder;
     }
 
-    public function mapDataToForms($data, $forms)
+    public function mapDataToForms($data, $forms): void
     {
         // No-op
     }
 
-    public function mapFormsToData($forms, &$data)
+    public function mapFormsToData($forms, &$data): void
     {
         /** @var FormInterface[] $formsArray */
         $formsArray = iterator_to_array($forms);

@@ -26,7 +26,7 @@ use PHPUnit\Framework\TestCase;
 final class ChangeClientPasswordHandlerTest extends TestCase
 {
     /** @test */
-    public function it_changes_password()
+    public function it_changes_password(): void
     {
         $client     = ClientRepositoryMock::createClient();
         $repository = new ClientRepositoryMock([$client]);
@@ -44,7 +44,7 @@ final class ChangeClientPasswordHandlerTest extends TestCase
     }
 
     /** @test */
-    public function it_changes_password_to_null()
+    public function it_changes_password_to_null(): void
     {
         $client     = ClientRepositoryMock::createClient();
         $repository = new ClientRepositoryMock([$client]);

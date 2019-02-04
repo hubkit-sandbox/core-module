@@ -25,7 +25,7 @@ use PHPUnit\Framework\TestCase;
 final class DeleteRegistrationHandlerTest extends TestCase
 {
     /** @test */
-    public function it_deletes_a_user_registration()
+    public function it_deletes_a_user_registration(): void
     {
         $repository = new ClientRepositoryMock([$client = ClientRepositoryMock::createClient()]);
 

@@ -16,7 +16,7 @@ namespace ParkManager\Module\CoreModule\Tests\Infrastructure\DependencyInjection
 
 class DependencyExtension
 {
-    public function getAlias()
+    public function getAlias(): string
     {
         return 'extension_not_valid';
     }

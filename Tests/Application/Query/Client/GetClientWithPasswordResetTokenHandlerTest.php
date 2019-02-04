@@ -42,7 +42,7 @@ final class GetClientWithPasswordResetTokenHandlerTest extends TestCase
     }
 
     /** @test */
-    public function it_gets_clientId()
+    public function it_gets_clientId(): void
     {
         $client = ClientRepositoryMock::createClient();
         $client->requestPasswordReset($this->fullToken);
@@ -55,7 +55,7 @@ final class GetClientWithPasswordResetTokenHandlerTest extends TestCase
     }
 
     /** @test */
-    public function it_clears_password_when_token_verifier_does_not_match()
+    public function it_clears_password_when_token_verifier_does_not_match(): void
     {
         $client = ClientRepositoryMock::createClient();
         $client->requestPasswordReset($this->fullToken);

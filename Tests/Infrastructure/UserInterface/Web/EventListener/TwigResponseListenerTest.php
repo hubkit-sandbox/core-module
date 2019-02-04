@@ -30,7 +30,7 @@ use Twig\Environment;
 final class TwigResponseListenerTest extends TestCase
 {
     /** @test */
-    public function it_ignores_other_responses()
+    public function it_ignores_other_responses(): void
     {
         $container = $this->createUnusedContainer();
         $listener  = new TwigResponseListener($container);
@@ -42,7 +42,7 @@ final class TwigResponseListenerTest extends TestCase
     }
 
     /** @test */
-    public function it_ignores_empty_response()
+    public function it_ignores_empty_response(): void
     {
         $container = $this->createUnusedContainer();
         $listener  = new TwigResponseListener($container);
@@ -54,7 +54,7 @@ final class TwigResponseListenerTest extends TestCase
     }
 
     /** @test */
-    public function it_ignores_when_content_is_already_set()
+    public function it_ignores_when_content_is_already_set(): void
     {
         $container = $this->createUnusedContainer();
         $listener  = new TwigResponseListener($container);
@@ -66,7 +66,7 @@ final class TwigResponseListenerTest extends TestCase
     }
 
     /** @test */
-    public function it_renders_twig_template()
+    public function it_renders_twig_template(): void
     {
         $container = $this->createUsedContainer('@CoreModule/client/show_user.html.twig', ['He' => 'you']);
         $listener  = new TwigResponseListener($container);

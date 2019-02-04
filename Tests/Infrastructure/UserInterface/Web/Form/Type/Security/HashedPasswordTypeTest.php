@@ -26,7 +26,7 @@ final class HashedPasswordTypeTest extends TypeTestCase
     use ValidatorExtensionTrait;
 
     /** @test */
-    public function it_hashes_password()
+    public function it_hashes_password(): void
     {
         $form = $this->factory->createBuilder()
             ->add('password', HashedPasswordType::class, [
@@ -45,7 +45,7 @@ final class HashedPasswordTypeTest extends TypeTestCase
     }
 
     /** @test */
-    public function it_asks_to_confirm_password()
+    public function it_asks_to_confirm_password(): void
     {
         $form = $this->factory->createBuilder()
             ->add('password', HashedPasswordType::class, [

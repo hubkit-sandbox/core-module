@@ -33,7 +33,7 @@ final class ConfirmPasswordResetDataMapper implements DataMapperInterface
         $this->commandBuilder    = $commandBuilder;
     }
 
-    public function mapDataToForms($data, $forms)
+    public function mapDataToForms($data, $forms): void
     {
         $empty = $data === null || $data === [];
 
@@ -53,7 +53,7 @@ final class ConfirmPasswordResetDataMapper implements DataMapperInterface
         }
     }
 
-    public function mapFormsToData($forms, &$data)
+    public function mapFormsToData($forms, &$data): void
     {
         /** @var FormInterface[] $formsArray */
         $formsArray = iterator_to_array($forms);

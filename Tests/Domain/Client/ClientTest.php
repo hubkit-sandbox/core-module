@@ -42,13 +42,13 @@ final class ClientTest extends TestCase
     /** @var FakeSplitTokenFactory */
     private $splitTokenFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->splitTokenFactory = FakeSplitTokenFactory::instance();
     }
 
     /** @test */
-    public function gets_registered()
+    public function gets_registered(): void
     {
         $client = Client::register(
             $id = ClientId::fromString(self::ID1),
@@ -61,7 +61,7 @@ final class ClientTest extends TestCase
     }
 
     /** @test */
-    public function change_email()
+    public function change_email(): void
     {
         $client = $this->registerClient();
         $client->changeEmail($email = new EmailAddress('Doh@example.com'));
@@ -79,7 +79,7 @@ final class ClientTest extends TestCase
     }
 
     /** @test */
-    public function change_dislay_name()
+    public function change_dislay_name(): void
     {
         $client = $this->registerClient();
         $client->changeName('Jenny');
@@ -88,7 +88,7 @@ final class ClientTest extends TestCase
     }
 
     /** @test */
-    public function disable_access()
+    public function disable_access(): void
     {
         $client = $this->registerClient();
         $client->disable();
@@ -97,7 +97,7 @@ final class ClientTest extends TestCase
     }
 
     /** @test */
-    public function enable_access_after_disabled()
+    public function enable_access_after_disabled(): void
     {
         $client = $this->registerClient();
         $client->disable();
@@ -107,7 +107,7 @@ final class ClientTest extends TestCase
     }
 
     /** @test */
-    public function change_password()
+    public function change_password(): void
     {
         $client = $this->registerClient();
 
@@ -117,7 +117,7 @@ final class ClientTest extends TestCase
     }
 
     /** @test */
-    public function change_password_to_null()
+    public function change_password_to_null(): void
     {
         $client = $this->registerClient('security-is-null');
         $client->changePassword(null);
@@ -126,7 +126,7 @@ final class ClientTest extends TestCase
     }
 
     /** @test */
-    public function password_cannot_be_empty_when_string()
+    public function password_cannot_be_empty_when_string(): void
     {
         $client = $this->registerClient();
 
@@ -137,7 +137,7 @@ final class ClientTest extends TestCase
     }
 
     /** @test */
-    public function request_email_change()
+    public function request_email_change(): void
     {
         $token   = $this->createTimeLimitedSplitToken(new DateTimeImmutable('+ 5 minutes UTC'));
         $client  = $this->registerClient();
@@ -152,7 +152,7 @@ final class ClientTest extends TestCase
     }
 
     /** @test */
-    public function ignores_email_change_token_when_already_set_with_same_information()
+    public function ignores_email_change_token_when_already_set_with_same_information(): void
     {
         $token   = $this->createTimeLimitedSplitToken(new DateTimeImmutable('+ 5 minutes UTC'));
         $client  = $this->registerClient();
@@ -162,7 +162,7 @@ final class ClientTest extends TestCase
     }
 
     /** @test */
-    public function changes_email_when_confirmation_token_is_correct()
+    public function changes_email_when_confirmation_token_is_correct(): void
     {
         $token   = $this->createTimeLimitedSplitToken(new DateTimeImmutable('+ 5 minutes UTC'));
         $client  = $this->registerClient();
@@ -193,7 +193,7 @@ final class ClientTest extends TestCase
     }
 
     /** @test */
-    public function rejects_email_change_confirmation_when_token_is_invalid()
+    public function rejects_email_change_confirmation_when_token_is_invalid(): void
     {
         $correctToken = $this->createTimeLimitedSplitToken(new DateTimeImmutable('+ 5 minutes UTC'));
         $invalidToken = $this->generateSecondToken();
@@ -215,7 +215,7 @@ final class ClientTest extends TestCase
     }
 
     /** @test */
-    public function rejects_email_change_confirmation_when_token_was_not_set()
+    public function rejects_email_change_confirmation_when_token_was_not_set(): void
     {
         $token   = FakeSplitTokenFactory::instance()->generate();
         $client  = $this->registerClient();
@@ -225,7 +225,7 @@ final class ClientTest extends TestCase
     }
 
     /** @test */
-    public function request_passwordReset_confirmation_token()
+    public function request_passwordReset_confirmation_token(): void
     {
         $token   = $this->createTimeLimitedSplitToken(new DateTimeImmutable('+ 5 minutes UTC'));
         $client  = $this->registerClient('pass-my-word');
@@ -234,7 +234,7 @@ final class ClientTest extends TestCase
     }
 
     /** @test */
-    public function reject_passwordReset_confirmation_when_token_already_set_with_and_not_expired()
+    public function reject_passwordReset_confirmation_when_token_already_set_with_and_not_expired(): void
     {
         $token   = $this->createTimeLimitedSplitToken(new DateTimeImmutable('+ 5 minutes UTC'));
         $client  = $this->registerClient('pass-my-word');
@@ -244,7 +244,7 @@ final class ClientTest extends TestCase
     }
 
     /** @test */
-    public function changes_password_when_token_is_correct()
+    public function changes_password_when_token_is_correct(): void
     {
         $token   = $this->createTimeLimitedSplitToken(new DateTimeImmutable('+ 5 minutes UTC'));
         $client  = $this->registerClient('pass-my-word');
@@ -263,7 +263,7 @@ final class ClientTest extends TestCase
     }
 
     /** @test */
-    public function password_reset_is_rejected_for_invalid_token()
+    public function password_reset_is_rejected_for_invalid_token(): void
     {
         $correctToken = $this->createTimeLimitedSplitToken(new DateTimeImmutable('+ 5 minutes UTC'));
         $invalidToken = $this->generateSecondToken();
@@ -292,7 +292,7 @@ final class ClientTest extends TestCase
     }
 
     /** @test */
-    public function password_reset_is_rejected_when_no_token_was_set()
+    public function password_reset_is_rejected_when_no_token_was_set(): void
     {
         $client = $this->registerClient('pass-my-word');
 
@@ -301,7 +301,7 @@ final class ClientTest extends TestCase
     }
 
     /** @test */
-    public function password_reset_is_rejected_when_token_has_expired()
+    public function password_reset_is_rejected_when_token_has_expired(): void
     {
         $token   = $this->createTimeLimitedSplitToken(new DateTimeImmutable('- 5 minutes UTC'));
         $client  = $this->registerClient('pass-my-word');

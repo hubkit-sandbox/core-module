@@ -25,7 +25,7 @@ use RuntimeException;
 final class ApplicationContextTest extends TestCase
 {
     /** @test */
-    public function it_throws_exception_for_unsupported_section()
+    public function it_throws_exception_for_unsupported_section(): void
     {
         $context = new ApplicationContext();
 
@@ -39,7 +39,7 @@ final class ApplicationContextTest extends TestCase
      * @test
      * @dataProvider provideGetterMethods
      */
-    public function it_throws_exception_when_calling_getter_with_an_uninitialised_context(string $method)
+    public function it_throws_exception_when_calling_getter_with_an_uninitialised_context(string $method): void
     {
         $context = new ApplicationContext();
 
@@ -53,7 +53,7 @@ final class ApplicationContextTest extends TestCase
      * @test
      * @dataProvider provideGetterMethods
      */
-    public function it_throws_exception_when_calling_getter_after_resetting_context(string $method)
+    public function it_throws_exception_when_calling_getter_after_resetting_context(string $method): void
     {
         $context = new ApplicationContext();
         $context->setActiveSection('client');
@@ -70,7 +70,7 @@ final class ApplicationContextTest extends TestCase
      * @test
      * @dataProvider provideGetterMethods
      */
-    public function it_get_active_section_info()
+    public function it_get_active_section_info(): void
     {
         $context = new ApplicationContext();
 

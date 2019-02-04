@@ -27,7 +27,7 @@ final class RegisterAdministratorTest extends TestCase
     private const USER_ID = '45a8ce38-5405-11e7-8853-acbc32b58315';
 
     /** @test */
-    public function its_constructable()
+    public function its_constructable(): void
     {
         $command = new RegisterAdministrator(self::USER_ID, $email = 'John@example.com', 'First, Named', 'empty');
 
@@ -38,7 +38,7 @@ final class RegisterAdministratorTest extends TestCase
     }
 
     /** @test */
-    public function its_password_is_optional()
+    public function its_password_is_optional(): void
     {
         $command = new RegisterAdministrator(self::USER_ID, $email = 'John@example.com', 'First Named');
 

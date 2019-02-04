@@ -44,7 +44,7 @@ use function iterator_to_array;
  */
 final class CommandBusFormHandlerTest extends TestCase
 {
-    public function its_constructable()
+    public function its_constructable(): void
     {
         $form       = $this->createRealForm();
         $commandBus = $this->createMessageBus();
@@ -89,7 +89,7 @@ final class CommandBusFormHandlerTest extends TestCase
             ->getForm();
     }
 
-    private function createMessageBus()
+    private function createMessageBus(): SpyingMessageBus
     {
         return new SpyingMessageBus();
     }
@@ -100,7 +100,7 @@ final class CommandBusFormHandlerTest extends TestCase
     }
 
     /** @test */
-    public function it_handles_non_submit_request()
+    public function it_handles_non_submit_request(): void
     {
         $form       = $this->createRealForm();
         $commandBus = $this->createMessageBus();
@@ -114,7 +114,7 @@ final class CommandBusFormHandlerTest extends TestCase
     }
 
     /** @test */
-    public function it_handles_submit_request_for_other_form()
+    public function it_handles_submit_request_for_other_form(): void
     {
         $commandBus = $this->createMessageBus();
         $form       = $this->createRealForm(new StubCommand());
@@ -128,7 +128,7 @@ final class CommandBusFormHandlerTest extends TestCase
     }
 
     /** @test */
-    public function it_handles_submit_request_without_errors()
+    public function it_handles_submit_request_without_errors(): void
     {
         $form       = $this->createRealForm(new StubCommand());
         $commandBus = $this->createMessageBus();
@@ -153,7 +153,7 @@ final class CommandBusFormHandlerTest extends TestCase
     }
 
     /** @test */
-    public function it_handles_submit_request_with_existing_errors()
+    public function it_handles_submit_request_with_existing_errors(): void
     {
         $form       = $this->createRealForm(new StubCommand());
         $commandBus = $this->createMessageBus();
@@ -175,7 +175,7 @@ final class CommandBusFormHandlerTest extends TestCase
     }
 
     /** @test */
-    public function it_forbids_handling_more_then_once()
+    public function it_forbids_handling_more_then_once(): void
     {
         $form       = $this->createRealForm(new StubCommand());
         $commandBus = $this->createMessageBus();
@@ -203,7 +203,7 @@ final class CommandBusFormHandlerTest extends TestCase
     }
 
     /** @test */
-    public function it_does_not_validate_command_if_submitting()
+    public function it_does_not_validate_command_if_submitting(): void
     {
         $form       = $this->createRealForm(new StubCommand());
         $commandBus = $this->createMessageBus();
@@ -230,7 +230,7 @@ final class CommandBusFormHandlerTest extends TestCase
     }
 
     /** @test */
-    public function it_validates_command_if_not_submitting()
+    public function it_validates_command_if_not_submitting(): void
     {
         $handler    = new CommandBusFormHandler(
             $this->createRealForm(new StubCommand()),
@@ -257,7 +257,7 @@ final class CommandBusFormHandlerTest extends TestCase
      * @test
      * @dataProvider provideExceptions
      */
-    public function it_maps_command_bus_exceptions(Throwable $exception, array $expectedErrors)
+    public function it_maps_command_bus_exceptions(Throwable $exception, array $expectedErrors): void
     {
         $form       = $this->createRealForm(new StubCommand());
         $commandBus = $this->createExceptionThrowingMessageBus($exception);

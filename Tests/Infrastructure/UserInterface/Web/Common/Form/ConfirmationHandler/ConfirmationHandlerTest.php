@@ -33,7 +33,7 @@ final class ConfirmationHandlerTest extends TestCase
     private const ID1 = '2108adf4-78e6-11e7-b6b3-acbc32b58315';
 
     /** @test */
-    public function it_returns_request_was_submitted_for_post_request()
+    public function it_returns_request_was_submitted_for_post_request(): void
     {
         $confirmationHandler = new ConfirmationHandler(
             $this->createTwigEnvironment(),
@@ -46,7 +46,7 @@ final class ConfirmationHandlerTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_request_was_not_submitted_for_get_request()
+    public function it_returns_request_was_not_submitted_for_get_request(): void
     {
         $confirmationHandler = new ConfirmationHandler(
             $this->createTwigEnvironment(),
@@ -59,7 +59,7 @@ final class ConfirmationHandlerTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_request_was_not_submitted_when_CSRF_token_is_missing()
+    public function it_returns_request_was_not_submitted_when_CSRF_token_is_missing(): void
     {
         $confirmationHandler = new ConfirmationHandler(
             $this->createTwigEnvironment(),
@@ -72,7 +72,7 @@ final class ConfirmationHandlerTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_request_was_not_submitted_when_CSRF_token_is_invalid()
+    public function it_returns_request_was_not_submitted_when_CSRF_token_is_invalid(): void
     {
         $confirmationHandler = new ConfirmationHandler(
             $this->createTwigEnvironment(),
@@ -85,7 +85,7 @@ final class ConfirmationHandlerTest extends TestCase
     }
 
     /** @test */
-    public function it_fails_when_checking_confirmation_without_handled_request()
+    public function it_fails_when_checking_confirmation_without_handled_request(): void
     {
         $confirmationHandler = new ConfirmationHandler(
             $this->createTwigEnvironment(),
@@ -99,7 +99,7 @@ final class ConfirmationHandlerTest extends TestCase
     }
 
     /** @test */
-    public function it_renders_template()
+    public function it_renders_template(): void
     {
         $confirmationHandler = new ConfirmationHandler(
             $this->createTwigEnvironment(),
@@ -117,7 +117,7 @@ final class ConfirmationHandlerTest extends TestCase
     }
 
     /** @test */
-    public function it_renders_template_with_token_validity()
+    public function it_renders_template_with_token_validity(): void
     {
         $confirmationHandler = new ConfirmationHandler(
             $this->createTwigEnvironment(),

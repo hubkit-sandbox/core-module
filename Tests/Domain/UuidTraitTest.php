@@ -24,7 +24,7 @@ use function unserialize;
 final class UuidTraitTest extends TestCase
 {
     /** @test */
-    public function it_allows_creating_new_instance()
+    public function it_allows_creating_new_instance(): void
     {
         $id = MockIdentity::create();
 
@@ -32,7 +32,7 @@ final class UuidTraitTest extends TestCase
     }
 
     /** @test */
-    public function it_allows_comparing()
+    public function it_allows_comparing(): void
     {
         $id  = MockIdentity::create();
         $id2 = MockIdentity::create();
@@ -49,7 +49,7 @@ final class UuidTraitTest extends TestCase
     }
 
     /** @test */
-    public function it_can_be_cast_to_string()
+    public function it_can_be_cast_to_string(): void
     {
         $id = MockIdentity::fromString('56253090-3960-11e7-94fd-acbc32b58315');
 
@@ -57,7 +57,7 @@ final class UuidTraitTest extends TestCase
     }
 
     /** @test */
-    public function its_serializable()
+    public function its_serializable(): void
     {
         $id         = MockIdentity::fromString('56253090-3960-11e7-94fd-acbc32b58315');
         $serialized = serialize($id);
@@ -66,7 +66,7 @@ final class UuidTraitTest extends TestCase
     }
 
     /** @test */
-    public function its_json_serializable()
+    public function its_json_serializable(): void
     {
         $id         = MockIdentity::fromString('56253090-3960-11e7-94fd-acbc32b58315');
         $serialized = json_encode($id);

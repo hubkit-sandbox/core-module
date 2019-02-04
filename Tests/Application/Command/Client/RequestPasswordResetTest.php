@@ -23,7 +23,7 @@ use PHPUnit\Framework\TestCase;
 final class RequestPasswordResetTest extends TestCase
 {
     /** @test */
-    public function its_constructable()
+    public function its_constructable(): void
     {
         $command = new RequestPasswordReset('jane@example.com');
 

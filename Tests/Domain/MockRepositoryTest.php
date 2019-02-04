@@ -28,7 +28,7 @@ use function mb_strtolower;
 final class MockRepositoryTest extends TestCase
 {
     /** @test */
-    public function it_has_no_enties_saved_or_removed()
+    public function it_has_no_enties_saved_or_removed(): void
     {
         $repository = new class() {
             use MockRepository;
@@ -44,7 +44,7 @@ final class MockRepositoryTest extends TestCase
     }
 
     /** @test */
-    public function it_gets_entity()
+    public function it_gets_entity(): void
     {
         $entity1 = new MockEntity('fc86687e-0875-11e9-9701-acbc32b58315');
         $entity2 = new MockEntity('9dab0b6a-0876-11e9-bfd1-acbc32b58315');
@@ -72,7 +72,7 @@ final class MockRepositoryTest extends TestCase
     }
 
     /** @test */
-    public function it_gets_entity_by_field_method()
+    public function it_gets_entity_by_field_method(): void
     {
         $entity1 = new MockEntity('fc86687e-0875-11e9-9701-acbc32b58315', 'John');
         $entity2 = new MockEntity('9dab0b6a-0876-11e9-bfd1-acbc32b58315', 'Jane');
@@ -101,7 +101,7 @@ final class MockRepositoryTest extends TestCase
     }
 
     /** @test */
-    public function it_gets_entity_by_field_property()
+    public function it_gets_entity_by_field_property(): void
     {
         $entity1       = new MockEntity('fc86687e-0875-11e9-9701-acbc32b58315');
         $entity1->name = 'John';
@@ -133,7 +133,7 @@ final class MockRepositoryTest extends TestCase
     }
 
     /** @test */
-    public function it_gets_entity_by_field_closure()
+    public function it_gets_entity_by_field_closure(): void
     {
         $entity1 = new MockEntity('fc86687e-0875-11e9-9701-acbc32b58315', 'John');
         $entity2 = new MockEntity('9dab0b6a-0876-11e9-bfd1-acbc32b58315', 'Jane');
@@ -162,7 +162,7 @@ final class MockRepositoryTest extends TestCase
     }
 
     /** @test */
-    public function it_gets_entity_by_event()
+    public function it_gets_entity_by_event(): void
     {
         $entity1 = new MockEntity('fc86687e-0875-11e9-9701-acbc32b58315', 'John');
         $entity1->changeEmail('John@example.com');
@@ -194,7 +194,7 @@ final class MockRepositoryTest extends TestCase
     }
 
     /** @test */
-    public function it_gets_entity_by_event_with_multiple_fired()
+    public function it_gets_entity_by_event_with_multiple_fired(): void
     {
         $entity1 = new MockEntity('fc86687e-0875-11e9-9701-acbc32b58315', 'John');
         $entity1->changeEmail('John@example.com');
@@ -227,7 +227,7 @@ final class MockRepositoryTest extends TestCase
     }
 
     /** @test */
-    public function it_saves_entity()
+    public function it_saves_entity(): void
     {
         $entity1       = new MockEntity('fc86687e-0875-11e9-9701-acbc32b58315');
         $entity1->name = 'John';
@@ -253,7 +253,7 @@ final class MockRepositoryTest extends TestCase
                 return $this->mockDoGetByField('Name', $name);
             }
 
-            public function save(MockEntity $entity)
+            public function save(MockEntity $entity): void
             {
                 $this->mockDoSave($entity);
             }
@@ -270,7 +270,7 @@ final class MockRepositoryTest extends TestCase
     }
 
     /** @test */
-    public function it_removes_entity()
+    public function it_removes_entity(): void
     {
         $entity1 = new MockEntity('fc86687e-0875-11e9-9701-acbc32b58315');
         $entity2 = new MockEntity('9dab0b6a-0876-11e9-bfd1-acbc32b58315');
@@ -288,7 +288,7 @@ final class MockRepositoryTest extends TestCase
                 return $this->mockDoGetById($id);
             }
 
-            public function remove(MockEntity $entity)
+            public function remove(MockEntity $entity): void
             {
                 $this->mockDoRemove($entity);
             }

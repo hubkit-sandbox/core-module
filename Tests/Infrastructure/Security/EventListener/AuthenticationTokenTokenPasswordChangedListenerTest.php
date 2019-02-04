@@ -33,7 +33,7 @@ final class AuthenticationTokenTokenPasswordChangedListenerTest extends TestCase
     private const ID2 = '930c3fd0-3bd1-11e7-bb9b-acdc32b58318';
 
     /** @test */
-    public function it_ignores_when_no_token_was_set()
+    public function it_ignores_when_no_token_was_set(): void
     {
         $userProvider = $this->createUserProvider();
         $tokenStorage = $this->createProvidingOnlyTokenStorage(null);
@@ -60,7 +60,7 @@ final class AuthenticationTokenTokenPasswordChangedListenerTest extends TestCase
     }
 
     /** @test */
-    public function it_ignores_when_token_is_not_authenticated()
+    public function it_ignores_when_token_is_not_authenticated(): void
     {
         $userProvider = $this->createUserProvider();
         $token        = new PostAuthenticationGuardToken($this->createUser1(), 'main', ['ROLE_USER']);
@@ -78,7 +78,7 @@ final class AuthenticationTokenTokenPasswordChangedListenerTest extends TestCase
     }
 
     /** @test */
-    public function it_ignores_when_user_is_not_a_SecurityUser()
+    public function it_ignores_when_user_is_not_a_SecurityUser(): void
     {
         $userProvider = $this->createUserProvider();
         $tokenStorage = $this->createProvidingOnlyTokenStorage(new PostAuthenticationGuardToken($this->createMock(UserInterface::class), 'main', ['ROLE_USER']));
@@ -88,7 +88,7 @@ final class AuthenticationTokenTokenPasswordChangedListenerTest extends TestCase
     }
 
     /** @test */
-    public function it_ignores_when_refreshed_user_is_not_enabled()
+    public function it_ignores_when_refreshed_user_is_not_enabled(): void
     {
         $currentUser  = $this->createUser1();
         $userProvider = $this->createUserProviderExpectsCurrentUser($currentUser, $this->createUser1Disabled());
@@ -112,7 +112,7 @@ final class AuthenticationTokenTokenPasswordChangedListenerTest extends TestCase
     }
 
     /** @test */
-    public function it_only_updates_token_when_current_user()
+    public function it_only_updates_token_when_current_user(): void
     {
         $userProvider = $this->createUserProvider();
         $currentUser  = new TestSecurityUser(self::ID2, 'pass-north', true, ['ROLE_USER']);
@@ -123,7 +123,7 @@ final class AuthenticationTokenTokenPasswordChangedListenerTest extends TestCase
     }
 
     /** @test */
-    public function it_marks_token_as_authenticated_and_sets_on_storage()
+    public function it_marks_token_as_authenticated_and_sets_on_storage(): void
     {
         $token        = new PostAuthenticationGuardToken($currentUser = $this->createUser1(), 'main', ['ROLE_USER']);
         $userProvider = $this->createUserProviderExpectsCurrentUser($currentUser, $newUser = $this->createUser1());

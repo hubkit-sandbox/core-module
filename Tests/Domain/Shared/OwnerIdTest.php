@@ -26,7 +26,7 @@ final class OwnerIdTest extends TestCase
     private const USER_ID = '783d3266-955a-11e8-8b48-4a0003ae49a0';
 
     /** @test */
-    public function it_creates_from_userId()
+    public function it_creates_from_userId(): void
     {
         $userId = ClientId::fromString(self::USER_ID);
         $id     = OwnerId::fromUserId($userId);
@@ -40,7 +40,7 @@ final class OwnerIdTest extends TestCase
         self::assertFalse($id->is(OwnerId::PRIVATE));
     }
 
-    public function testInternal()
+    public function testInternal(): void
     {
         $id = OwnerId::internal();
 
@@ -53,7 +53,7 @@ final class OwnerIdTest extends TestCase
         self::assertFalse($id->is(OwnerId::PERSONAL));
     }
 
-    public function testPrivate()
+    public function testPrivate(): void
     {
         $id = OwnerId::private();
 

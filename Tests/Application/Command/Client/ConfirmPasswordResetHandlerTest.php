@@ -42,7 +42,7 @@ final class ConfirmPasswordResetHandlerTest extends TestCase
     }
 
     /** @test */
-    public function handle_password_reset_confirmation()
+    public function handle_password_reset_confirmation(): void
     {
         $client = ClientRepositoryMock::createClient();
         $client->requestPasswordReset($this->fullToken);
@@ -61,7 +61,7 @@ final class ConfirmPasswordResetHandlerTest extends TestCase
     }
 
     /** @test */
-    public function it_handles_password_reset_confirmation_with_failure()
+    public function it_handles_password_reset_confirmation_with_failure(): void
     {
         $client = ClientRepositoryMock::createClient();
         $client->requestPasswordReset($this->fullToken);
@@ -78,7 +78,7 @@ final class ConfirmPasswordResetHandlerTest extends TestCase
     }
 
     /** @test */
-    public function it_handles_password_reset_confirmation_with_no_result()
+    public function it_handles_password_reset_confirmation_with_no_result(): void
     {
         $client     = ClientRepositoryMock::createClient();
         $repository = new ClientRepositoryMock([$client]);

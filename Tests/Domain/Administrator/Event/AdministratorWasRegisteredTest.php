@@ -27,7 +27,7 @@ final class AdministratorWasRegisteredTest extends TestCase
     private const USER_ID = '45a8ce38-5405-11e7-8853-acbc32b58315';
 
     /** @test */
-    public function its_constructable()
+    public function its_constructable(): void
     {
         $command = new AdministratorWasRegistered($id = AdministratorId::fromString(self::USER_ID), new EmailAddress('Jane@example.com'), 'First, Named');
 

@@ -34,7 +34,7 @@ final class RegisterAdministratorHandlerTest extends TestCase
     private const ID_EXISTING = 'a0816f44-6545-11e7-a234-acbc32b58315';
 
     /** @test */
-    public function handle_registration_of_new_administrator()
+    public function handle_registration_of_new_administrator(): void
     {
         $repo    = new AdministratorRepositoryMock();
         $handler = new RegisterAdministratorHandler($repo);
@@ -52,7 +52,7 @@ final class RegisterAdministratorHandlerTest extends TestCase
     }
 
     /** @test */
-    public function handle_registration_without_password()
+    public function handle_registration_without_password(): void
     {
         $repo    = new AdministratorRepositoryMock();
         $handler = new RegisterAdministratorHandler($repo);
@@ -69,7 +69,7 @@ final class RegisterAdministratorHandlerTest extends TestCase
     }
 
     /** @test */
-    public function handle_registration_of_new_user_with_already_existing_email()
+    public function handle_registration_of_new_user_with_already_existing_email(): void
     {
         $repo = new AdministratorRepositoryMock(
             [

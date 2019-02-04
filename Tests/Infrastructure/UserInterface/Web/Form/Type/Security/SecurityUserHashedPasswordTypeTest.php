@@ -32,7 +32,7 @@ final class SecurityUserHashedPasswordTypeTest extends TypeTestCase
     /** @var EncoderFactoryInterface */
     private $encoderFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $encoder = new class() implements PasswordEncoderInterface {
             public function encodePassword($raw, $salt): string
@@ -67,7 +67,7 @@ final class SecurityUserHashedPasswordTypeTest extends TypeTestCase
         parent::setUp();
     }
 
-    protected function getTypes()
+    protected function getTypes(): array
     {
         return [
             new SecurityUserHashedPasswordType($this->encoderFactory),
@@ -75,7 +75,7 @@ final class SecurityUserHashedPasswordTypeTest extends TypeTestCase
     }
 
     /** @test */
-    public function it_hashes_password()
+    public function it_hashes_password(): void
     {
         $form = $this->factory->createBuilder()
             ->add('password', SecurityUserHashedPasswordType::class, ['user_class' => ClientUser::class])

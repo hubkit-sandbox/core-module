@@ -19,7 +19,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 abstract class EntityRepositoryTestCase extends KernelTestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         self::bootKernel();
@@ -27,13 +27,13 @@ abstract class EntityRepositoryTestCase extends KernelTestCase
         $this->setUpDatabaseTransaction();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->tearDownDatabaseTransaction();
         parent::tearDown();
     }
 
-    protected function assertInTransaction(?string $manager = null)
+    protected function assertInTransaction(?string $manager = null): void
     {
         self::assertTrue($this->getEntityManager($manager)->getConnection()->getTransactionNestingLevel() > 0, 'Expected to be in a transactional');
     }

@@ -26,7 +26,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 final class SecurityMiddlewareTest extends MiddlewareTestCase
 {
     /** @test */
-    public function it_executed_next_middleware_when_granted()
+    public function it_executed_next_middleware_when_granted(): void
     {
         $authorizationChecker = $this->createMock(AuthorizationCheckerInterface::class);
         $authorizationChecker
@@ -42,7 +42,7 @@ final class SecurityMiddlewareTest extends MiddlewareTestCase
     }
 
     /** @test */
-    public function it_throws_access_denied_when_access_is_denied()
+    public function it_throws_access_denied_when_access_is_denied(): void
     {
         $envelope             = new Envelope(new MockMessage());
         $authorizationChecker = $this->createMock(AuthorizationCheckerInterface::class);

@@ -29,21 +29,21 @@ final class SplitTokenTypeTest extends TypeTestCase
     /** @var FakeSplitTokenFactory */
     private $splitTokenFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->splitTokenFactory = new FakeSplitTokenFactory();
 
         parent::setUp();
     }
 
-    protected function getTypes()
+    protected function getTypes(): array
     {
         return [
             new SplitTokenType($this->splitTokenFactory, new IdentityTranslator()),
         ];
     }
 
-    protected function getTypeExtensions()
+    protected function getTypeExtensions(): array
     {
         return [
             new TransformationFailureExtension(),

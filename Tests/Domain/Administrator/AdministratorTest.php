@@ -42,12 +42,12 @@ final class AdministratorTest extends TestCase
     /** @var FakeSplitTokenFactory */
     private $splitTokenFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->splitTokenFactory = FakeSplitTokenFactory::instance();
     }
 
-    public function testRegistered()
+    public function testRegistered(): void
     {
         $user = Administrator::register($id = AdministratorId::fromString(self::ID1), $email = new EmailAddress('Jane@example.com'), 'Janet Doe');
 
@@ -63,7 +63,7 @@ final class AdministratorTest extends TestCase
         self::assertDomainEvents($user, [new AdministratorWasRegistered($id, $email, 'Janet Doe')]);
     }
 
-    public function testChangeEmail()
+    public function testChangeEmail(): void
     {
         $user = $this->registerAdministrator();
         $user->changeEmail($email = new EmailAddress('Doh@example.com'));
@@ -71,7 +71,7 @@ final class AdministratorTest extends TestCase
         self::assertEquals($email, $user->getEmailAddress());
     }
 
-    public function testChangeDislayName()
+    public function testChangeDislayName(): void
     {
         $user = $this->registerAdministrator();
         $user->changeName('Jane Doe');
@@ -79,7 +79,7 @@ final class AdministratorTest extends TestCase
         self::assertDomainEvents($user, [new AdministratorNameWasChanged($user->getId(), 'Jane Doe')]);
     }
 
-    public function testDisableAccess()
+    public function testDisableAccess(): void
     {
         $user = $this->registerAdministrator();
         $user->disableLogin();
@@ -87,7 +87,7 @@ final class AdministratorTest extends TestCase
         self::assertFalse($user->isLoginEnabled());
     }
 
-    public function testEnableAccessAfterDisabled()
+    public function testEnableAccessAfterDisabled(): void
     {
         $user = $this->registerAdministrator();
         $user->disableLogin();
@@ -96,7 +96,7 @@ final class AdministratorTest extends TestCase
         self::assertTrue($user->isLoginEnabled());
     }
 
-    public function testCannotDisableAccessWhenSuperAdmin()
+    public function testCannotDisableAccessWhenSuperAdmin(): void
     {
         $user = $this->registerAdministrator();
         $user->addRole('ROLE_SUPER_ADMIN');
@@ -106,7 +106,7 @@ final class AdministratorTest extends TestCase
         $user->disableLogin();
     }
 
-    public function testChangePassword()
+    public function testChangePassword(): void
     {
         $user = $this->registerAdministrator();
 
@@ -115,7 +115,7 @@ final class AdministratorTest extends TestCase
         self::assertDomainEvents($user, [new AdministratorPasswordWasChanged($user->getId(), 'security-is-null')]);
     }
 
-    public function testChangePasswordToNull()
+    public function testChangePasswordToNull(): void
     {
         $user = $this->registerAdministrator('security-is-null');
         $user->changePassword(null);
@@ -123,7 +123,7 @@ final class AdministratorTest extends TestCase
         self::assertDomainEvents($user, [new AdministratorPasswordWasChanged($user->getId(), null)]);
     }
 
-    public function testPasswordCannotBeEmptyWhenString()
+    public function testPasswordCannotBeEmptyWhenString(): void
     {
         $user = $this->registerAdministrator();
 
@@ -133,7 +133,7 @@ final class AdministratorTest extends TestCase
         $user->changePassword('');
     }
 
-    public function testAddRoles()
+    public function testAddRoles(): void
     {
         $user = $this->registerAdministrator();
 
@@ -145,7 +145,7 @@ final class AdministratorTest extends TestCase
         self::assertTrue($user->hasRole('ROLE_SUPER_ADMIN'));
     }
 
-    public function testRemoveRole()
+    public function testRemoveRole(): void
     {
         $user = $this->registerAdministrator();
         $user->addRole('ROLE_SUPER_ADMIN');
@@ -157,7 +157,7 @@ final class AdministratorTest extends TestCase
         self::assertFalse($user->hasRole('ROLE_SUPER_ADMIN'));
     }
 
-    public function testCannotRemoveDefaultRole()
+    public function testCannotRemoveDefaultRole(): void
     {
         $user = $this->registerAdministrator();
 
@@ -167,7 +167,7 @@ final class AdministratorTest extends TestCase
         $user->removeRole('ROLE_ADMIN');
     }
 
-    public function testRequestPasswordReset()
+    public function testRequestPasswordReset(): void
     {
         $token = $this->createTimeLimitedSplitToken(new DateTimeImmutable('+ 5 minutes UTC'));
 
@@ -177,7 +177,7 @@ final class AdministratorTest extends TestCase
         self::assertDomainEvents($user, [new AdministratorPasswordResetWasRequested($user->getId(), $token)]);
     }
 
-    public function testChangesPasswordWhenTokenIsCorrect()
+    public function testChangesPasswordWhenTokenIsCorrect(): void
     {
         $token = $this->createTimeLimitedSplitToken(new DateTimeImmutable('+ 5 minutes UTC'));
         $user  = $this->registerAdministrator('pass-my-word');
@@ -196,7 +196,7 @@ final class AdministratorTest extends TestCase
         );
     }
 
-    public function testPasswordResetIsRejectedForInvalidToken()
+    public function testPasswordResetIsRejectedForInvalidToken(): void
     {
         $correctToken = $this->createTimeLimitedSplitToken(new DateTimeImmutable('+ 5 minutes UTC'));
         $invalidToken = $this->generateSecondToken();
@@ -217,7 +217,7 @@ final class AdministratorTest extends TestCase
         );
     }
 
-    public function testPasswordResetIsRejectedWhenNoTokenWasSet()
+    public function testPasswordResetIsRejectedWhenNoTokenWasSet(): void
     {
         $user  = $this->registerAdministrator('pass-my-word');
 
@@ -226,7 +226,7 @@ final class AdministratorTest extends TestCase
     }
 
     /** @test */
-    public function testPasswordResetIsRejectedWhenTokenHasExpired()
+    public function testPasswordResetIsRejectedWhenTokenHasExpired(): void
     {
         $token = $this->createTimeLimitedSplitToken(new DateTimeImmutable('- 5 minutes UTC'));
         $user  = $this->registerAdministrator('pass-my-word');

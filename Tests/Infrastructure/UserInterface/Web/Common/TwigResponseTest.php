@@ -23,7 +23,7 @@ use PHPUnit\Framework\TestCase;
 final class TwigResponseTest extends TestCase
 {
     /** @test */
-    public function it_is_constructable()
+    public function it_is_constructable(): void
     {
         $response = new TwigResponse('@CoreModule/client/show_user.html.twig', ['foo' => 'bar']);
 
@@ -33,7 +33,7 @@ final class TwigResponseTest extends TestCase
     }
 
     /** @test */
-    public function it_is_constructable_with_a_custom_status_code()
+    public function it_is_constructable_with_a_custom_status_code(): void
     {
         $response = new TwigResponse('@CoreModule/client/show_user.html.twig', ['foo' => 'bar'], 400);
 
@@ -43,7 +43,7 @@ final class TwigResponseTest extends TestCase
     }
 
     /** @test */
-    public function it_is_constructable_with_custom_headers()
+    public function it_is_constructable_with_custom_headers(): void
     {
         $response = new TwigResponse('@CoreModule/client/show_user.html.twig', ['foo' => 'bar'], 200, ['X-Foo' => 'bar']);
 

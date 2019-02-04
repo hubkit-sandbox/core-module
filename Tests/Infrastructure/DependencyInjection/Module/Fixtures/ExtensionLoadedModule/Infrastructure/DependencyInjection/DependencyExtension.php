@@ -24,7 +24,7 @@ class DependencyExtension extends Extension
         return 'extension_loaded';
     }
 
-    public function load(array $configs, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container): void
     {
     }
 }

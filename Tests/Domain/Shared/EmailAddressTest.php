@@ -24,7 +24,7 @@ use PHPUnit\Framework\TestCase;
 final class EmailAddressTest extends TestCase
 {
     /** @test */
-    public function its_constructable()
+    public function its_constructable(): void
     {
         $value = new EmailAddress('info@example.com');
 
@@ -36,7 +36,7 @@ final class EmailAddressTest extends TestCase
     }
 
     /** @test */
-    public function its_constructable_with_name()
+    public function its_constructable_with_name(): void
     {
         $value = new EmailAddress('info@example.com', 'Janet Doe');
 
@@ -47,7 +47,7 @@ final class EmailAddressTest extends TestCase
     }
 
     /** @test */
-    public function it_canonicalizes_the_address()
+    public function it_canonicalizes_the_address(): void
     {
         $value = new EmailAddress('info@EXAMPLE.com');
 
@@ -58,7 +58,7 @@ final class EmailAddressTest extends TestCase
     }
 
     /** @test */
-    public function it_canonicalizes_the_address_with_idn()
+    public function it_canonicalizes_the_address_with_idn(): void
     {
         $value = new EmailAddress('info@xn--tst-qla.de');
 
@@ -71,7 +71,7 @@ final class EmailAddressTest extends TestCase
     }
 
     /** @test */
-    public function it_extracts_the_label()
+    public function it_extracts_the_label(): void
     {
         $value = new EmailAddress('info+hello@example.com');
 
@@ -82,7 +82,7 @@ final class EmailAddressTest extends TestCase
     }
 
     /** @test */
-    public function it_validates_basic_formatting()
+    public function it_validates_basic_formatting(): void
     {
         $this->expectException(MalformedEmailAddress::class);
         $this->expectExceptionMessage('Malformed e-mail address "info?example.com" (missing @)');
@@ -91,7 +91,7 @@ final class EmailAddressTest extends TestCase
     }
 
     /** @test */
-    public function it_validates_idn_format()
+    public function it_validates_idn_format(): void
     {
         $this->expectException(MalformedEmailAddress::class);
         $this->expectExceptionMessageRegExp('/Malformed e-mail address "ok@xn--wat\.de" \(IDN Error reported \d+\)/');

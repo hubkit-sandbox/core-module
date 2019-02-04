@@ -45,7 +45,7 @@ final class MockEntity implements RecordsDomainEvents
         return $this->lastName;
     }
 
-    public function changeEmail(string $email)
+    public function changeEmail(string $email): void
     {
         $this->recordThat(new EmailChanged($this->id, $email));
     }
