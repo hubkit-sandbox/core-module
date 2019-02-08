@@ -8,9 +8,7 @@ declare(strict_types=1);
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-namespace ParkManager\Module\CoreModule\Application\Service\Finder\Client;
-
-use ParkManager\Module\CoreModule\Application\Service\Finder\Shared\SecurityAuthenticationData;
+namespace ParkManager\Module\CoreModule\Application\Service\Finder\Shared;
 
 interface AuthenticationFinder
 {

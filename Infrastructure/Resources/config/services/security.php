@@ -24,10 +24,10 @@ return function (ContainerConfigurator $c) {
         ->private();
 
     $di->set('park_manager.security.user_provider.administrator', UserProvider::class)
-        ->args([ref('park_manager.repository.administrator'), AdministratorUser::class]);
+        ->args([ref('park_manager.query_finder.administrator'), AdministratorUser::class]);
 
     $di->set('park_manager.security.user_provider.client_user', UserProvider::class)
-        ->args([ref('park_manager.repository.client_user'), ClientUser::class]);
+        ->args([ref('park_manager.query_finder.client'), ClientUser::class]);
 
     $di->set('park_manager.security.guard.form.administrator', FormAuthenticator::class)
         ->arg('$loginRoute', 'park_manager.admin.security_login')

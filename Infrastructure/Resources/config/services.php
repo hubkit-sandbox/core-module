@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
+use ParkManager\Module\CoreModule\Infrastructure\Doctrine\Shared\DoctrineDbalAuthenticationFinder;
 use Rollerworks\Component\SplitToken\Argon2SplitTokenFactory;
 use ParkManager\Module\CoreModule\Infrastructure\DependencyInjection\AutoServiceConfigurator;
 use ParkManager\Module\CoreModule\Infrastructure\Doctrine\Administrator\DoctrineOrmAdministratorRepository;
@@ -31,6 +32,12 @@ return function (ContainerConfigurator $c) {
     $autoDi->set(Argon2SplitTokenFactory::class);
     $autoDi->set('park_manager.repository.administrator', DoctrineOrmAdministratorRepository::class);
     $autoDi->set('park_manager.repository.client_user', DoctrineOrmClientRepository::class);
+
+    // Authentication finders
+    $di->set('park_manager.query_finder.administrator', DoctrineDbalAuthenticationFinder::class)
+        ->arg('$table', 'administrator');
+    $di->set('park_manager.query_finder.client', DoctrineDbalAuthenticationFinder::class)
+        ->arg('$table', 'client');
 
     // RoutingLoader
     $di->set(SectionsLoader::class)

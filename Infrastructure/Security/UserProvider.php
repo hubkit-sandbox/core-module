@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace ParkManager\Module\CoreModule\Infrastructure\Security;
 
 use InvalidArgumentException;
-use ParkManager\Module\CoreModule\Application\Service\Finder\Client\AuthenticationFinder;
+use ParkManager\Module\CoreModule\Application\Service\Finder\Shared\AuthenticationFinder;
 use ParkManager\Module\CoreModule\Application\Service\Finder\Shared\SecurityAuthenticationData;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;

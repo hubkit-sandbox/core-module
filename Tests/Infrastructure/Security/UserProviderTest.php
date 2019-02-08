@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace ParkManager\Module\CoreModule\Tests\Infrastructure\Security;
 
 use InvalidArgumentException;
-use ParkManager\Module\CoreModule\Application\Service\Finder\Client\AuthenticationFinder;
+use ParkManager\Module\CoreModule\Application\Service\Finder\Shared\AuthenticationFinder;
 use ParkManager\Module\CoreModule\Application\Service\Finder\Shared\SecurityAuthenticationData;
 use ParkManager\Module\CoreModule\Infrastructure\Security\AdministratorUser;
 use ParkManager\Module\CoreModule\Infrastructure\Security\ClientUser;
