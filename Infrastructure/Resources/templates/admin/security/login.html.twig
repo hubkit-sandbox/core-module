@@ -19,8 +19,6 @@
     </div>
     <button type="submit" name="_submit">{{ 'button.login'|trans }}</button>
 
-    <div>
-        <a href="{{ path('park_manager.admin.security_request_password_reset') }}">{{ 'login.forgot_password'|trans }}</a>
-    </div>
+    <p>{{ 'login.forgot_password_admin'|trans }}</p>
 </form>
 {% endblock content %}

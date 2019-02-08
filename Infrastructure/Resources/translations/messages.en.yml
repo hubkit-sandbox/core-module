@@ -23,6 +23,7 @@ login:
     heading: Login
     admin_heading: Administrator Login
     forgot_password: Forgot your password?
+    forgot_password_admin: Forgot your password? Contact (another) super administrator or use the recovery console.
     help.trouble.button: Trouble logging in?
     help.trouble.html: |
         <ul>
