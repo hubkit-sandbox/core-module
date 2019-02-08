@@ -24,6 +24,8 @@ use ParkManager\Module\CoreModule\Test\Infrastructure\Doctrine\EntityRepositoryT
 
 /**
  * @internal
+ *
+ * @group functional
  */
 final class DoctrineDbalAuthenticationFinderTest extends EntityRepositoryTestCase
 {
