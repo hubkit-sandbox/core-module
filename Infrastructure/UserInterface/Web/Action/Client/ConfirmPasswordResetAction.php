@@ -12,11 +12,10 @@ namespace ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Action\
 
 use ParkManager\Module\CoreModule\Application\Command\Client\ConfirmPasswordReset;
 use ParkManager\Module\CoreModule\Infrastructure\Security\ClientUser;
-use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Common\Form\Handler\ServiceBusFormFactory;
 use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Common\TwigResponse;
 use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Form\Type\Security\ConfirmPasswordResetType;
 use Rollerworks\Bundle\RouteAutofillBundle\Response\RouteRedirectResponse;
-use Rollerworks\Component\SplitToken\SplitToken;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 final class ConfirmPasswordResetAction
@@ -24,21 +23,21 @@ final class ConfirmPasswordResetAction
     /**
      * @return TwigResponse|RouteRedirectResponse
      */
-    public function __invoke(Request $request, string $token, ServiceBusFormFactory $formFactory)
+    public function __invoke(Request $request, string $token, FormFactoryInterface $formFactory)
     {
-        $handler = $formFactory->createForCommand(ConfirmPasswordResetType::class, ['reset_token' => $token], [
+        $form = $formFactory->create(ConfirmPasswordResetType::class, ['reset_token' => $token], [
             'user_class' => ClientUser::class,
-            'command_builder' => static function (SplitToken $splitToken, string $password) {
-                return new ConfirmPasswordReset($splitToken, $password);
+            'command_message_factory' => static function (array $data) {
+                return new ConfirmPasswordReset($data['reset_token'], $data['password']);
             },
         ]);
-        $handler->handleRequest($request);
+        $form->handleRequest($request);
 
-        if ($handler->isReady()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             return new RouteRedirectResponse('park_manager.client.security_login');
         }
 
-        $response = new TwigResponse('@ParkManagerCore/client/security/password_reset_confirm.html.twig', $handler);
+        $response = new TwigResponse('@ParkManagerCore/client/security/password_reset_confirm.html.twig', $form);
         $response->setPrivate();
         $response->setMaxAge(1);
 

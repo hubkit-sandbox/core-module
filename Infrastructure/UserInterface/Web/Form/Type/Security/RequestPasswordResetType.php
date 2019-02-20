@@ -10,30 +10,26 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Form\Type\Security;
 
-use Closure;
+use Rollerworks\Bundle\MessageBusFormBundle\Type\MessageFormType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class RequestPasswordResetType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->setDataMapper(new RequestPasswordResetDataMapper($options['command_builder']))
             ->add('email', EmailType::class, ['label' => 'label.email']);
-    }
-
-    public function configureOptions(OptionsResolver $resolver): void
-    {
-        $resolver
-            ->setRequired(['command_builder'])
-            ->setAllowedTypes('command_builder', [Closure::class]);
     }
 
     public function getBlockPrefix(): ?string
     {
         return 'request_user_password_reset';
+    }
+
+    public function getParent(): string
+    {
+        return MessageFormType::class;
     }
 }

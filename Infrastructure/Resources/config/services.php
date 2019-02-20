@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use ParkManager\Module\CoreModule\Infrastructure\Doctrine\Shared\DoctrineDbalAuthenticationFinder;
+use ParkManager\Module\CoreModule\Infrastructure\Http\ArgumentResolver\FormFactoryResolver;
 use Rollerworks\Component\SplitToken\Argon2SplitTokenFactory;
 use ParkManager\Module\CoreModule\Infrastructure\DependencyInjection\AutoServiceConfigurator;
 use ParkManager\Module\CoreModule\Infrastructure\Doctrine\Administrator\DoctrineOrmAdministratorRepository;
@@ -57,6 +58,10 @@ return function (ContainerConfigurator $c) {
             'client' => ref('park_manager.section.client.request_matcher'),
         ]);
 
+    $di->set(FormFactoryResolver::class)
+        ->tag('controller.argument_value_resolver', ['priority' => 30]);
+
+    // DEPRECATED
     $di->set(ServiceBusFormFactoryResolver::class)
         ->tag('controller.argument_value_resolver', ['priority' => 30]);
 

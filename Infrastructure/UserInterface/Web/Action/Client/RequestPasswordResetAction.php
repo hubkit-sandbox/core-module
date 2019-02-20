@@ -11,28 +11,28 @@ declare(strict_types=1);
 namespace ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Action\Client;
 
 use ParkManager\Module\CoreModule\Application\Command\Client\RequestPasswordReset;
-use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Common\Form\Handler\ServiceBusFormFactory;
 use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Common\TwigResponse;
 use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Form\Type\Security\RequestPasswordResetType;
 use Rollerworks\Bundle\RouteAutofillBundle\Response\RouteRedirectResponse;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 final class RequestPasswordResetAction
 {
-    public function __invoke(Request $request, ServiceBusFormFactory $formFactory): object
+    public function __invoke(Request $request, FormFactoryInterface $formFactory): object
     {
-        $handler = $formFactory->createForCommand(RequestPasswordResetType::class, null, [
-            'command_builder' => static function (string $email) {
-                return new RequestPasswordReset($email);
+        $form = $formFactory->create(RequestPasswordResetType::class, null, [
+            'command_message_factory' => static function (array $data) {
+                return new RequestPasswordReset($data['email']);
             },
         ]);
-        $handler->handleRequest($request);
+        $form->handleRequest($request);
 
-        if ($handler->isReady()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             return new RouteRedirectResponse('park_manager.client.security_login');
         }
 
-        $response = new TwigResponse('@ParkManagerCore/client/security/password_reset.html.twig', $handler);
+        $response = new TwigResponse('@ParkManagerCore/client/security/password_reset.html.twig', $form);
         $response->setPrivate();
         $response->setMaxAge(1);
 

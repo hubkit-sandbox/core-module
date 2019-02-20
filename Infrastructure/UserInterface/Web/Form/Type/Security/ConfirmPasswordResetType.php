@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Form\Type\Security;
 
-use Closure;
 use ParkManager\Module\CoreModule\Domain\Shared\Exception\PasswordResetTokenNotAccepted;
+use Rollerworks\Bundle\MessageBusFormBundle\Type\MessageFormType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormError;
@@ -20,13 +20,13 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Exception\DisabledException;
 use Symfony\Component\Validator\Constraint;
+use Symfony\Contracts\Translation\TranslatorInterface as Translator;
 
-class ConfirmPasswordResetType extends AbstractType
+final class ConfirmPasswordResetType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->setDataMapper(new ConfirmPasswordResetDataMapper($options['command_builder']))
             ->add('reset_token', SplitTokenType::class, ['invalid_message' => 'password_reset.invalid_token'])
             ->add('password', SecurityUserHashedPasswordType::class, [
                 'required' => true,
@@ -52,27 +52,31 @@ class ConfirmPasswordResetType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver
-            ->setRequired(['user_class', 'command_builder'])
+            ->setRequired(['user_class'])
             ->setDefault('password_constraints', [])
             ->setDefault('exception_mapping', [
-                PasswordResetTokenNotAccepted::class => static function (PasswordResetTokenNotAccepted $e) {
+                PasswordResetTokenNotAccepted::class => static function (PasswordResetTokenNotAccepted $e, Translator $translator) {
                     if ($e->storedToken() === null) {
-                        return new FormError('password_reset.no_token', null, [], null, $e);
+                        return new FormError($translator->trans('password_reset.no_token', [], 'validators'), 'password_reset.no_token', [], null, $e);
                     }
 
-                    return new FormError('password_reset.invalid_token', null, [], null, $e);
+                    return new FormError($translator->trans('password_reset.invalid_token', [], 'validators'), 'password_reset.invalid_token', [], null, $e);
                 },
-                DisabledException::class => static function (DisabledException $e) {
-                    return new FormError('password_reset.access_disabled', null, [], null, $e);
+                DisabledException::class => static function (DisabledException $e, Translator $translator) {
+                    return new FormError($translator->trans('password_reset.access_disabled', [], 'validators'), null, [], null, $e);
                 },
             ])
             ->setAllowedTypes('user_class', ['string'])
-            ->setAllowedTypes('command_builder', [Closure::class])
             ->setAllowedTypes('password_constraints', ['array', Constraint::class]);
     }
 
     public function getBlockPrefix(): string
     {
         return 'confirm_user_password_reset';
+    }
+
+    public function getParent(): string
+    {
+        return MessageFormType::class;
     }
 }

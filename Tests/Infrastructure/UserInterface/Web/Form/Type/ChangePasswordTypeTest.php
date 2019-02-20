@@ -13,14 +13,15 @@ namespace ParkManager\Module\CoreModule\Tests\Infrastructure\UserInterface\Web\F
 use Closure;
 use ParkManager\Module\CoreModule\Infrastructure\Security\ClientUser;
 use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Form\Type\Security\ChangePasswordType;
+use ParkManager\Module\CoreModule\Test\Infrastructure\UserInterface\Web\Form\TransformationFailureExtension;
 use ParkManager\Module\CoreModule\Tests\Infrastructure\UserInterface\Web\Form\Type\Mocks\FakePasswordHashFactory;
+use Rollerworks\Bundle\MessageBusFormBundle\Test\MessageFormTestCase;
 use Symfony\Component\Form\Test\Traits\ValidatorExtensionTrait;
-use Symfony\Component\Form\Test\TypeTestCase;
 
 /**
  * @internal
  */
-final class ChangePasswordTypeTest extends TypeTestCase
+final class ChangePasswordTypeTest extends MessageFormTestCase
 {
     use ValidatorExtensionTrait;
 
@@ -32,6 +33,18 @@ final class ChangePasswordTypeTest extends TypeTestCase
         return [
             $this->getValidatorExtension(),
         ];
+    }
+
+    protected function getTypeExtensions(): array
+    {
+        return [
+            new TransformationFailureExtension(),
+        ];
+    }
+
+    protected static function getCommandName(): string
+    {
+        return ChangeUserPassword::class;
     }
 
     protected function setUp(): void

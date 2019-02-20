@@ -10,7 +10,7 @@ declare(strict_types=1);
 
 namespace Symfony\Component\Routing\Loader\Configurator;
 
-use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Action\Client\ConfirmPasswordResetAction;
+use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Action\Admin\ConfirmPasswordResetAction;
 use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Action\HomepageAction;
 use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Action\SecurityLoginAction;
 use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Action\SecurityLogoutAction;
