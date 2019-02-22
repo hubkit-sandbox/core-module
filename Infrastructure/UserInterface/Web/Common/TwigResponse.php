@@ -11,8 +11,7 @@ declare(strict_types=1);
 namespace ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Common;
 
 use InvalidArgumentException;
-use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Common\Form\Handler\FormHandler;
-use Symfony\Component\Form\Form;
+use Symfony\Component\Form\FormInterface as Form;
 use Symfony\Component\HttpFoundation\Response;
 use function is_array;
 use function sprintf;
@@ -23,7 +22,7 @@ class TwigResponse extends Response
     private $variables;
 
     /**
-     * @param array|Form|FormHandler $variables A Form or FormHandler object is passed as [form => createView()]
+     * @param array|Form $variables A Form or FormHandler object is passed as [form => createView()]
      */
     public function __construct(string $template, $variables = [], int $status = 200, array $headers = [])
     {
@@ -40,13 +39,13 @@ class TwigResponse extends Response
     }
 
     /**
-     * @param array|Form|FormHandler $variables A Form or FormHandler object is passed as [form => createView()]
+     * @param array|Form $variables A Form or FormHandler object is passed as [form => createView()]
      */
     public function setTemplateVariables($variables): void
     {
         if (! is_array($variables)) {
-            if (! ($variables instanceof Form) && ! ($variables instanceof FormHandler)) {
-                throw new InvalidArgumentException(sprintf('TwigResponse $variables expects an array, %s or %s object.', Form::class, FormHandler::class));
+            if (! $variables instanceof Form) {
+                throw new InvalidArgumentException(sprintf('TwigResponse $variables expects an array or %s object.', Form::class));
             }
 
             $variables = ['form' => $variables->createView()];

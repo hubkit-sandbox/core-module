@@ -17,7 +17,6 @@ use ParkManager\Module\CoreModule\Infrastructure\DependencyInjection\AutoService
 use ParkManager\Module\CoreModule\Infrastructure\Doctrine\Administrator\DoctrineOrmAdministratorRepository;
 use ParkManager\Module\CoreModule\Infrastructure\Doctrine\Client\DoctrineOrmClientRepository;
 use ParkManager\Module\CoreModule\Infrastructure\Http\ArgumentResolver\ApplicationContextResolver;
-use ParkManager\Module\CoreModule\Infrastructure\Http\ArgumentResolver\ServiceBusFormFactoryResolver;
 use ParkManager\Module\CoreModule\Infrastructure\Http\SectionsLoader;
 use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\Common\ApplicationContext;
 use ParkManager\Module\CoreModule\Infrastructure\UserInterface\Web\EventListener\ApplicationSectionListener;
@@ -59,10 +58,6 @@ return function (ContainerConfigurator $c) {
         ]);
 
     $di->set(FormFactoryResolver::class)
-        ->tag('controller.argument_value_resolver', ['priority' => 30]);
-
-    // DEPRECATED
-    $di->set(ServiceBusFormFactoryResolver::class)
         ->tag('controller.argument_value_resolver', ['priority' => 30]);
 
     $di->set(ApplicationContextResolver::class)
