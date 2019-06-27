@@ -25,8 +25,6 @@ class TraversableNotContains extends Constraint
 
     public function __construct(string $type, bool $isNativeType = true)
     {
-        parent::__construct();
-
         if ($isNativeType) {
             $this->constraint = new IsType($type);
         } else {

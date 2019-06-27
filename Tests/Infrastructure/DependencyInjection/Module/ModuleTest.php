@@ -107,15 +107,12 @@ class ModuleTest extends TestCase
         $module = new DoctrineMappingsModule();
         $module->build($containerBuilder);
 
-        self::assertContains(
+        self::assertContainsEquals(
             DoctrineOrmMappingsPass::createXmlMappingDriver([
                 $module->getPath() . '/Infrastructure/Doctrine/Account/Mapping' => $module->getNamespace() . '\\Domain\\Account',
             ]),
             $containerBuilder->getCompilerPassConfig()->getPasses(),
-            '',
-            false,
-            false,
-            true
+            ''
         );
     }
 }
