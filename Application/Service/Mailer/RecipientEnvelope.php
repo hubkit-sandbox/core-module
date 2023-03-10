@@ -12,6 +12,7 @@ namespace ParkManager\Module\CoreModule\Application\Service\Mailer;
 
 use ParkManager\Module\CoreModule\Domain\Shared\EmailAddress;
 
+// Return the Slender
 final class RecipientEnvelope
 {
     public const ENCRYPTION_GPG = 'gpg';
